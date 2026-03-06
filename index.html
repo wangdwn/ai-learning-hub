@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI学习天地 - 从零基础到AI达人</title>
+    <title>AI智学工坊 - 地质海洋监测行业AI能力提升平台</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #06b6d4;
+            --accent: #8b5cf6;
             --success: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
+            --ocean: #0066cc;
+            --earth: #8b4513;
             --bg-dark: #0f172a;
             --bg-card: #1e293b;
-            --text-primary: #f1f5f9;
+            --bg-elevated: #334155;
+            --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --text-muted: #64748b;
+            --border: rgba(148, 163, 184, 0.1);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -44,1459 +49,3394 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
             z-index: 1000;
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.5rem;
+            gap: 0.75rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, var(--ocean) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo i {
-            font-size: 1.8rem;
-            -webkit-text-fill-color: #667eea;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
             cursor: pointer;
+            transition: transform 0.3s;
         }
 
-        /* 英雄区域 */
-        .hero {
-            min-height: 100vh;
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 0.375rem;
+            border-radius: 12px;
+        }
+
+        .nav-tab {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: none;
+            background: transparent;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .xp-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--warning), #f97316);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .streak-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            background: var(--danger);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ocean), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 6rem 2rem 4rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .page {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 首页封面样式 */
+        .hero-cover {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0a1628 0%, #1a1a3e 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 100;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .hero-cover.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            animation: heroPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes heroPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(6, 182, 212, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(-100vh) rotate(720deg); 
+                opacity: 0;
+            }
+        }
+
+        .hero-cover-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-title-container {
+            margin-bottom: 2rem;
+        }
+
+        .hero-main-title {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #06b6d4 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite, titleShine 4s linear infinite;
+            text-shadow: 0 0 60px rgba(6, 182, 212, 0.5);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(139, 92, 246, 0.8)); }
+        }
+
+        @keyframes titleShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: subtitleFade 2s ease-out;
+        }
+
+        @keyframes subtitleFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-slogan {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin: 2.5rem 0;
+            padding: 1.5rem 2rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            animation: sloganSlide 1s ease-out 0.5s both;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
+        .hero-slogan::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: sloganShine 3s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes sloganShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
-        .hero-content {
+        @keyframes sloganSlide {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-slogan i {
+            color: var(--accent);
+            margin: 0 0.5rem;
+        }
+
+        .hero-stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2.5rem 0;
+            animation: statsFade 1s ease-out 0.8s both;
+        }
+
+        @keyframes statsFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-stat {
             text-align: center;
-            max-width: 800px;
-            z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        .hero-stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1;
         }
 
-        .hero p {
-            font-size: 1.25rem;
+        .hero-stat-label {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 2rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .cta-buttons {
+        .hero-cta-group {
             display: flex;
             gap: 1rem;
             justify-content: center;
-            flex-wrap: wrap;
+            margin-top: 2.5rem;
+            animation: ctaFade 1s ease-out 1s both;
         }
 
-        .btn {
-            padding: 1rem 2rem;
+        @keyframes ctaFade {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hero-btn {
+            padding: 1rem 2.5rem;
             border-radius: 50px;
-            text-decoration: none;
+            font-size: 1.1rem;
             font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            border: none;
         }
 
-        .btn-primary {
-            background: var(--gradient-1);
+        .hero-btn-primary {
+            background: linear-gradient(135deg, #06b6d4, #8b5cf6);
             color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        .hero-btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.6);
         }
 
-        .btn-secondary {
+        .hero-btn-secondary {
             background: transparent;
             color: var(--text-primary);
             border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
         }
 
-        .btn-secondary:hover {
+        .hero-btn-secondary:hover {
             background: rgba(255,255,255,0.1);
             border-color: rgba(255,255,255,0.4);
+            transform: translateY(-3px);
         }
 
-        /* 学习路径 */
-        .learning-path {
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* 介绍弹窗样式 */
+        .intro-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
 
-        .section-title {
+        .intro-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .intro-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .intro-content {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .intro-modal.show .intro-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .intro-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-close:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .intro-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
-        .section-title h2 {
+        .intro-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--ocean), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 2.5rem;
-            margin-bottom: 1rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
         }
 
-        .section-title p {
+        .intro-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .intro-header p {
             color: var(--text-secondary);
             font-size: 1.1rem;
         }
 
-        .modules-grid {
+        .intro-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .module-card {
-            background: var(--bg-card);
+        .intro-feature {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .intro-feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .intro-feature h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .intro-feature p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .intro-steps {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .intro-steps h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .intro-steps h3 i {
+            margin-right: 0.5rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .intro-cta {
+            text-align: center;
+        }
+
+        .intro-btn-primary {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .intro-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.6);
+        }
+
+        /* 响应式介绍弹窗 */
+        @media (max-width: 768px) {
+            .intro-content {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            
+            .intro-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .intro-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* 响应式封面 */
+        @media (max-width: 768px) {
+            .hero-main-title {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+                letter-spacing: 0.2em;
+            }
+            
+            .hero-slogan {
+                font-size: 1rem;
+                padding: 1rem;
+                margin: 1.5rem 0;
+            }
+            
+            .hero-stats-row {
+                gap: 1.5rem;
+            }
+            
+            .hero-stat-number {
+                font-size: 2rem;
+            }
+            
+            .hero-cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+
+        /* 仪表盘页面 */
+        .dashboard-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
             border-radius: 20px;
             padding: 2rem;
-            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .welcome-card h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .continue-learning {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .continue-learning:hover {
+            background: rgba(14, 165, 233, 0.2);
+            transform: translateX(5px);
+        }
+
+        .continue-learning i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* 技能图谱 */
+        .skill-map-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .skill-tree {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-branch {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
 
-        .module-card::before {
+        .skill-branch::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--gradient-1);
-            transform: scaleX(0);
-            transition: transform 0.3s;
+            background: linear-gradient(90deg, var(--ocean), var(--secondary));
         }
 
-        .module-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .module-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .module-card:nth-child(1) .module-icon { background: var(--gradient-1); }
-        .module-card:nth-child(2) .module-icon { background: var(--gradient-2); }
-        .module-card:nth-child(3) .module-icon { background: var(--gradient-3); }
-        .module-card:nth-child(4) .module-icon { background: var(--gradient-4); }
-
-        .module-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .module-card p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .module-progress {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--success);
-            border-radius: 3px;
-            transition: width 0.3s;
-        }
-
-        /* 内容区域 */
-        .content-section {
-            padding: 4rem 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
-        }
-
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .lesson-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .lesson-card h3 {
+        .skill-branch-header {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             margin-bottom: 1rem;
-            color: var(--accent);
         }
 
-        .lesson-card h3 i {
-            font-size: 1.2rem;
+        .skill-branch-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            background: linear-gradient(135deg, var(--ocean), var(--secondary));
         }
 
-        .lesson-content {
+        .skill-branch h3 {
+            font-size: 1.1rem;
+        }
+
+        .skill-branch p {
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        .lesson-content h4 {
-            color: var(--text-primary);
-            margin: 1.5rem 0 0.75rem;
-        }
-
-        .lesson-content ul, .lesson-content ol {
-            margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
 
-        .lesson-content li {
+        .skill-nodes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .skill-node {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .skill-node:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--primary);
+        }
+
+        .skill-node.completed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .skill-node.in-progress {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .node-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            background: var(--bg-elevated);
+        }
+
+        .skill-node.completed .node-status {
+            background: var(--success);
+        }
+
+        .skill-node.in-progress .node-status {
+            background: var(--warning);
+        }
+
+        .node-info {
+            flex: 1;
+        }
+
+        .node-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .node-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .node-xp {
+            font-size: 0.75rem;
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        /* 学习路径页面 */
+        .learning-path-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .path-sidebar {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+        }
+
+        .path-filter {
+            margin-bottom: 1.5rem;
+        }
+
+        .path-filter h4 {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.625rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-option:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .filter-option.active {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--primary);
+        }
+
+        .filter-option i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .progress-overview {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: var(--bg-elevated);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .lessons-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .lesson-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .lesson-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lesson-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            cursor: pointer;
+        }
+
+        .lesson-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--ocean), var(--secondary));
+        }
+
+        .lesson-info {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .lesson-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-beginner { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .tag-intermediate { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .tag-advanced { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .tag-industry { background: rgba(139, 92, 246, 0.15); color: var(--accent); }
+
+        .lesson-status {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-elevated);
+        }
+
+        .lesson-status.completed {
+            background: var(--success);
+        }
+
+        .lesson-content-preview {
+            padding: 0 1.25rem 1.25rem;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+
+        .lesson-item.expanded .lesson-content-preview {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 实战项目页面 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--ocean), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .project-difficulty {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-category {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             margin-bottom: 0.5rem;
         }
 
-        .tip-box {
-            background: rgba(6, 182, 212, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 1rem 1.5rem;
-            border-radius: 0 10px 10px 0;
-            margin: 1.5rem 0;
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
         }
 
-        .tip-box i {
-            color: var(--accent);
-            margin-right: 0.5rem;
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
         }
 
-        .practice-box {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--success);
-            padding: 1rem 1.5rem;
-            border-radius: 0 10px 10px 0;
-            margin: 1.5rem 0;
+        .project-stats {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
-        .practice-box i {
-            color: var(--success);
-            margin-right: 0.5rem;
+        .project-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
         }
 
-        /* 测验样式 */
-        .quiz-container {
+        .project-btn {
+            width: 100%;
+            padding: 0.875rem;
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .project-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* 社区页面 */
+        .community-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .discussions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .discussion-card {
             background: var(--bg-card);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-top: 2rem;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
         }
 
-        .quiz-question {
+        .discussion-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .disc-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .disc-author-info {
+            flex: 1;
+        }
+
+        .disc-author-name {
+            font-weight: 600;
+        }
+
+        .disc-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .disc-badge {
+            padding: 0.25rem 0.625rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .disc-badge-question { background: rgba(14, 165, 233, 0.15); color: var(--primary); }
+        .disc-badge-showcase { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .disc-badge-discussion { background: rgba(139, 92, 246, 0.15); color: var(--accent); }
+
+        .discussion-title {
             font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .quiz-options {
+        .discussion-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .discussion-footer {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .discussion-footer span {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .discussion-footer span:hover {
+            color: var(--primary);
+        }
+
+        /* 侧边栏 */
+        .community-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .sidebar-card h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            background: var(--bg-elevated);
+        }
+
+        .leaderboard-rank.top3 {
+            background: linear-gradient(135deg, var(--warning), #f97316);
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-xp {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* 成就系统 */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .achievement-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+
+        .achievement-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, var(--warning), #f97316);
+        }
+
+        .achievement-card.locked .achievement-icon {
+            background: var(--bg-elevated);
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .achievement-progress {
+            margin-top: 0.75rem;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--bg-elevated);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .achievement-reward {
+            font-size: 0.75rem;
+            color: var(--warning);
+            margin-top: 0.5rem;
+        }
+
+        /* 互动学习组件 */
+        .interactive-demo {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            margin: 1rem 0;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-header i {
+            color: var(--primary);
+        }
+
+        .prompt-playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .playground-input, .playground-output {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .playground-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .playground-textarea {
+            width: 100%;
+            min-height: 150px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+        }
+
+        .playground-output-content {
+            min-height: 150px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .playground-btn {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .playground-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* 测验组件 */
+        .quiz-interactive {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-question-number {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .quiz-question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .quiz-options-modern {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
         }
 
-        .quiz-option {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 1rem 1.5rem;
+        .quiz-option-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option-modern:hover {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .quiz-option-modern.selected {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        .quiz-option-modern.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option-modern.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .option-letter {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            background: var(--bg-elevated);
+            flex-shrink: 0;
+        }
+
+        .quiz-option-modern.selected .option-letter {
+            background: var(--primary);
+            color: white;
+        }
+
+        .quiz-option-modern.correct .option-letter {
+            background: var(--success);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        /* 反馈墙组件 */
+        .feedback-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .feedback-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            transition: all 0.3s;
+        }
+
+        .feedback-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+        }
+
+        .feedback-btn.has-new::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid var(--bg-dark);
+        }
+
+        .feedback-wall {
+            position: fixed;
+            bottom: 90px;
+            right: 2rem;
+            width: 420px;
+            max-height: 600px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .feedback-wall.show {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-wall-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .feedback-wall-header h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .feedback-wall-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.2s;
+        }
+
+        .feedback-wall-close:hover {
+            color: var(--text-primary);
+        }
+
+        .feedback-wall-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .feedback-form-section {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-type {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feedback-type-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .feedback-type-btn:hover, .feedback-type-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        .feedback-input-group {
+            position: relative;
+        }
+
+        .feedback-name-input {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .feedback-name-input:focus, .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: vertical;
+            font-size: 0.9rem;
+        }
+
+        .feedback-char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .feedback-submit {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .quiz-option:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--primary);
+        .feedback-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
         }
 
-        .quiz-option.selected {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: var(--primary);
+        /* 反馈列表 */
+        .feedback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
-        .quiz-option.correct {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: var(--success);
+        .feedback-item {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
         }
 
-        .quiz-option.wrong {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
+        .feedback-item:hover {
+            border-color: rgba(14, 165, 233, 0.3);
+            transform: translateX(4px);
         }
 
-        .quiz-option span {
-            width: 28px;
-            height: 28px;
+        .feedback-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feedback-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.875rem;
             font-weight: 600;
+        }
+
+        .feedback-name {
+            font-weight: 500;
             font-size: 0.9rem;
         }
 
-        .quiz-result {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-            display: none;
+        .feedback-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
-        .quiz-result.show {
-            display: block;
+        .feedback-type-tag {
+            padding: 0.25rem 0.625rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        .quiz-result.success {
-            background: rgba(16, 185, 129, 0.2);
+        .feedback-type-tag.suggestion { background: rgba(14, 165, 233, 0.15); color: var(--primary); }
+        .feedback-type-tag.bug { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .feedback-type-tag.praise { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+
+        .feedback-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .feedback-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+        }
+
+        .feedback-action-btn:hover {
+            color: var(--primary);
+        }
+
+        .feedback-action-btn.liked {
             color: var(--success);
         }
 
-        .quiz-result.error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        /* 底部 */
-        .footer {
-            background: rgba(0,0,0,0.3);
-            padding: 3rem 2rem;
+        .feedback-empty {
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            color: var(--text-muted);
         }
 
-        .footer p {
-            color: var(--text-secondary);
+        .feedback-empty i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .modules-grid {
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .learning-path-container {
                 grid-template-columns: 1fr;
             }
+            
+            .path-sidebar {
+                position: static;
+            }
+            
+            .community-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                grid-template-columns: 1fr;
+            }
+        }
 
-            .btn {
-                padding: 0.875rem 1.5rem;
-                font-size: 0.9rem;
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.75rem 1rem;
+            }
+            
+            .nav-center {
+                display: none;
+            }
+            
+            .page {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skill-tree {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .prompt-playground {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         /* 动画 */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        /* 工具卡片 */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+        .float {
+            animation: float 3s ease-in-out infinite;
         }
 
-        .tool-card {
-            background: rgba(255,255,255,0.05);
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 2rem;
+            background: var(--bg-card);
             border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .notification.success .notification-icon {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .notification.info .notification-icon {
+            background: rgba(14, 165, 233, 0.2);
+            color: var(--primary);
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
             transition: all 0.3s;
         }
 
-        .tool-card:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-3px);
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .tool-card h4 {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .tool-card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* 代码块 */
-        .code-block {
-            background: #0d1117;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            color: #e6edf3;
-            border: 1px solid #30363d;
-        }
-
-        .code-block .comment { color: #8b949e; }
-        .code-block .keyword { color: #ff7b72; }
-        .code-block .string { color: #a5d6ff; }
-
-        /* 标签 */
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--primary);
+        .modal {
+            background: var(--bg-card);
             border-radius: 20px;
-            font-size: 0.8rem;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
         }
 
-        .tag.beginner { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-        .tag.intermediate { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .tag.advanced { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- SVG渐变定义 -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#0ea5e9"/>
+                <stop offset="100%" style="stop-color:#06b6d4"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
     <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-brain"></i>
-            <span>AI学习天地</span>
+        <div class="logo" onclick="backToHome()" title="点击返回首页">
+            <i class="fas fa-water"></i>
+            <span>AI智学工坊</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="#home" onclick="showHome()">首页</a></li>
-            <li><a href="#modules" onclick="showHome()">学习模块</a></li>
-            <li><a href="#about">关于我们</a></li>
-        </ul>
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
+        <div class="nav-center">
+            <button class="nav-tab active" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-pie"></i> 仪表盘
+            </button>
+            <button class="nav-tab" onclick="showPage('learning')">
+                <i class="fas fa-graduation-cap"></i> 学习路径
+            </button>
+            <button class="nav-tab" onclick="showPage('projects')">
+                <i class="fas fa-project-diagram"></i> 实战项目
+            </button>
+            <button class="nav-tab" onclick="showPage('community')">
+                <i class="fas fa-users"></i> 社区
+            </button>
+            <button class="nav-tab" onclick="showPage('achievements')">
+                <i class="fas fa-trophy"></i> 成就
+            </button>
+        </div>
+        <div class="nav-right">
+            <div class="xp-badge">
+                <i class="fas fa-star"></i>
+                <span id="user-xp">1,250 XP</span>
+            </div>
+            <div class="streak-badge">
+                <i class="fas fa-fire"></i>
+                <span id="user-streak">5天</span>
+            </div>
+            <div class="user-avatar" onclick="showUserProfile()">王</div>
+        </div>
     </nav>
 
-    <!-- 首页内容 -->
-    <div id="home-section">
-        <!-- 英雄区域 -->
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <h1>AI学习天地</h1>
-                <p>从零基础到AI达人，让每个人都能掌握人工智能的力量。免费、实用、循序渐进的学习平台。</p>
-                <div class="cta-buttons">
-                    <a href="#modules" class="btn btn-primary" onclick="showHome()">
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 首页封面 -->
+        <div class="hero-cover" id="heroCover">
+            <div class="hero-cover-content">
+                <div class="hero-title-container">
+                    <h1 class="hero-main-title">AI库旋风</h1>
+                    <div class="hero-subtitle">未来科技 · 智能学习平台</div>
+                </div>
+                <div class="hero-slogan">
+                    <i class="fas fa-quote-left"></i>
+                    未来已来，要么做驾驭AI的骑士，要么做AI的牛马！
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="hero-stats-row">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">38</div>
+                        <div class="hero-stat-label">精品课程</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">12</div>
+                        <div class="hero-stat-label">实战项目</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">500+</div>
+                        <div class="hero-stat-label">学习伙伴</div>
+                    </div>
+                </div>
+                <div class="hero-cta-group">
+                    <button class="hero-btn hero-btn-primary" onclick="enterPlatform()">
                         <i class="fas fa-rocket"></i>
-                        开始学习
-                    </a>
-                    <a href="#" class="btn btn-secondary" onclick="showModule('ai-basics')">
+                        进入学习平台
+                    </button>
+                    <button class="hero-btn hero-btn-secondary" onclick="showIntro()">
                         <i class="fas fa-play-circle"></i>
                         观看介绍
-                    </a>
+                    </button>
                 </div>
             </div>
-        </section>
+            <div class="hero-particles" id="heroParticles"></div>
+        </div>
 
-        <!-- 学习路径 -->
-        <section class="learning-path" id="modules">
-            <div class="section-title">
-                <h2>选择你的学习路径</h2>
-                <p>四大模块，循序渐进，从认知到实战，全面提升AI能力</p>
+    <!-- 仪表盘页面 -->
+        <div class="page" id="dashboard">
+            <div class="dashboard-header">
+                <div class="welcome-card">
+                    <h1>欢迎回来，王同学！</h1>
+                    <p>今天是你学习AI的第12天，继续保持这个节奏！</p>
+                    <div class="continue-learning" onclick="continueLastLesson()">
+                        <i class="fas fa-play-circle"></i>
+                        <div>
+                            <div style="font-weight: 600;">继续学习</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">第3课：提示词工程基础（已完成65%）</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="margin-left: auto;"></i>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">已学课程</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">完成项目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">获得技能</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">连续学习</div>
+                    </div>
+                </div>
             </div>
-            <div class="modules-grid">
-                <div class="module-card" onclick="showModule('ai-basics')">
-                    <div class="module-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3>AI基础认知</h3>
-                    <p>了解什么是AI、能做什么、不能做什么，建立正确的AI认知框架</p>
-                    <div class="module-progress">
-                        <span>8节课</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
+
+            <div class="skill-map-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> 技能图谱</h2>
+                    <button class="nav-tab" onclick="showPage('learning')">查看全部</button>
+                </div>
+                <div class="skill-tree">
+                    <div class="skill-branch">
+                        <div class="skill-branch-header">
+                            <div class="skill-branch-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <h3>AI基础认知</h3>
+                                <p style="font-size: 0.875rem; color: var(--text-muted);">3/8 已完成</p>
+                            </div>
                         </div>
-                        <span>入门</span>
+                        <div class="skill-nodes">
+                            <div class="skill-node completed" onclick="openLesson('ai-basics-1')">
+                                <div class="node-status"><i class="fas fa-check"></i></div>
+                                <div class="node-info">
+                                    <div class="node-name">什么是人工智能</div>
+                                    <div class="node-meta">10分钟 · 入门级</div>
+                                </div>
+                                <div class="node-xp">+50 XP</div>
+                            </div>
+                            <div class="skill-node completed" onclick="openLesson('ai-basics-2')">
+                                <div class="node-status"><i class="fas fa-check"></i></div>
+                                <div class="node-info">
+                                    <div class="node-name">主流AI工具介绍</div>
+                                    <div class="node-meta">15分钟 · 入门级</div>
+                                </div>
+                                <div class="node-xp">+50 XP</div>
+                            </div>
+                            <div class="skill-node in-progress" onclick="openLesson('ai-basics-3')">
+                                <div class="node-status"><i class="fas fa-play"></i></div>
+                                <div class="node-info">
+                                    <div class="node-name">如何与AI有效对话</div>
+                                    <div class="node-meta">20分钟 · 核心技能</div>
+                                </div>
+                                <div class="node-xp">+100 XP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-branch">
+                        <div class="skill-branch-header">
+                            <div class="skill-branch-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div>
+                                <h3>AI工具技能</h3>
+                                <p style="font-size: 0.875rem; color: var(--text-muted);">2/12 已完成</p>
+                            </div>
+                        </div>
+                        <div class="skill-nodes">
+                            <div class="skill-node completed" onclick="openLesson('tools-1')">
+                                <div class="node-status"><i class="fas fa-check"></i></div>
+                                <div class="node-info">
+                                    <div class="node-name">提示词工程基础</div>
+                                    <div class="node-meta">25分钟 · 核心技能</div>
+                                </div>
+                                <div class="node-xp">+100 XP</div>
+                            </div>
+                            <div class="skill-node completed" onclick="openLesson('tools-2')">
+                                <div class="node-status"><i class="fas fa-check"></i></div>
+                                <div class="node-info">
+                                    <div class="node-name">办公场景实战</div>
+                                    <div class="node-meta">30分钟 · 实用场景</div>
+                                </div>
+                                <div class="node-xp">+100 XP</div>
+                            </div>
+                            <div class="skill-node" onclick="openLesson('tools-3')">
+                                <div class="node-status">3</div>
+                                <div class="node-info">
+                                    <div class="node-name">Claude Code编程助手</div>
+                                    <div class="node-meta">35分钟 · 技术向</div>
+                                </div>
+                                <div class="node-xp">+150 XP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-branch">
+                        <div class="skill-branch-header">
+                            <div class="skill-branch-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <h3>行业应用</h3>
+                                <p style="font-size: 0.875rem; color: var(--text-muted);">0/10 已完成</p>
+                            </div>
+                        </div>
+                        <div class="skill-nodes">
+                            <div class="skill-node" onclick="openLesson('industry-1')">
+                                <div class="node-status">1</div>
+                                <div class="node-info">
+                                    <div class="node-name">地质数据处理自动化</div>
+                                    <div class="node-meta">40分钟 · 行业专项</div>
+                                </div>
+                                <div class="node-xp">+200 XP</div>
+                            </div>
+                            <div class="skill-node" onclick="openLesson('industry-2')">
+                                <div class="node-status">2</div>
+                                <div class="node-info">
+                                    <div class="node-name">海洋监测报告生成</div>
+                                    <div class="node-meta">35分钟 · 行业专项</div>
+                                </div>
+                                <div class="node-xp">+200 XP</div>
+                            </div>
+                            <div class="skill-node" onclick="openLesson('industry-3')">
+                                <div class="node-status">3</div>
+                                <div class="node-info">
+                                    <div class="node-name">灾害预警数据分析</div>
+                                    <div class="node-meta">45分钟 · 行业专项</div>
+                                </div>
+                                <div class="node-xp">+250 XP</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学习路径页面 -->
+        <div class="page" id="learning">
+            <div class="section-header">
+                <h2><i class="fas fa-graduation-cap" style="color: var(--primary);"></i> 学习路径</h2>
+            </div>
+            <div class="learning-path-container">
+                <aside class="path-sidebar">
+                    <div class="path-filter">
+                        <h4>难度等级</h4>
+                        <div class="filter-options">
+                            <div class="filter-option active" onclick="filterLessons('all')">
+                                <i class="fas fa-layer-group"></i> 全部课程
+                            </div>
+                            <div class="filter-option" onclick="filterLessons('beginner')">
+                                <i class="fas fa-seedling"></i> 入门级
+                            </div>
+                            <div class="filter-option" onclick="filterLessons('intermediate')">
+                                <i class="fas fa-leaf"></i> 进阶级
+                            </div>
+                            <div class="filter-option" onclick="filterLessons('advanced')">
+                                <i class="fas fa-tree"></i> 高级
+                            </div>
+                            <div class="filter-option" onclick="filterLessons('industry')">
+                                <i class="fas fa-industry"></i> 行业专项
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-overview">
+                        <h4 style="margin-bottom: 1rem;">总体进度</h4>
+                        <div class="progress-ring">
+                            <svg width="120" height="120">
+                                <circle class="progress-ring-bg" cx="60" cy="60" r="52"/>
+                                <circle class="progress-ring-fill" cx="60" cy="60" r="52" 
+                                    stroke-dasharray="326.73" stroke-dashoffset="245"/>
+                            </svg>
+                            <div class="progress-text">25%</div>
+                        </div>
+                        <p style="text-align: center; color: var(--text-secondary); font-size: 0.875rem;">
+                            已完成 5/38 节课
+                        </p>
+                    </div>
+                </aside>
+                <div class="lessons-area">
+                    <div class="lesson-item" data-level="beginner">
+                        <div class="lesson-header" onclick="toggleLesson(this)">
+                            <div class="lesson-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">第1课：什么是人工智能？</div>
+                                <div class="lesson-meta">
+                                    <span><i class="fas fa-clock"></i> 10分钟</span>
+                                    <span><i class="fas fa-signal"></i> 入门级</span>
+                                    <span><i class="fas fa-users"></i> 234人学过</span>
+                                </div>
+                            </div>
+                            <div class="lesson-tags">
+                                <span class="tag tag-beginner">入门</span>
+                            </div>
+                            <div class="lesson-status completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="lesson-content-preview">
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                本课程将帮助你建立对AI的基本认知，了解AI能做什么、不能做什么，以及如何与AI协作。
+                            </p>
+                            <div class="interactive-demo">
+                                <div class="demo-header">
+                                    <i class="fas fa-robot"></i>
+                                    <span style="font-weight: 600;">互动体验：与AI对话</span>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                    在下方输入框中尝试向AI提问，体验AI的回答风格
+                                </p>
+                                <div class="prompt-playground">
+                                    <div class="playground-input">
+                                        <div class="playground-label">你的提问</div>
+                                        <textarea class="playground-textarea" placeholder="例如：用简单的话解释什么是人工智能"></textarea>
+                                    </div>
+                                    <div class="playground-output">
+                                        <div class="playground-label">AI回答预览</div>
+                                        <div class="playground-output-content">
+                                            点击"模拟回答"查看AI会如何回应你的问题...
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="playground-btn" onclick="simulateAIResponse()">
+                                    <i class="fas fa-magic"></i> 模拟回答
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lesson-item" data-level="beginner">
+                        <div class="lesson-header" onclick="toggleLesson(this)">
+                            <div class="lesson-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">第3课：提示词工程基础</div>
+                                <div class="lesson-meta">
+                                    <span><i class="fas fa-clock"></i> 25分钟</span>
+                                    <span><i class="fas fa-signal"></i> 核心技能</span>
+                                    <span><i class="fas fa-users"></i> 189人学过</span>
+                                </div>
+                            </div>
+                            <div class="lesson-tags">
+                                <span class="tag tag-beginner">入门</span>
+                                <span class="tag tag-industry">核心</span>
+                            </div>
+                            <div class="lesson-status in-progress">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="lesson-content-preview">
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                学习五大提示词技巧：角色设定法、分步骤法、示例法、约束条件法、迭代优化法
+                            </p>
+                            <div class="quiz-interactive">
+                                <div class="quiz-progress">
+                                    <div class="quiz-progress-bar">
+                                        <div class="quiz-progress-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="quiz-question-number">1/5</div>
+                                </div>
+                                <div class="quiz-question-text">
+                                    当你想让AI扮演特定角色（如"资深地质工程师"）来回答问题时，应该使用哪种提示词技巧？
+                                </div>
+                                <div class="quiz-options-modern">
+                                    <div class="quiz-option-modern" onclick="selectQuizOption(this, false)">
+                                        <div class="option-letter">A</div>
+                                        <div class="option-text">分步骤法</div>
+                                    </div>
+                                    <div class="quiz-option-modern" onclick="selectQuizOption(this, true)">
+                                        <div class="option-letter">B</div>
+                                        <div class="option-text">角色设定法</div>
+                                    </div>
+                                    <div class="quiz-option-modern" onclick="selectQuizOption(this, false)">
+                                        <div class="option-letter">C</div>
+                                        <div class="option-text">示例法</div>
+                                    </div>
+                                    <div class="quiz-option-modern" onclick="selectQuizOption(this, false)">
+                                        <div class="option-letter">D</div>
+                                        <div class="option-text">约束条件法</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lesson-item" data-level="industry">
+                        <div class="lesson-header" onclick="toggleLesson(this)">
+                            <div class="lesson-icon" style="background: linear-gradient(135deg, #0066cc, #00c6ff);">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <div class="lesson-info">
+                                <div class="lesson-title">行业专项：海洋监测数据自动化处理</div>
+                                <div class="lesson-meta">
+                                    <span><i class="fas fa-clock"></i> 40分钟</span>
+                                    <span><i class="fas fa-signal"></i> 行业专项</span>
+                                    <span><i class="fas fa-users"></i> 67人学过</span>
+                                </div>
+                            </div>
+                            <div class="lesson-tags">
+                                <span class="tag tag-intermediate">进阶</span>
+                                <span class="tag tag-industry">海洋监测</span>
+                            </div>
+                            <div class="lesson-status">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                        <div class="lesson-content-preview">
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                学习如何使用AI自动处理海洋监测数据，生成标准化报告，提高工作效率80%
+                            </p>
+                            <div class="interactive-demo">
+                                <div class="demo-header">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span style="font-weight: 600;">实战案例：监测报告生成</span>
+                                </div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+                                    上传你的监测数据，AI将自动分析并生成专业报告
+                                </p>
+                                <div style="background: var(--bg-dark); border-radius: 8px; padding: 2rem; text-align: center; border: 2px dashed var(--border);">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                                    <p style="color: var(--text-secondary);">拖拽文件到此处或点击上传</p>
+                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">支持 CSV, Excel, JSON 格式</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 实战项目页面 -->
+        <div class="page" id="projects">
+            <div class="section-header">
+                <h2><i class="fas fa-project-diagram" style="color: var(--success);"></i> 实战项目库</h2>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="project-difficulty">入门级</span>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-category">文档处理</div>
+                        <h3 class="project-title">智能监测报告生成器</h3>
+                        <p class="project-desc">
+                            使用AI自动将原始监测数据转换为专业的分析报告，包含数据可视化、异常检测和趋势预测。
+                        </p>
+                        <div class="project-stats">
+                            <span><i class="fas fa-clock"></i> 2小时</span>
+                            <span><i class="fas fa-users"></i> 128人完成</span>
+                            <span><i class="fas fa-star"></i> 4.9分</span>
+                        </div>
+                        <button class="project-btn" onclick="startProject('report-generator')">开始项目</button>
                     </div>
                 </div>
 
-                <div class="module-card" onclick="showModule('ai-tools')">
-                    <div class="module-icon">
-                        <i class="fas fa-tools"></i>
+                <div class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="project-difficulty">进阶级</span>
                     </div>
-                    <h3>AI工具技能</h3>
-                    <p>掌握Claude、ChatGPT等主流AI工具的使用技巧和提示词工程</p>
-                    <div class="module-progress">
-                        <span>12节课</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
+                    <div class="project-body">
+                        <div class="project-category">数据分析</div>
+                        <h3 class="project-title">海洋灾害预警系统</h3>
+                        <p class="project-desc">
+                            构建基于AI的海洋灾害预警分析流程，自动识别异常数据模式并生成预警通知。
+                        </p>
+                        <div class="project-stats">
+                            <span><i class="fas fa-clock"></i> 4小时</span>
+                            <span><i class="fas fa-users"></i> 86人完成</span>
+                            <span><i class="fas fa-star"></i> 4.8分</span>
                         </div>
-                        <span>实用</span>
+                        <button class="project-btn" onclick="startProject('disaster-warning')">开始项目</button>
                     </div>
                 </div>
 
-                <div class="module-card" onclick="showModule('thinking')">
-                    <div class="module-icon">
-                        <i class="fas fa-brain"></i>
+                <div class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                        <i class="fas fa-database"></i>
+                        <span class="project-difficulty">高级</span>
                     </div>
-                    <h3>逻辑思维训练</h3>
-                    <p>培养结构化思维、批判性思维，学会与AI协作解决问题</p>
-                    <div class="module-progress">
-                        <span>10节课</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
+                    <div class="project-body">
+                        <div class="project-category">数据处理</div>
+                        <h3 class="project-title">地质数据清洗与标准化</h3>
+                        <p class="project-desc">
+                            使用AI工具批量处理历史地质数据，自动识别错误、填充缺失值、统一数据格式。
+                        </p>
+                        <div class="project-stats">
+                            <span><i class="fas fa-clock"></i> 6小时</span>
+                            <span><i class="fas fa-users"></i> 45人完成</span>
+                            <span><i class="fas fa-star"></i> 4.7分</span>
                         </div>
-                        <span>进阶</span>
+                        <button class="project-btn" onclick="startProject('data-cleaning')">开始项目</button>
                     </div>
                 </div>
 
-                <div class="module-card" onclick="showModule('teamwork')">
-                    <div class="module-icon">
+                <div class="project-card">
+                    <div class="project-image" style="background: linear-gradient(135deg, #10b981, #06b6d4);">
+                        <i class="fas fa-robot"></i>
+                        <span class="project-difficulty">进阶级</span>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-category">自动化</div>
+                        <h3 class="project-title">监测数据自动采集助手</h3>
+                        <p class="project-desc">
+                            创建自动化脚本，定时从多个数据源采集监测信息，并生成每日汇总报告。
+                        </p>
+                        <div class="project-stats">
+                            <span><i class="fas fa-clock"></i> 3小时</span>
+                            <span><i class="fas fa-users"></i> 92人完成</span>
+                            <span><i class="fas fa-star"></i> 4.9分</span>
+                        </div>
+                        <button class="project-btn" onclick="startProject('auto-collection')">开始项目</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 社区页面 -->
+        <div class="page" id="community">
+            <div class="community-layout">
+                <div class="discussions-list">
+                    <div class="section-header">
+                        <h2><i class="fas fa-comments" style="color: var(--accent);"></i> 讨论区</h2>
+                        <button class="nav-tab" onclick="showNewDiscussionModal()">
+                            <i class="fas fa-plus"></i> 发起讨论
+                        </button>
+                    </div>
+
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <div class="disc-author-avatar">李</div>
+                            <div class="disc-author-info">
+                                <div class="disc-author-name">李明</div>
+                                <div class="disc-time">2小时前</div>
+                            </div>
+                            <span class="disc-badge disc-badge-question">提问</span>
+                        </div>
+                        <h3 class="discussion-title">如何处理监测数据中的异常值？</h3>
+                        <p class="discussion-excerpt">
+                            最近在用AI处理海洋温度监测数据，发现有些异常值AI处理得不太好。大家有什么好的提示词技巧吗？
+                        </p>
+                        <div class="discussion-footer">
+                            <span><i class="fas fa-comment"></i> 12 回复</span>
+                            <span><i class="fas fa-heart"></i> 8 赞</span>
+                            <span><i class="fas fa-eye"></i> 156 浏览</span>
+                        </div>
+                    </div>
+
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <div class="disc-author-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">张</div>
+                            <div class="disc-author-info">
+                                <div class="disc-author-name">张伟</div>
+                                <div class="disc-time">5小时前</div>
+                            </div>
+                            <span class="disc-badge disc-badge-showcase">作品</span>
+                        </div>
+                        <h3 class="discussion-title">分享：我用AI生成的月度监测报告模板</h3>
+                        <p class="discussion-excerpt">
+                            经过两周的调试，终于做出了一套自动报告生成流程。从数据导入到报告输出，全程只需要5分钟！
+                        </p>
+                        <div class="discussion-footer">
+                            <span><i class="fas fa-comment"></i> 23 回复</span>
+                            <span><i class="fas fa-heart"></i> 45 赞</span>
+                            <span><i class="fas fa-eye"></i> 512 浏览</span>
+                        </div>
+                    </div>
+
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <div class="disc-author-avatar" style="background: linear-gradient(135deg, #10b981, #06b6d4);">王</div>
+                            <div class="disc-author-info">
+                                <div class="disc-author-name">王芳</div>
+                                <div class="disc-time">1天前</div>
+                            </div>
+                            <span class="disc-badge disc-badge-discussion">讨论</span>
+                        </div>
+                        <h3 class="discussion-title">讨论：AI生成的报告需要人工审核吗？</h3>
+                        <p class="discussion-excerpt">
+                            我们团队最近开始用AI生成监测报告，但领导担心准确性问题。大家是怎么平衡效率和质量的？
+                        </p>
+                        <div class="discussion-footer">
+                            <span><i class="fas fa-comment"></i> 34 回复</span>
+                            <span><i class="fas fa-heart"></i> 18 赞</span>
+                            <span><i class="fas fa-eye"></i> 423 浏览</span>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="community-sidebar">
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-trophy" style="color: var(--warning);"></i> 学习排行榜</h3>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank top3">1</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">陈晓明</div>
+                                <div class="leaderboard-xp">3,450 XP</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank top3">2</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">刘芳</div>
+                                <div class="leaderboard-xp">3,120 XP</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank top3">3</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">赵强</div>
+                                <div class="leaderboard-xp">2,890 XP</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">4</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">孙丽</div>
+                                <div class="leaderboard-xp">2,650 XP</div>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">5</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">周杰</div>
+                                <div class="leaderboard-xp">2,340 XP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-fire" style="color: var(--danger);"></i> 热门话题</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="padding: 0.75rem; background: var(--bg-dark); border-radius: 8px; cursor: pointer;">
+                                <div style="font-weight: 500; margin-bottom: 0.25rem;">#提示词技巧</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">156 个讨论</div>
+                            </div>
+                            <div style="padding: 0.75rem; background: var(--bg-dark); border-radius: 8px; cursor: pointer;">
+                                <div style="font-weight: 500; margin-bottom: 0.25rem;">#监测报告自动化</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">89 个讨论</div>
+                            </div>
+                            <div style="padding: 0.75rem; background: var(--bg-dark); border-radius: 8px; cursor: pointer;">
+                                <div style="font-weight: 500; margin-bottom: 0.25rem;">#数据处理案例</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">67 个讨论</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <!-- 成就页面 -->
+        <div class="page" id="achievements">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy" style="color: var(--warning);"></i> 成就系统</h2>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">初次启航</div>
+                        <div class="achievement-desc">完成第一门课程的学习</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-reward">
+                            <i class="fas fa-star"></i> 已获得 100 XP
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">学习达人</div>
+                        <div class="achievement-desc">连续学习7天</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 71%"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-reward">
+                            <i class="fas fa-star"></i> 进度: 5/7 天
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-card">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #10b981, #06b6d4);">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">项目实战家</div>
+                        <div class="achievement-desc">完成第一个实战项目</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-reward">
+                            <i class="fas fa-star"></i> 已获得 300 XP
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-card locked">
+                    <div class="achievement-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3>团队协作能力</h3>
-                    <p>学习如何在团队中有效使用AI，提升协作效率和项目管理</p>
-                    <div class="module-progress">
-                        <span>8节课</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">社区贡献者</div>
+                        <div class="achievement-desc">在社区发表5个有价值的回复</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 40%"></div>
+                            </div>
                         </div>
-                        <span>实战</span>
+                        <div class="achievement-reward">
+                            <i class="fas fa-lock"></i> 进度: 2/5 回复
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-card locked">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">AI大师</div>
+                        <div class="achievement-desc">完成所有基础课程和3个进阶项目</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 35%"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-reward">
+                            <i class="fas fa-lock"></i> 进度: 7/20 课程
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievement-card locked">
+                    <div class="achievement-icon" style="background: linear-gradient(135deg, #0ea5e9, #8b5cf6);">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">知识分享者</div>
+                        <div class="achievement-desc">分享你的学习心得并获得10个赞</div>
+                        <div class="achievement-progress">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-reward">
+                            <i class="fas fa-lock"></i> 未开始
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </main>
+
+    <!-- 反馈墙组件 -->
+    <div class="feedback-widget">
+        <button class="feedback-btn" onclick="toggleFeedbackWall()">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="feedback-wall" id="feedbackWall">
+            <div class="feedback-wall-header">
+                <h4><i class="fas fa-bullhorn"></i> 反馈墙</h4>
+                <button class="feedback-wall-close" onclick="toggleFeedbackWall()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="feedback-wall-content">
+                <div class="feedback-form-section">
+                    <div class="feedback-type">
+                        <button class="feedback-type-btn active" onclick="selectFeedbackType(this, 'suggestion')">建议</button>
+                        <button class="feedback-type-btn" onclick="selectFeedbackType(this, 'bug')">问题</button>
+                        <button class="feedback-type-btn" onclick="selectFeedbackType(this, 'praise')">点赞</button>
+                    </div>
+                    <div class="feedback-input-group">
+                        <input type="text" class="feedback-name-input" id="feedbackName" placeholder="你的名字（可选）" maxlength="20">
+                        <textarea class="feedback-textarea" id="feedbackContent" placeholder="分享你的想法、建议或遇到的问题..." maxlength="500"></textarea>
+                        <div class="feedback-char-count"><span id="charCount">0</span>/500</div>
+                    </div>
+                    <button class="feedback-submit" onclick="submitPublicFeedback()">
+                        <i class="fas fa-paper-plane"></i> 发布反馈
+                    </button>
+                </div>
+                <div class="feedback-list" id="feedbackList">
+                    <!-- 反馈列表将在这里动态生成 -->
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- AI基础认知模块 -->
-    <section class="content-section" id="ai-basics">
-        <div class="breadcrumb">
-            <a href="#" onclick="showHome()">首页</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>AI基础认知</span>
+    <!-- 通知 -->
+    <div class="notification" id="notification">
+        <div class="notification-icon">
+            <i class="fas fa-check"></i>
         </div>
-        <h2><i class="fas fa-lightbulb" style="color: #667eea;"></i> AI基础认知</h2>
-        
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第1课：什么是人工智能？</h3>
-            <div class="lesson-content">
-                <span class="tag beginner">入门级</span>
-                <span class="tag">10分钟阅读</span>
-                
-                <h4>通俗理解</h4>
-                <p>人工智能（AI）就像是给计算机装上了一个"大脑"，让它能够：</p>
-                <ul>
-                    <li><strong>理解你说的话</strong> - 就像和朋友聊天一样自然</li>
-                    <li><strong>帮你写东西</strong> - 邮件、报告、文案都能写</li>
-                    <li><strong>分析问题</strong> - 给你建议、帮你做决策</li>
-                    <li><strong>处理重复工作</strong> - 节省你的时间和精力</li>
-                </ul>
-
-                <div class="tip-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>生活比喻：</strong>AI就像是一个非常聪明、从不疲倦的助手，它读过互联网上几乎所有的书籍和资料，可以随时为你提供帮助。
-                </div>
-
-                <h4>AI能做什么？</h4>
-                <ol>
-                    <li><strong>文本处理</strong> - 写作、翻译、总结、润色</li>
-                    <li><strong>数据分析</strong> - 解读数据、制作图表、发现规律</li>
-                    <li><strong>编程辅助</strong> - 写代码、找bug、解释技术概念</li>
-                    <li><strong>创意激发</strong> - 头脑风暴、提供灵感、设计方案</li>
-                    <li><strong>学习辅导</strong> - 解释复杂概念、制定学习计划</li>
-                </ol>
-
-                <h4>AI不能做什么？</h4>
-                <ul>
-                    <li>替代人类的创造力和情感</li>
-                    <li>做出涉及伦理的最终决策</li>
-                    <li>获取实时信息（除非特别配置）</li>
-                    <li>完全理解特定公司的内部业务逻辑</li>
-                </ul>
-
-                <div class="practice-box">
-                    <i class="fas fa-hands"></i>
-                    <strong>动手练习：</strong>打开任意一个AI工具（如Claude、ChatGPT），问它："用简单的话解释什么是人工智能，并举3个生活中的例子"
-                </div>
-            </div>
+        <div>
+            <div style="font-weight: 600;" id="notification-title">操作成功</div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);" id="notification-message">你的反馈已提交</div>
         </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第2课：主流AI工具介绍</h3>
-            <div class="lesson-content">
-                <span class="tag beginner">入门级</span>
-                <span class="tag">15分钟阅读</span>
-
-                <h4>文本类AI助手</h4>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h4><i class="fas fa-robot"></i> Claude</h4>
-                        <p>Anthropic开发的AI助手，擅长长文本处理、代码编写和深度分析。免费版功能已经很强大。</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-comments"></i> ChatGPT</h4>
-                        <p>OpenAI的产品，最知名的AI聊天工具。适合日常问答、创意写作和通用任务。</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-search"></i> 文心一言</h4>
-                        <p>百度开发的国产AI，对中文理解很好，适合国内用户使用。</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-sparkles"></i> 通义千问</h4>
-                        <p>阿里巴巴的AI助手，在电商、办公场景有很多实用功能。</p>
-                    </div>
-                </div>
-
-                <h4>图像类AI工具</h4>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h4><i class="fas fa-image"></i> Midjourney</h4>
-                        <p>通过文字描述生成高质量图片，适合做设计、创意视觉。</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-palette"></i> DALL-E</h4>
-                        <p>OpenAI的图像生成工具，与ChatGPT集成，使用方便。</p>
-                    </div>
-                </div>
-
-                <div class="tip-box">
-                    <i class="fas fa-star"></i>
-                    <strong>推荐组合：</strong>对于初学者，建议先用 Claude 或 ChatGPT（免费版）入门，熟练后再探索其他工具。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第3课：如何与AI有效对话</h3>
-            <div class="lesson-content">
-                <span class="tag beginner">入门级</span>
-                <span class="tag">必学</span>
-
-                <h4>黄金法则：清晰、具体、有背景</h4>
-                
-                <p><strong>❌ 不好的提问：</strong></p>
-                <div class="code-block">
-                    "帮我写个邮件"
-                </div>
-
-                <p><strong>✅ 好的提问：</strong></p>
-                <div class="code-block">
-                    "我需要给客户写一封跟进邮件。背景：我们上周提交了项目方案，客户说需要考虑。请帮我写一封礼貌、专业的跟进邮件，询问他们的决定，并表示愿意解答任何问题。语气要友好但不失专业。"
-                </div>
-
-                <h4>提问公式：背景 + 任务 + 要求 + 格式</h4>
-                <ol>
-                    <li><strong>背景</strong> - 告诉AI你现在的情况</li>
-                    <li><strong>任务</strong> - 明确你要AI做什么</li>
-                    <li><strong>要求</strong> - 说明具体要求和限制</li>
-                    <li><strong>格式</strong> - 指定输出的形式</li>
-                </ol>
-
-                <div class="practice-box">
-                    <i class="fas fa-hands"></i>
-                    <strong>实战练习：</strong>用上面的公式，让AI帮你写一份本周工作总结。包含：你做了什么、遇到什么困难、下周计划。
-                </div>
-            </div>
-        </div>
-
-        <!-- 测验 -->
-        <div class="quiz-container">
-            <h3><i class="fas fa-question-circle"></i> 小测验：检验你的理解</h3>
-            <div class="quiz-question">1. 以下哪项是AI最擅长的？</div>
-            <div class="quiz-options">
-                <div class="quiz-option" onclick="selectOption(this, false)">
-                    <span>A</span>
-                    替代人类做所有决策
-                </div>
-                <div class="quiz-option" onclick="selectOption(this, true)">
-                    <span>B</span>
-                    处理重复性文本工作和数据分析
-                </div>
-                <div class="quiz-option" onclick="selectOption(this, false)">
-                    <span>C</span>
-                    完全理解人类的情感
-                </div>
-                <div class="quiz-option" onclick="selectOption(this, false)">
-                    <span>D</span>
-                    预测彩票中奖号码
-                </div>
-            </div>
-            <div class="quiz-result" id="quiz-result"></div>
-        </div>
-    </section>
-
-    <!-- AI工具技能模块 -->
-    <section class="content-section" id="ai-tools">
-        <div class="breadcrumb">
-            <a href="#" onclick="showHome()">首页</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>AI工具技能</span>
-        </div>
-        <h2><i class="fas fa-tools" style="color: #f5576c;"></i> AI工具技能</h2>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第1课：提示词工程基础</h3>
-            <div class="lesson-content">
-                <span class="tag beginner">入门级</span>
-                <span class="tag">核心技能</span>
-
-                <h4>什么是提示词工程？</h4>
-                <p>提示词工程（Prompt Engineering）就是学会如何给AI下指令，让它给你最好的回答。就像学会和同事有效沟通一样重要。</p>
-
-                <h4>五大提示词技巧</h4>
-                
-                <p><strong>1. 角色设定法</strong></p>
-                <div class="code-block">
-                    <span class="comment">// 让AI扮演特定角色</span>
-                    "你是一位经验丰富的产品经理，请帮我..."
-                    "假设你是一位资深HR，请给我建议..."
-                    "请扮演一位耐心的老师，向我解释..."
-                </div>
-
-                <p><strong>2. 分步骤法</strong></p>
-                <div class="code-block">
-                    <span class="comment">// 将复杂任务分解</span>
-                    "请按以下步骤帮我：
-                    1. 先分析这个问题的原因
-                    2. 然后列出3个解决方案
-                    3. 最后比较各方案的优缺点"
-                </div>
-
-                <p><strong>3. 示例法（Few-shot）</strong></p>
-                <div class="code-block">
-                    <span class="comment">// 给AI例子，它学得更快</span>
-                    "请按照下面的风格回复客户：
-                    
-                    例子1：
-                    客户：你们的产品太贵了
-                    回复：理解您的考虑...（展示同理心+解释价值）
-                    
-                    现在请回复：客户说发货太慢了"
-                </div>
-
-                <p><strong>4. 约束条件法</strong></p>
-                <div class="code-block">
-                    <span class="comment">// 明确告诉AI限制条件</span>
-                    "请用300字以内总结"
-                    "请避免使用专业术语"
-                    "请用 bullet points 格式输出"
-                    "目标受众是小学生，请用简单语言"
-                </div>
-
-                <p><strong>5. 迭代优化法</strong></p>
-                <div class="code-block">
-                    <span class="comment">// 不满意就继续调整</span>
-                    第一次："帮我写个产品介绍"
-                    第二次："太长了，缩短到100字"
-                    第三次："再加一些数据支持"
-                    第四次："语气再活泼一些"
-                </div>
-
-                <div class="tip-box">
-                    <i class="fas fa-magic"></i>
-                    <strong>秘诀：</strong>把AI当成一个聪明但需要你指导的实习生。你越清楚地说明需求，结果就越好。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第2课：办公场景实战</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">实用场景</span>
-
-                <h4>场景1：快速写邮件</h4>
-                <div class="code-block">
-                    <span class="comment">// 提示词模板</span>
-                    "我需要给[收件人]写一封关于[主题]的邮件。
-                    背景：[具体情况]
-                    目的：[希望达成什么]
-                    语气要求：[正式/友好/紧急等]
-                    字数限制：[可选]"
-                </div>
-
-                <h4>场景2：会议纪要整理</h4>
-                <div class="code-block">
-                    <span class="comment">// 把杂乱的记录变成专业纪要</span>
-                    "请将下面的会议记录整理成正式的会议纪要：
-                    [粘贴你的记录]
-                    
-                    要求：
-                    - 包含：会议主题、时间、参会人、决议事项、待办任务
-                    - 待办任务要注明负责人和截止日期
-                    - 用清晰的格式输出"
-                </div>
-
-                <h4>场景3：数据分析报告</h4>
-                <div class="code-block">
-                    <span class="comment">// 让AI帮你解读数据</span>
-                    "我有一份销售数据，请帮我分析：
-                    [粘贴数据]
-                    
-                    请提供：
-                    1. 数据趋势总结
-                    2. 异常点分析
-                    3. 改进建议
-                    4. 用通俗语言解释"
-                </div>
-
-                <h4>场景4：PPT大纲生成</h4>
-                <div class="code-block">
-                    <span class="comment">// 快速生成演示文稿结构</span>
-                    "我要做一个关于[主题]的PPT，面向[受众]，预计[时长]。
-                    请帮我：
-                    1. 设计PPT结构（包含每页标题）
-                    2. 每页的关键要点
-                    3. 建议的视觉呈现方式"
-                </div>
-
-                <div class="practice-box">
-                    <i class="fas fa-briefcase"></i>
-                    <strong>本周挑战：</strong>选择你工作中最耗时的一项文案工作，用AI尝试完成，记录时间节省了多少。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第3课：Claude Code 编程助手</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">技术向</span>
-
-                <h4>Claude Code 是什么？</h4>
-                <p>Claude Code 是一个可以直接在你的电脑上运行的AI编程助手。它可以：</p>
-                <ul>
-                    <li>帮你写代码、改代码</li>
-                    <li>分析项目结构和文件</li>
-                    <li>自动执行命令和脚本</li>
-                    <li>帮你调试程序</li>
-                </ul>
-
-                <h4>基础命令</h4>
-                <div class="code-block">
-                    <span class="comment">// 进入项目目录后启动</span>
-                    <span class="keyword">claude</span>
-                    
-                    <span class="comment">// 常用指令</span>
-                    /help          <span class="comment">// 查看帮助</span>
-                    /clear         <span class="comment">// 清空对话</span>
-                    /compact       <span class="comment">// 压缩对话历史</span>
-                </div>
-
-                <h4>实用场景示例</h4>
-                <p><strong>1. 分析代码</strong></p>
-                <div class="code-block">
-                    "请帮我分析这个文件的功能和潜在问题"
-                    <span class="comment">// 然后粘贴代码或让Claude读取文件</span>
-                </div>
-
-                <p><strong>2. 批量修改</strong></p>
-                <div class="code-block">
-                    "帮我把项目中所有的 console.log 改成 logger.debug"
-                </div>
-
-                <p><strong>3. 生成脚本</strong></p>
-                <div class="code-block">
-                    "帮我写一个Python脚本，批量重命名文件夹里的图片，按日期排序"
-                </div>
-
-                <div class="tip-box">
-                    <i class="fas fa-terminal"></i>
-                    <strong>注意：</strong>即使你不是程序员，Claude Code 也能帮你处理很多技术任务，比如批量处理文件、数据分析脚本等。
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 逻辑思维训练模块 -->
-    <section class="content-section" id="thinking">
-        <div class="breadcrumb">
-            <a href="#" onclick="showHome()">首页</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>逻辑思维训练</span>
-        </div>
-        <h2><i class="fas fa-brain" style="color: #4facfe;"></i> 逻辑思维训练</h2>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第1课：结构化思维</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">思维方法</span>
-
-                <h4>什么是结构化思维？</h4>
-                <p>结构化思维就是把复杂的问题分解成清晰、有条理的部分。就像整理衣柜一样，把东西分类放好，需要时就能快速找到。</p>
-
-                <h4>MECE原则：不重不漏</h4>
-                <p>MECE = Mutually Exclusive, Collectively Exhaustive（相互独立，完全穷尽）</p>
-                
-                <div class="code-block">
-                    <span class="comment">// 不好的分类：有重叠</span>
-                    人群分类：男人、女人、小孩、老人
-                    <span class="comment">// 问题：小孩可以是男孩或女孩，老人也有男女</span>
-                    
-                    <span class="comment">// 好的分类：MECE</span>
-                    人群分类：
-                    - 按性别：男性、女性
-                    - 按年龄：儿童、青年、中年、老年
-                </div>
-
-                <h4>常用思维框架</h4>
-                
-                <p><strong>1. 5W2H分析法</strong></p>
-                <ul>
-                    <li><strong>What</strong> - 是什么？要做什么？</li>
-                    <li><strong>Why</strong> - 为什么？目的是什么？</li>
-                    <li><strong>Who</strong> - 谁？涉及哪些人？</li>
-                    <li><strong>When</strong> - 何时？时间安排？</li>
-                    <li><strong>Where</strong> - 何地？在哪里做？</li>
-                    <li><strong>How</strong> - 怎么做？方法是什么？</li>
-                    <li><strong>How much</strong> - 多少？预算/成本？</li>
-                </ul>
-
-                <p><strong>2. SWOT分析</strong></p>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h4>S - 优势</h4>
-                        <p>内部的有利因素</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4>W - 劣势</h4>
-                        <p>内部的不利因素</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4>O - 机会</h4>
-                        <p>外部的好机会</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4>T - 威胁</h4>
-                        <p>外部的挑战</p>
-                    </div>
-                </div>
-
-                <div class="practice-box">
-                    <i class="fas fa-puzzle-piece"></i>
-                    <strong>练习：</strong>用5W2H分析法，向AI描述你最近要完成的一个工作任务，看看AI能否帮你梳理得更清晰。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第2课：批判性思维</h3>
-            <div class="lesson-content">
-                <span class="tag advanced">高级</span>
-                <span class="tag">必备能力</span>
-
-                <h4>AI时代的批判性思维</h4>
-                <p>AI可以给我们答案，但它不一定总是对的。批判性思维帮助我们：</p>
-                <ul>
-                    <li>判断AI回答的质量</li>
-                    <li>发现潜在的错误或偏见</li>
-                    <li>结合实际情况做决策</li>
-                </ul>
-
-                <h4>验证AI回答的 checklist</h4>
-                <ol>
-                    <li><strong>事实核查</strong> - 关键数据是否准确？</li>
-                    <li><strong>逻辑检查</strong> - 推理过程是否合理？</li>
-                    <li><strong>时效性</strong> - 信息是否过时？</li>
-                    <li><strong>偏见识别</strong> - 是否存在明显偏见？</li>
-                    <li><strong>适用性</strong> - 是否适合我的具体情况？</li>
-                </ol>
-
-                <h4>如何向AI提问以获得更好答案</h4>
-                <div class="code-block">
-                    <span class="comment">// 让AI展示思考过程</span>
-                    "请一步一步地思考这个问题"
-                    "请解释你的推理过程"
-                    
-                    <span class="comment">// 让AI考虑不同角度</span>
-                    "请从正反两方面分析这个问题"
-                    "有哪些反对这个观点的理由？"
-                    
-                    <span class="comment">// 让AI承认不确定性</span>
-                    "如果你不确定，请告诉我"
-                    "这个答案的可靠程度如何？"
-                </div>
-
-                <div class="tip-box">
-                    <i class="fas fa-shield-alt"></i>
-                    <strong>重要提醒：</strong>对于重要决策，永远不要把AI的回答作为唯一依据。用AI获取思路和参考，但最终判断权在你。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第3课：与AI协作解决问题</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">实战技巧</span>
-
-                <h4>人机协作的最佳模式</h4>
-                <p>把AI当作你的思维伙伴，而不是答案机器。最佳协作流程：</p>
-
-                <ol>
-                    <li><strong>你定义问题</strong> - 清楚地描述你要解决什么</li>
-                    <li><strong>AI提供思路</strong> - 让AI给出可能的方向</li>
-                    <li><strong>你筛选判断</strong> - 结合实际情况选择可行方案</li>
-                    <li><strong>AI深化细节</strong> - 对选定方案进行细化</li>
-                    <li><strong>你执行验证</strong> - 实施方案并检验效果</li>
-                </ol>
-
-                <h4>实战：用AI解决工作难题</h4>
-                <div class="code-block">
-                    <span class="comment">// 第一步：描述问题</span>
-                    "我遇到一个工作问题：[具体问题描述]
-                    我已经尝试了：[你做过什么]
-                    限制条件：[时间/资源/人员等限制]"
-                    
-                    <span class="comment">// 第二步：要求多角度方案</span>
-                    "请提供3个不同角度的解决方案，
-                    并分析每个方案的优缺点和所需资源"
-                    
-                    <span class="comment">// 第三步：深入最佳方案</span>
-                    "我选择方案X，请帮我：
-                    1. 制定详细的执行步骤
-                    2. 识别可能的风险
-                    3. 准备应对预案"
-                </div>
-
-                <div class="practice-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>思维实验：</strong>想一个你目前工作中的真实问题，按照上面的流程和AI对话，看看能否找到新的解决思路。
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 团队协作模块 -->
-    <section class="content-section" id="teamwork">
-        <div class="breadcrumb">
-            <a href="#" onclick="showHome()">首页</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>团队协作能力</span>
-        </div>
-        <h2><i class="fas fa-users" style="color: #43e97b;"></i> 团队协作能力</h2>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第1课：团队中的AI使用规范</h3>
-            <div class="lesson-content">
-                <span class="tag beginner">入门级</span>
-                <span class="tag">必读</span>
-
-                <h4>为什么要建立使用规范？</h4>
-                <p>当团队一起使用AI时，需要明确的规则来确保：</p>
-                <ul>
-                    <li>信息安全和保密</li>
-                    <li>工作质量的一致性</li>
-                    <li>团队成员之间的有效协作</li>
-                    <li>避免过度依赖AI</li>
-                </ul>
-
-                <h4>建议的团队规范框架</h4>
-                
-                <p><strong>1. 信息安全红线</strong></p>
-                <div class="tip-box">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <strong>绝不要输入AI的内容：</strong>
-                    <ul>
-                        <li>客户敏感信息（身份证号、银行卡号等）</li>
-                        <li>公司核心商业机密</li>
-                        <li>未公开的产品计划或财务数据</li>
-                        <li>员工个人隐私信息</li>
-                    </ul>
-                </div>
-
-                <p><strong>2. 使用场景白名单</strong></p>
-                <ul>
-                    <li>✅ 可以：通用知识查询、文案草稿、代码辅助、学习资料整理</li>
-                    <li>❌ 避免：涉及敏感数据的分析、最终决策、对外发布的最终版本</li>
-                </ul>
-
-                <p><strong>3. 质量检查流程</strong></p>
-                <ol>
-                    <li>AI生成内容 → 人工审核 → 修改完善 → 最终确认</li>
-                    <li>重要文档必须人工复核事实和数据</li>
-                    <li>对外发布的材料需要负责人签字确认</li>
-                </ol>
-
-                <h4>团队提示词模板共享</h4>
-                <p>建议团队建立共享的提示词库，包含：</p>
-                <ul>
-                    <li>常用文案模板（邮件、报告、通知）</li>
-                    <li>内部术语解释</li>
-                    <li>公司风格指南</li>
-                    <li>常见问题解决方案</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第2课：用AI提升会议效率</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">效率工具</span>
-
-                <h4>会前准备</h4>
-                <div class="code-block">
-                    <span class="comment">// 生成会议议程</span>
-                    "我要组织一个关于[主题]的会议，
-                    参会人：[列出角色]
-                    目标：[希望达成什么]
-                    预计时长：[X分钟]
-                    
-                    请帮我：
-                    1. 设计会议议程
-                    2. 每个议题的建议时长
-                    3. 需要提前准备的材料清单"
-                </div>
-
-                <h4>会中辅助</h4>
-                <ul>
-                    <li><strong>实时记录</strong> - 用AI语音转文字工具记录会议内容</li>
-                    <li><strong>即时查询</strong> - 遇到不确定的问题，快速询问AI</li>
-                    <li><strong>时间提醒</strong> - 让AI帮你控制每个议题的时间</li>
-                </ul>
-
-                <h4>会后跟进</h4>
-                <div class="code-block">
-                    <span class="comment">// 自动生成会议纪要</span>
-                    "请将以下会议录音/记录整理成标准会议纪要：
-                    [粘贴内容]
-                    
-                    要求：
-                    1. 提取所有决议事项
-                    2. 列出待办任务（含负责人和截止日期）
-                    3. 标注需要后续跟进的疑问点"
-                </div>
-
-                <div class="practice-box">
-                    <i class="fas fa-clock"></i>
-                    <strong>效率挑战：</strong>下次会议尝试用AI准备议程，看看会议时间是否能缩短20%。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第3课：AI辅助项目管理</h3>
-            <div class="lesson-content">
-                <span class="tag intermediate">进阶级</span>
-                <span class="tag">管理技能</span>
-
-                <h4>项目规划阶段</h4>
-                <div class="code-block">
-                    <span class="comment">// 制定项目计划</span>
-                    "我要负责一个[项目类型]项目，
-                    目标：[具体目标]
-                    团队：[人数和角色]
-                    截止日期：[时间]
-                    
-                    请帮我：
-                    1. 拆分项目里程碑
-                    2. 估算每个阶段的时间
-                    3. 识别潜在风险
-                    4. 建议的团队分工"
-                </div>
-
-                <h4>进度跟踪</h4>
-                <p>用AI帮你：</p>
-                <ul>
-                    <li>生成周报/日报模板</li>
-                    <li>分析进度延迟的原因</li>
-                    <li>提出资源调配建议</li>
-                    <li>起草风险预警通知</li>
-                </ul>
-
-                <h4>团队沟通</h4>
-                <div class="code-block">
-                    <span class="comment">// 处理团队冲突</span>
-                    "团队里出现了[描述情况]，
-                    我需要和[相关人员]沟通。
-                    请帮我：
-                    1. 分析可能的沟通策略
-                    2. 起草一个中立、建设性的沟通稿
-                    3. 提供后续跟进建议"
-                </div>
-
-                <div class="tip-box">
-                    <i class="fas fa-users-cog"></i>
-                    <strong>团队领导建议：</strong>作为团队负责人，你可以用AI来准备一对一谈话、团队建设活动方案、甚至是激励邮件。但记住，真诚的人际互动永远比AI生成的内容更有价值。
-                </div>
-            </div>
-        </div>
-
-        <div class="lesson-card">
-            <h3><i class="fas fa-book-open"></i> 第4课：建立团队知识库</h3>
-            <div class="lesson-content">
-                <span class="tag advanced">高级</span>
-                <span class="tag">长期建设</span>
-
-                <h4>为什么需要AI知识库？</h4>
-                <p>把团队的集体智慧和AI结合，可以：</p>
-                <ul>
-                    <li>新员工快速上手</li>
-                    <li>减少重复性问题</li>
-                    <li>保留团队经验</li>
-                    <li>提高整体效率</li>
-                </ul>
-
-                <h4>知识库内容规划</h4>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h4><i class="fas fa-book"></i> 操作手册</h4>
-                        <p>常用流程、系统操作、工具使用指南</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-question-circle"></i> FAQ</h4>
-                        <p>常见问题及解决方案</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-lightbulb"></i> 最佳实践</h4>
-                        <p>成功案例、经验教训、技巧分享</p>
-                    </div>
-                    <div class="tool-card">
-                        <h4><i class="fas fa-file-alt"></i> 模板库</h4>
-                        <p>文档模板、邮件模板、报告模板</p>
-                    </div>
-                </div>
-
-                <h4>用AI整理知识库</h4>
-                <div class="code-block">
-                    <span class="comment">// 将零散文档整理成知识库</span>
-                    "我有以下关于[主题]的零散笔记：
-                    [粘贴内容]
-                    
-                    请帮我：
-                    1. 整理成结构化的知识文档
-                    2. 提取关键要点
-                    3. 补充缺失的信息（如果有）
-                    4. 生成FAQ部分"
-                </div>
-
-                <div class="practice-box">
-                    <i class="fas fa-rocket"></i>
-                    <strong>团队项目：</strong>和同事们一起，用AI整理你们团队的第一个共享知识库文档。从最常见的"新人入职指南"开始！
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 底部 -->
-    <footer class="footer">
-        <p>AI学习天地 - 让每个人都能掌握人工智能的力量</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">免费开源 | 持续更新 | 团队协作学习平台</p>
-    </footer>
+    </div>
 
     <script>
-        // 显示首页
-        function showHome() {
-            document.getElementById('home-section').style.display = 'block';
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
+        // 返回首页/封面
+        function backToHome() {
+            const heroCover = document.getElementById('heroCover');
+            
+            // 显示封面
+            heroCover.classList.remove('hidden');
+            
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
-            window.scrollTo(0, 0);
+            
+            // 重置导航状态
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 重新初始化粒子效果
+            const container = document.getElementById('heroParticles');
+            container.innerHTML = '';
+            initParticles();
+            
+            showNotification('info', '已返回首页', '欢迎再次体验AI库旋风！');
         }
 
-        // 显示模块内容
-        function showModule(moduleId) {
-            document.getElementById('home-section').style.display = 'none';
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(moduleId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        // 测验功能
-        function selectOption(element, isCorrect) {
-            // 移除其他选项的选中状态
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('selected', 'correct', 'wrong');
-            });
-
-            // 标记当前选项
-            element.classList.add('selected');
-            if (isCorrect) {
-                element.classList.add('correct');
-                showQuizResult(true, '正确！AI擅长处理重复性文本工作和数据分析，而不是替代人类做决策。');
-            } else {
-                element.classList.add('wrong');
-                showQuizResult(false, '再想想。AI是辅助工具，不是决策者。它最擅长的是处理重复性工作。');
+        // 初始化粒子效果
+        function initParticles() {
+            const container = document.getElementById('heroParticles');
+            if (!container) return;
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                
+                // 随机颜色
+                const colors = [
+                    'rgba(6, 182, 212, 0.6)',
+                    'rgba(139, 92, 246, 0.6)',
+                    'rgba(99, 102, 241, 0.6)'
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+                
+                container.appendChild(particle);
             }
         }
 
-        function showQuizResult(isCorrect, message) {
-            const resultDiv = document.getElementById('quiz-result');
-            resultDiv.className = 'quiz-result show ' + (isCorrect ? 'success' : 'error');
-            resultDiv.innerHTML = '<i class="fas fa-' + (isCorrect ? 'check-circle' : 'times-circle') + '"></i> ' + message;
-        }
-
-        // 移动端菜单切换
-        function toggleMobileMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+        // 进入平台
+        function enterPlatform() {
+            const heroCover = document.getElementById('heroCover');
+            heroCover.classList.add('hidden');
+            
+            // 显示仪表盘
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
+            document.getElementById('dashboard').classList.add('active');
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector('.nav-tab:first-child').classList.add('active');
+            
+            showNotification('success', '欢迎来到AI智学工坊', '开始学习你的AI之旅吧！');
+        }
+
+        // 显示介绍
+        function showIntro() {
+            const introModal = document.createElement('div');
+            introModal.className = 'intro-modal';
+            introModal.innerHTML = `
+                <div class="intro-overlay" onclick="closeIntro()"></div>
+                <div class="intro-content">
+                    <button class="intro-close" onclick="closeIntro()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <div class="intro-header">
+                        <div class="intro-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h2>欢迎来到 AI智学工坊</h2>
+                        <p>地质海洋监测行业AI能力提升平台</p>
+                    </div>
+                    
+                    <div class="intro-features">
+                        <div class="intro-feature">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #06b6d4, #8b5cf6);">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>38节精品课程</h3>
+                            <p>从AI基础到行业应用，循序渐进掌握AI技能</p>
+                        </div>
+                        
+                        <div class="intro-feature">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #10b981, #06b6d4);">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h3>12个实战项目</h3>
+                            <p>监测数据处理、报告生成、灾害预警等真实场景</p>
+                        </div>
+                        
+                        <div class="intro-feature">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h3>游戏化学习</h3>
+                            <p>XP经验值、成就徽章、排行榜激励学习动力</p>
+                        </div>
+                        
+                        <div class="intro-feature">
+                            <div class="feature-icon" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>社区互动</h3>
+                            <p>反馈墙、讨论区，与同事一起交流学习心得</p>
+                        </div>
+                    </div>
+                    
+                    <div class="intro-steps">
+                        <h3><i class="fas fa-rocket"></i> 三步开始你的AI之旅</h3>
+                        <div class="steps-grid">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>选择学习路径</h4>
+                                    <p>根据你的水平选择入门或进阶课程</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>完成互动课程</h4>
+                                    <p>边看边练，实时测验巩固知识</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>实战项目练手</h4>
+                                    <p>用真实数据练习，成为AI达人</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="intro-cta">
+                        <button class="intro-btn-primary" onclick="closeIntro(); enterPlatform();">
+                            <i class="fas fa-rocket"></i>
+                            立即开始学习
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(introModal);
+            
+            // 动画效果
+            setTimeout(() => {
+                introModal.classList.add('show');
+            }, 10);
+        }
+
+        function closeIntro() {
+            const modal = document.querySelector('.intro-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // 页面切换
+        function showPage(pageId) {
+            // 隐藏封面
+            const heroCover = document.getElementById('heroCover');
+            if (heroCover && !heroCover.classList.contains('hidden')) {
+                heroCover.classList.add('hidden');
+            }
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.closest('.nav-tab').classList.add('active');
+        }
+
+        // 课程展开/收起
+        function toggleLesson(header) {
+            const lessonItem = header.closest('.lesson-item');
+            lessonItem.classList.toggle('expanded');
+        }
+
+        // 课程筛选
+        function filterLessons(level) {
+            document.querySelectorAll('.filter-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            event.target.closest('.filter-option').classList.add('active');
+            
+            // 这里可以添加实际的筛选逻辑
+            showNotification('info', '筛选已应用', `正在显示${level === 'all' ? '全部' : level}课程`);
+        }
+
+        // 模拟AI响应
+        function simulateAIResponse() {
+            const output = document.querySelector('.playground-output-content');
+            output.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI正在思考...';
+            
+            setTimeout(() => {
+                output.innerHTML = `
+                    <p style="margin-bottom: 0.75rem;"><strong>人工智能</strong>（Artificial Intelligence，简称AI）是指由人制造出来的系统所表现出来的智能。</p>
+                    <p style="margin-bottom: 0.75rem;">简单来说，AI就是让计算机能够：</p>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 0.75rem;">
+                        <li>理解人类的语言</li>
+                        <li>学习和积累经验</li>
+                        <li>解决复杂问题</li>
+                        <li>做出预测和决策</li>
+                    </ul>
+                    <p>就像你身边有一个超级聪明的助手，它读过几乎所有书籍，随时准备回答你的问题！</p>
+                `;
+                showNotification('success', '体验完成', '你可以继续修改提问，体验不同的回答');
+            }, 1500);
+        }
+
+        // 测验选择
+        function selectQuizOption(element, isCorrect) {
+            document.querySelectorAll('.quiz-option-modern').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'wrong');
+            });
+            
+            element.classList.add('selected');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                setTimeout(() => {
+                    showNotification('success', '回答正确！', '获得 +50 XP');
+                    updateXP(50);
+                }, 300);
+            } else {
+                element.classList.add('wrong');
+                setTimeout(() => {
+                    showNotification('info', '再试一次', '角色设定法是让AI扮演特定角色的技巧');
+                }, 300);
+            }
+        }
+
+        // 更新XP
+        function updateXP(amount) {
+            const xpElement = document.getElementById('user-xp');
+            let currentXP = parseInt(xpElement.textContent.replace(/[^0-9]/g, ''));
+            currentXP += amount;
+            xpElement.textContent = currentXP.toLocaleString() + ' XP';
+        }
+
+        // 反馈墙功能
+        let currentFeedbackType = 'suggestion';
+        let feedbackData = JSON.parse(localStorage.getItem('aiHubFeedback') || '[]');
+
+        function toggleFeedbackWall() {
+            const wall = document.getElementById('feedbackWall');
+            wall.classList.toggle('show');
+            if (wall.classList.contains('show')) {
+                renderFeedbackList();
+            }
+        }
+
+        function selectFeedbackType(btn, type) {
+            document.querySelectorAll('.feedback-type-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            currentFeedbackType = type;
+        }
+
+        function submitPublicFeedback() {
+            const nameInput = document.getElementById('feedbackName');
+            const contentInput = document.getElementById('feedbackContent');
+            const name = nameInput.value.trim() || '匿名用户';
+            const content = contentInput.value.trim();
+
+            if (!content) {
+                showNotification('error', '内容不能为空', '请输入你的反馈内容');
+                return;
+            }
+
+            const newFeedback = {
+                id: Date.now(),
+                name: name,
+                content: content,
+                type: currentFeedbackType,
+                time: new Date().toLocaleString('zh-CN'),
+                likes: 0,
+                liked: false
+            };
+
+            feedbackData.unshift(newFeedback);
+            localStorage.setItem('aiHubFeedback', JSON.stringify(feedbackData));
+
+            // 清空输入
+            nameInput.value = '';
+            contentInput.value = '';
+            document.getElementById('charCount').textContent = '0';
+
+            // 刷新列表
+            renderFeedbackList();
+
+            showNotification('success', '反馈已发布', '你的声音已被记录，感谢参与！');
+        }
+
+        function renderFeedbackList() {
+            const listContainer = document.getElementById('feedbackList');
+            
+            if (feedbackData.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="feedback-empty">
+                        <i class="fas fa-comments"></i>
+                        <p>暂无反馈，来做第一个发言的人吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = feedbackData.map(item => `
+                <div class="feedback-item">
+                    <div class="feedback-item-header">
+                        <div class="feedback-author">
+                            <div class="feedback-avatar">${item.name.charAt(0)}</div>
+                            <div>
+                                <div class="feedback-name">${item.name}</div>
+                                <div class="feedback-time">${item.time}</div>
+                            </div>
+                        </div>
+                        <span class="feedback-type-tag ${item.type}">
+                            ${item.type === 'suggestion' ? '建议' : item.type === 'bug' ? '问题' : '点赞'}
+                        </span>
+                    </div>
+                    <div class="feedback-content">${item.content}</div>
+                    <div class="feedback-actions">
+                        <button class="feedback-action-btn ${item.liked ? 'liked' : ''}" onclick="likeFeedback(${item.id})">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>${item.likes}</span>
+                        </button>
+                        <button class="feedback-action-btn" onclick="replyFeedback(${item.id})">
+                            <i class="fas fa-reply"></i>
+                            <span>回复</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function likeFeedback(id) {
+            const item = feedbackData.find(f => f.id === id);
+            if (item) {
+                if (item.liked) {
+                    item.likes--;
+                    item.liked = false;
+                } else {
+                    item.likes++;
+                    item.liked = true;
+                }
+                localStorage.setItem('aiHubFeedback', JSON.stringify(feedbackData));
+                renderFeedbackList();
+            }
+        }
+
+        function replyFeedback(id) {
+            const item = feedbackData.find(f => f.id === id);
+            if (item) {
+                document.getElementById('feedbackContent').value = `@${item.name} `;
+                document.getElementById('feedbackContent').focus();
+                updateCharCount();
+            }
+        }
+
+        // 字符计数
+        document.getElementById('feedbackContent')?.addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const content = document.getElementById('feedbackContent').value;
+            document.getElementById('charCount').textContent = content.length;
+        }
+
+        // 通知系统
+        function showNotification(type, title, message) {
+            const notification = document.getElementById('notification');
+            notification.className = 'notification ' + type + ' show';
+            document.getElementById('notification-title').textContent = title;
+            document.getElementById('notification-message').textContent = message;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // 继续学习
+        function continueLastLesson() {
+            showPage('learning');
+            showNotification('info', '继续学习', '已恢复到你上次离开的位置');
+        }
+
+        // 打开课程
+        function openLesson(lessonId) {
+            showPage('learning');
+            showNotification('info', '加载课程', '正在打开课程：' + lessonId);
+        }
+
+        // 开始项目
+        function startProject(projectId) {
+            showNotification('success', '项目已启动', '开始你的实战项目之旅！');
+        }
+
+        // 显示用户资料
+        function showUserProfile() {
+            showNotification('info', '用户资料', '功能开发中...');
+        }
+
+        // 新讨论模态框
+        function showNewDiscussionModal() {
+            showNotification('info', '发起讨论', '功能开发中...');
+        }
+
+        // 点击外部关闭反馈面板
+        document.addEventListener('click', function(e) {
+            const widget = document.querySelector('.feedback-widget');
+            const panel = document.getElementById('feedbackPanel');
+            if (!widget.contains(e.target) && panel.classList.contains('show')) {
+                panel.classList.remove('show');
+            }
         });
 
-        // 学习进度追踪（使用 localStorage）
-        function saveProgress(module, lesson, completed) {
-            let progress = JSON.parse(localStorage.getItem('aiLearningProgress') || '{}');
-            if (!progress[module]) progress[module] = {};
-            progress[module][lesson] = completed;
+        // 学习进度本地存储
+        function saveProgress() {
+            const progress = {
+                completedLessons: ['ai-basics-1', 'ai-basics-2', 'tools-1', 'tools-2'],
+                currentLesson: 'ai-basics-3',
+                xp: 1250,
+                streak: 5,
+                lastStudyDate: new Date().toISOString()
+            };
             localStorage.setItem('aiLearningProgress', JSON.stringify(progress));
-            updateProgressUI();
-        }
-
-        function updateProgressUI() {
-            // 更新UI上的进度显示
-            const progress = JSON.parse(localStorage.getItem('aiLearningProgress') || '{}');
-            // 这里可以添加更新进度条和完成标记的逻辑
         }
 
         // 页面加载时恢复进度
         document.addEventListener('DOMContentLoaded', function() {
-            updateProgressUI();
+            // 初始化封面粒子效果
+            initParticles();
+            
+            // 恢复学习进度
+            const saved = localStorage.getItem('aiLearningProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                document.getElementById('user-xp').textContent = progress.xp.toLocaleString() + ' XP';
+                document.getElementById('user-streak').textContent = progress.streak + '天';
+            }
+            
+            // 检查是否是首次访问
+            const hasVisited = localStorage.getItem('hasVisitedAIHub');
+            if (hasVisited) {
+                // 非首次访问，直接显示仪表盘
+                document.getElementById('heroCover').classList.add('hidden');
+                document.getElementById('dashboard').classList.add('active');
+                document.querySelector('.nav-tab:first-child').classList.add('active');
+            } else {
+                // 首次访问，显示封面
+                localStorage.setItem('hasVisitedAIHub', 'true');
+            }
         });
     </script>
 </body>
