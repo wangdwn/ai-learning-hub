@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI学习天地 - 从零基础到AI达人</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            -webkit-text-fill-color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* 学习路径 */
+        .learning-path {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-card:nth-child(1) .module-icon { background: var(--gradient-1); }
+        .module-card:nth-child(2) .module-icon { background: var(--gradient-2); }
+        .module-card:nth-child(3) .module-icon { background: var(--gradient-3); }
+        .module-card:nth-child(4) .module-icon { background: var(--gradient-4); }
+
+        .module-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .module-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* 内容区域 */
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .lesson-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .lesson-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .lesson-card h3 i {
+            font-size: 1.2rem;
+        }
+
+        .lesson-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .lesson-content h4 {
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .lesson-content ul, .lesson-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .tip-box {
+            background: rgba(6, 182, 212, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 0 10px 10px 0;
+            margin: 1.5rem 0;
+        }
+
+        .tip-box i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        .practice-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 1rem 1.5rem;
+            border-radius: 0 10px 10px 0;
+            margin: 1.5rem 0;
+        }
+
+        .practice-box i {
+            color: var(--success);
+            margin-right: 0.5rem;
+        }
+
+        /* 测验样式 */
+        .quiz-container {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--primary);
+        }
+
+        .quiz-option.selected {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        .quiz-option span {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .quiz-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .quiz-result.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* 底部 */
+        .footer {
+            background: rgba(0,0,0,0.3);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 动画 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 工具卡片 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        .tool-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .tool-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* 代码块 */
+        .code-block {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            border: 1px solid #30363d;
+        }
+
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag.beginner { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .tag.intermediate { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .tag.advanced { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>AI学习天地</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" onclick="showHome()">首页</a></li>
+            <li><a href="#modules" onclick="showHome()">学习模块</a></li>
+            <li><a href="#about">关于我们</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- 首页内容 -->
+    <div id="home-section">
+        <!-- 英雄区域 -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>AI学习天地</h1>
+                <p>从零基础到AI达人，让每个人都能掌握人工智能的力量。免费、实用、循序渐进的学习平台。</p>
+                <div class="cta-buttons">
+                    <a href="#modules" class="btn btn-primary" onclick="showHome()">
+                        <i class="fas fa-rocket"></i>
+                        开始学习
+                    </a>
+                    <a href="#" class="btn btn-secondary" onclick="showModule('ai-basics')">
+                        <i class="fas fa-play-circle"></i>
+                        观看介绍
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学习路径 -->
+        <section class="learning-path" id="modules">
+            <div class="section-title">
+                <h2>选择你的学习路径</h2>
+                <p>四大模块，循序渐进，从认知到实战，全面提升AI能力</p>
+            </div>
+            <div class="modules-grid">
+                <div class="module-card" onclick="showModule('ai-basics')">
+                    <div class="module-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>AI基础认知</h3>
+                    <p>了解什么是AI、能做什么、不能做什么，建立正确的AI认知框架</p>
+                    <div class="module-progress">
+                        <span>8节课</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span>入门</span>
+                    </div>
+                </div>
+
+                <div class="module-card" onclick="showModule('ai-tools')">
+                    <div class="module-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>AI工具技能</h3>
+                    <p>掌握Claude、ChatGPT等主流AI工具的使用技巧和提示词工程</p>
+                    <div class="module-progress">
+                        <span>12节课</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span>实用</span>
+                    </div>
+                </div>
+
+                <div class="module-card" onclick="showModule('thinking')">
+                    <div class="module-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>逻辑思维训练</h3>
+                    <p>培养结构化思维、批判性思维，学会与AI协作解决问题</p>
+                    <div class="module-progress">
+                        <span>10节课</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span>进阶</span>
+                    </div>
+                </div>
+
+                <div class="module-card" onclick="showModule('teamwork')">
+                    <div class="module-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>团队协作能力</h3>
+                    <p>学习如何在团队中有效使用AI，提升协作效率和项目管理</p>
+                    <div class="module-progress">
+                        <span>8节课</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span>实战</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- AI基础认知模块 -->
+    <section class="content-section" id="ai-basics">
+        <div class="breadcrumb">
+            <a href="#" onclick="showHome()">首页</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>AI基础认知</span>
+        </div>
+        <h2><i class="fas fa-lightbulb" style="color: #667eea;"></i> AI基础认知</h2>
+        
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第1课：什么是人工智能？</h3>
+            <div class="lesson-content">
+                <span class="tag beginner">入门级</span>
+                <span class="tag">10分钟阅读</span>
+                
+                <h4>通俗理解</h4>
+                <p>人工智能（AI）就像是给计算机装上了一个"大脑"，让它能够：</p>
+                <ul>
+                    <li><strong>理解你说的话</strong> - 就像和朋友聊天一样自然</li>
+                    <li><strong>帮你写东西</strong> - 邮件、报告、文案都能写</li>
+                    <li><strong>分析问题</strong> - 给你建议、帮你做决策</li>
+                    <li><strong>处理重复工作</strong> - 节省你的时间和精力</li>
+                </ul>
+
+                <div class="tip-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>生活比喻：</strong>AI就像是一个非常聪明、从不疲倦的助手，它读过互联网上几乎所有的书籍和资料，可以随时为你提供帮助。
+                </div>
+
+                <h4>AI能做什么？</h4>
+                <ol>
+                    <li><strong>文本处理</strong> - 写作、翻译、总结、润色</li>
+                    <li><strong>数据分析</strong> - 解读数据、制作图表、发现规律</li>
+                    <li><strong>编程辅助</strong> - 写代码、找bug、解释技术概念</li>
+                    <li><strong>创意激发</strong> - 头脑风暴、提供灵感、设计方案</li>
+                    <li><strong>学习辅导</strong> - 解释复杂概念、制定学习计划</li>
+                </ol>
+
+                <h4>AI不能做什么？</h4>
+                <ul>
+                    <li>替代人类的创造力和情感</li>
+                    <li>做出涉及伦理的最终决策</li>
+                    <li>获取实时信息（除非特别配置）</li>
+                    <li>完全理解特定公司的内部业务逻辑</li>
+                </ul>
+
+                <div class="practice-box">
+                    <i class="fas fa-hands"></i>
+                    <strong>动手练习：</strong>打开任意一个AI工具（如Claude、ChatGPT），问它："用简单的话解释什么是人工智能，并举3个生活中的例子"
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第2课：主流AI工具介绍</h3>
+            <div class="lesson-content">
+                <span class="tag beginner">入门级</span>
+                <span class="tag">15分钟阅读</span>
+
+                <h4>文本类AI助手</h4>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h4><i class="fas fa-robot"></i> Claude</h4>
+                        <p>Anthropic开发的AI助手，擅长长文本处理、代码编写和深度分析。免费版功能已经很强大。</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-comments"></i> ChatGPT</h4>
+                        <p>OpenAI的产品，最知名的AI聊天工具。适合日常问答、创意写作和通用任务。</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-search"></i> 文心一言</h4>
+                        <p>百度开发的国产AI，对中文理解很好，适合国内用户使用。</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-sparkles"></i> 通义千问</h4>
+                        <p>阿里巴巴的AI助手，在电商、办公场景有很多实用功能。</p>
+                    </div>
+                </div>
+
+                <h4>图像类AI工具</h4>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h4><i class="fas fa-image"></i> Midjourney</h4>
+                        <p>通过文字描述生成高质量图片，适合做设计、创意视觉。</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-palette"></i> DALL-E</h4>
+                        <p>OpenAI的图像生成工具，与ChatGPT集成，使用方便。</p>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-star"></i>
+                    <strong>推荐组合：</strong>对于初学者，建议先用 Claude 或 ChatGPT（免费版）入门，熟练后再探索其他工具。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第3课：如何与AI有效对话</h3>
+            <div class="lesson-content">
+                <span class="tag beginner">入门级</span>
+                <span class="tag">必学</span>
+
+                <h4>黄金法则：清晰、具体、有背景</h4>
+                
+                <p><strong>❌ 不好的提问：</strong></p>
+                <div class="code-block">
+                    "帮我写个邮件"
+                </div>
+
+                <p><strong>✅ 好的提问：</strong></p>
+                <div class="code-block">
+                    "我需要给客户写一封跟进邮件。背景：我们上周提交了项目方案，客户说需要考虑。请帮我写一封礼貌、专业的跟进邮件，询问他们的决定，并表示愿意解答任何问题。语气要友好但不失专业。"
+                </div>
+
+                <h4>提问公式：背景 + 任务 + 要求 + 格式</h4>
+                <ol>
+                    <li><strong>背景</strong> - 告诉AI你现在的情况</li>
+                    <li><strong>任务</strong> - 明确你要AI做什么</li>
+                    <li><strong>要求</strong> - 说明具体要求和限制</li>
+                    <li><strong>格式</strong> - 指定输出的形式</li>
+                </ol>
+
+                <div class="practice-box">
+                    <i class="fas fa-hands"></i>
+                    <strong>实战练习：</strong>用上面的公式，让AI帮你写一份本周工作总结。包含：你做了什么、遇到什么困难、下周计划。
+                </div>
+            </div>
+        </div>
+
+        <!-- 测验 -->
+        <div class="quiz-container">
+            <h3><i class="fas fa-question-circle"></i> 小测验：检验你的理解</h3>
+            <div class="quiz-question">1. 以下哪项是AI最擅长的？</div>
+            <div class="quiz-options">
+                <div class="quiz-option" onclick="selectOption(this, false)">
+                    <span>A</span>
+                    替代人类做所有决策
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, true)">
+                    <span>B</span>
+                    处理重复性文本工作和数据分析
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, false)">
+                    <span>C</span>
+                    完全理解人类的情感
+                </div>
+                <div class="quiz-option" onclick="selectOption(this, false)">
+                    <span>D</span>
+                    预测彩票中奖号码
+                </div>
+            </div>
+            <div class="quiz-result" id="quiz-result"></div>
+        </div>
+    </section>
+
+    <!-- AI工具技能模块 -->
+    <section class="content-section" id="ai-tools">
+        <div class="breadcrumb">
+            <a href="#" onclick="showHome()">首页</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>AI工具技能</span>
+        </div>
+        <h2><i class="fas fa-tools" style="color: #f5576c;"></i> AI工具技能</h2>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第1课：提示词工程基础</h3>
+            <div class="lesson-content">
+                <span class="tag beginner">入门级</span>
+                <span class="tag">核心技能</span>
+
+                <h4>什么是提示词工程？</h4>
+                <p>提示词工程（Prompt Engineering）就是学会如何给AI下指令，让它给你最好的回答。就像学会和同事有效沟通一样重要。</p>
+
+                <h4>五大提示词技巧</h4>
+                
+                <p><strong>1. 角色设定法</strong></p>
+                <div class="code-block">
+                    <span class="comment">// 让AI扮演特定角色</span>
+                    "你是一位经验丰富的产品经理，请帮我..."
+                    "假设你是一位资深HR，请给我建议..."
+                    "请扮演一位耐心的老师，向我解释..."
+                </div>
+
+                <p><strong>2. 分步骤法</strong></p>
+                <div class="code-block">
+                    <span class="comment">// 将复杂任务分解</span>
+                    "请按以下步骤帮我：
+                    1. 先分析这个问题的原因
+                    2. 然后列出3个解决方案
+                    3. 最后比较各方案的优缺点"
+                </div>
+
+                <p><strong>3. 示例法（Few-shot）</strong></p>
+                <div class="code-block">
+                    <span class="comment">// 给AI例子，它学得更快</span>
+                    "请按照下面的风格回复客户：
+                    
+                    例子1：
+                    客户：你们的产品太贵了
+                    回复：理解您的考虑...（展示同理心+解释价值）
+                    
+                    现在请回复：客户说发货太慢了"
+                </div>
+
+                <p><strong>4. 约束条件法</strong></p>
+                <div class="code-block">
+                    <span class="comment">// 明确告诉AI限制条件</span>
+                    "请用300字以内总结"
+                    "请避免使用专业术语"
+                    "请用 bullet points 格式输出"
+                    "目标受众是小学生，请用简单语言"
+                </div>
+
+                <p><strong>5. 迭代优化法</strong></p>
+                <div class="code-block">
+                    <span class="comment">// 不满意就继续调整</span>
+                    第一次："帮我写个产品介绍"
+                    第二次："太长了，缩短到100字"
+                    第三次："再加一些数据支持"
+                    第四次："语气再活泼一些"
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-magic"></i>
+                    <strong>秘诀：</strong>把AI当成一个聪明但需要你指导的实习生。你越清楚地说明需求，结果就越好。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第2课：办公场景实战</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">实用场景</span>
+
+                <h4>场景1：快速写邮件</h4>
+                <div class="code-block">
+                    <span class="comment">// 提示词模板</span>
+                    "我需要给[收件人]写一封关于[主题]的邮件。
+                    背景：[具体情况]
+                    目的：[希望达成什么]
+                    语气要求：[正式/友好/紧急等]
+                    字数限制：[可选]"
+                </div>
+
+                <h4>场景2：会议纪要整理</h4>
+                <div class="code-block">
+                    <span class="comment">// 把杂乱的记录变成专业纪要</span>
+                    "请将下面的会议记录整理成正式的会议纪要：
+                    [粘贴你的记录]
+                    
+                    要求：
+                    - 包含：会议主题、时间、参会人、决议事项、待办任务
+                    - 待办任务要注明负责人和截止日期
+                    - 用清晰的格式输出"
+                </div>
+
+                <h4>场景3：数据分析报告</h4>
+                <div class="code-block">
+                    <span class="comment">// 让AI帮你解读数据</span>
+                    "我有一份销售数据，请帮我分析：
+                    [粘贴数据]
+                    
+                    请提供：
+                    1. 数据趋势总结
+                    2. 异常点分析
+                    3. 改进建议
+                    4. 用通俗语言解释"
+                </div>
+
+                <h4>场景4：PPT大纲生成</h4>
+                <div class="code-block">
+                    <span class="comment">// 快速生成演示文稿结构</span>
+                    "我要做一个关于[主题]的PPT，面向[受众]，预计[时长]。
+                    请帮我：
+                    1. 设计PPT结构（包含每页标题）
+                    2. 每页的关键要点
+                    3. 建议的视觉呈现方式"
+                </div>
+
+                <div class="practice-box">
+                    <i class="fas fa-briefcase"></i>
+                    <strong>本周挑战：</strong>选择你工作中最耗时的一项文案工作，用AI尝试完成，记录时间节省了多少。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第3课：Claude Code 编程助手</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">技术向</span>
+
+                <h4>Claude Code 是什么？</h4>
+                <p>Claude Code 是一个可以直接在你的电脑上运行的AI编程助手。它可以：</p>
+                <ul>
+                    <li>帮你写代码、改代码</li>
+                    <li>分析项目结构和文件</li>
+                    <li>自动执行命令和脚本</li>
+                    <li>帮你调试程序</li>
+                </ul>
+
+                <h4>基础命令</h4>
+                <div class="code-block">
+                    <span class="comment">// 进入项目目录后启动</span>
+                    <span class="keyword">claude</span>
+                    
+                    <span class="comment">// 常用指令</span>
+                    /help          <span class="comment">// 查看帮助</span>
+                    /clear         <span class="comment">// 清空对话</span>
+                    /compact       <span class="comment">// 压缩对话历史</span>
+                </div>
+
+                <h4>实用场景示例</h4>
+                <p><strong>1. 分析代码</strong></p>
+                <div class="code-block">
+                    "请帮我分析这个文件的功能和潜在问题"
+                    <span class="comment">// 然后粘贴代码或让Claude读取文件</span>
+                </div>
+
+                <p><strong>2. 批量修改</strong></p>
+                <div class="code-block">
+                    "帮我把项目中所有的 console.log 改成 logger.debug"
+                </div>
+
+                <p><strong>3. 生成脚本</strong></p>
+                <div class="code-block">
+                    "帮我写一个Python脚本，批量重命名文件夹里的图片，按日期排序"
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-terminal"></i>
+                    <strong>注意：</strong>即使你不是程序员，Claude Code 也能帮你处理很多技术任务，比如批量处理文件、数据分析脚本等。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 逻辑思维训练模块 -->
+    <section class="content-section" id="thinking">
+        <div class="breadcrumb">
+            <a href="#" onclick="showHome()">首页</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>逻辑思维训练</span>
+        </div>
+        <h2><i class="fas fa-brain" style="color: #4facfe;"></i> 逻辑思维训练</h2>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第1课：结构化思维</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">思维方法</span>
+
+                <h4>什么是结构化思维？</h4>
+                <p>结构化思维就是把复杂的问题分解成清晰、有条理的部分。就像整理衣柜一样，把东西分类放好，需要时就能快速找到。</p>
+
+                <h4>MECE原则：不重不漏</h4>
+                <p>MECE = Mutually Exclusive, Collectively Exhaustive（相互独立，完全穷尽）</p>
+                
+                <div class="code-block">
+                    <span class="comment">// 不好的分类：有重叠</span>
+                    人群分类：男人、女人、小孩、老人
+                    <span class="comment">// 问题：小孩可以是男孩或女孩，老人也有男女</span>
+                    
+                    <span class="comment">// 好的分类：MECE</span>
+                    人群分类：
+                    - 按性别：男性、女性
+                    - 按年龄：儿童、青年、中年、老年
+                </div>
+
+                <h4>常用思维框架</h4>
+                
+                <p><strong>1. 5W2H分析法</strong></p>
+                <ul>
+                    <li><strong>What</strong> - 是什么？要做什么？</li>
+                    <li><strong>Why</strong> - 为什么？目的是什么？</li>
+                    <li><strong>Who</strong> - 谁？涉及哪些人？</li>
+                    <li><strong>When</strong> - 何时？时间安排？</li>
+                    <li><strong>Where</strong> - 何地？在哪里做？</li>
+                    <li><strong>How</strong> - 怎么做？方法是什么？</li>
+                    <li><strong>How much</strong> - 多少？预算/成本？</li>
+                </ul>
+
+                <p><strong>2. SWOT分析</strong></p>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h4>S - 优势</h4>
+                        <p>内部的有利因素</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>W - 劣势</h4>
+                        <p>内部的不利因素</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>O - 机会</h4>
+                        <p>外部的好机会</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>T - 威胁</h4>
+                        <p>外部的挑战</p>
+                    </div>
+                </div>
+
+                <div class="practice-box">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <strong>练习：</strong>用5W2H分析法，向AI描述你最近要完成的一个工作任务，看看AI能否帮你梳理得更清晰。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第2课：批判性思维</h3>
+            <div class="lesson-content">
+                <span class="tag advanced">高级</span>
+                <span class="tag">必备能力</span>
+
+                <h4>AI时代的批判性思维</h4>
+                <p>AI可以给我们答案，但它不一定总是对的。批判性思维帮助我们：</p>
+                <ul>
+                    <li>判断AI回答的质量</li>
+                    <li>发现潜在的错误或偏见</li>
+                    <li>结合实际情况做决策</li>
+                </ul>
+
+                <h4>验证AI回答的 checklist</h4>
+                <ol>
+                    <li><strong>事实核查</strong> - 关键数据是否准确？</li>
+                    <li><strong>逻辑检查</strong> - 推理过程是否合理？</li>
+                    <li><strong>时效性</strong> - 信息是否过时？</li>
+                    <li><strong>偏见识别</strong> - 是否存在明显偏见？</li>
+                    <li><strong>适用性</strong> - 是否适合我的具体情况？</li>
+                </ol>
+
+                <h4>如何向AI提问以获得更好答案</h4>
+                <div class="code-block">
+                    <span class="comment">// 让AI展示思考过程</span>
+                    "请一步一步地思考这个问题"
+                    "请解释你的推理过程"
+                    
+                    <span class="comment">// 让AI考虑不同角度</span>
+                    "请从正反两方面分析这个问题"
+                    "有哪些反对这个观点的理由？"
+                    
+                    <span class="comment">// 让AI承认不确定性</span>
+                    "如果你不确定，请告诉我"
+                    "这个答案的可靠程度如何？"
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>重要提醒：</strong>对于重要决策，永远不要把AI的回答作为唯一依据。用AI获取思路和参考，但最终判断权在你。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第3课：与AI协作解决问题</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">实战技巧</span>
+
+                <h4>人机协作的最佳模式</h4>
+                <p>把AI当作你的思维伙伴，而不是答案机器。最佳协作流程：</p>
+
+                <ol>
+                    <li><strong>你定义问题</strong> - 清楚地描述你要解决什么</li>
+                    <li><strong>AI提供思路</strong> - 让AI给出可能的方向</li>
+                    <li><strong>你筛选判断</strong> - 结合实际情况选择可行方案</li>
+                    <li><strong>AI深化细节</strong> - 对选定方案进行细化</li>
+                    <li><strong>你执行验证</strong> - 实施方案并检验效果</li>
+                </ol>
+
+                <h4>实战：用AI解决工作难题</h4>
+                <div class="code-block">
+                    <span class="comment">// 第一步：描述问题</span>
+                    "我遇到一个工作问题：[具体问题描述]
+                    我已经尝试了：[你做过什么]
+                    限制条件：[时间/资源/人员等限制]"
+                    
+                    <span class="comment">// 第二步：要求多角度方案</span>
+                    "请提供3个不同角度的解决方案，
+                    并分析每个方案的优缺点和所需资源"
+                    
+                    <span class="comment">// 第三步：深入最佳方案</span>
+                    "我选择方案X，请帮我：
+                    1. 制定详细的执行步骤
+                    2. 识别可能的风险
+                    3. 准备应对预案"
+                </div>
+
+                <div class="practice-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>思维实验：</strong>想一个你目前工作中的真实问题，按照上面的流程和AI对话，看看能否找到新的解决思路。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 团队协作模块 -->
+    <section class="content-section" id="teamwork">
+        <div class="breadcrumb">
+            <a href="#" onclick="showHome()">首页</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>团队协作能力</span>
+        </div>
+        <h2><i class="fas fa-users" style="color: #43e97b;"></i> 团队协作能力</h2>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第1课：团队中的AI使用规范</h3>
+            <div class="lesson-content">
+                <span class="tag beginner">入门级</span>
+                <span class="tag">必读</span>
+
+                <h4>为什么要建立使用规范？</h4>
+                <p>当团队一起使用AI时，需要明确的规则来确保：</p>
+                <ul>
+                    <li>信息安全和保密</li>
+                    <li>工作质量的一致性</li>
+                    <li>团队成员之间的有效协作</li>
+                    <li>避免过度依赖AI</li>
+                </ul>
+
+                <h4>建议的团队规范框架</h4>
+                
+                <p><strong>1. 信息安全红线</strong></p>
+                <div class="tip-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>绝不要输入AI的内容：</strong>
+                    <ul>
+                        <li>客户敏感信息（身份证号、银行卡号等）</li>
+                        <li>公司核心商业机密</li>
+                        <li>未公开的产品计划或财务数据</li>
+                        <li>员工个人隐私信息</li>
+                    </ul>
+                </div>
+
+                <p><strong>2. 使用场景白名单</strong></p>
+                <ul>
+                    <li>✅ 可以：通用知识查询、文案草稿、代码辅助、学习资料整理</li>
+                    <li>❌ 避免：涉及敏感数据的分析、最终决策、对外发布的最终版本</li>
+                </ul>
+
+                <p><strong>3. 质量检查流程</strong></p>
+                <ol>
+                    <li>AI生成内容 → 人工审核 → 修改完善 → 最终确认</li>
+                    <li>重要文档必须人工复核事实和数据</li>
+                    <li>对外发布的材料需要负责人签字确认</li>
+                </ol>
+
+                <h4>团队提示词模板共享</h4>
+                <p>建议团队建立共享的提示词库，包含：</p>
+                <ul>
+                    <li>常用文案模板（邮件、报告、通知）</li>
+                    <li>内部术语解释</li>
+                    <li>公司风格指南</li>
+                    <li>常见问题解决方案</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第2课：用AI提升会议效率</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">效率工具</span>
+
+                <h4>会前准备</h4>
+                <div class="code-block">
+                    <span class="comment">// 生成会议议程</span>
+                    "我要组织一个关于[主题]的会议，
+                    参会人：[列出角色]
+                    目标：[希望达成什么]
+                    预计时长：[X分钟]
+                    
+                    请帮我：
+                    1. 设计会议议程
+                    2. 每个议题的建议时长
+                    3. 需要提前准备的材料清单"
+                </div>
+
+                <h4>会中辅助</h4>
+                <ul>
+                    <li><strong>实时记录</strong> - 用AI语音转文字工具记录会议内容</li>
+                    <li><strong>即时查询</strong> - 遇到不确定的问题，快速询问AI</li>
+                    <li><strong>时间提醒</strong> - 让AI帮你控制每个议题的时间</li>
+                </ul>
+
+                <h4>会后跟进</h4>
+                <div class="code-block">
+                    <span class="comment">// 自动生成会议纪要</span>
+                    "请将以下会议录音/记录整理成标准会议纪要：
+                    [粘贴内容]
+                    
+                    要求：
+                    1. 提取所有决议事项
+                    2. 列出待办任务（含负责人和截止日期）
+                    3. 标注需要后续跟进的疑问点"
+                </div>
+
+                <div class="practice-box">
+                    <i class="fas fa-clock"></i>
+                    <strong>效率挑战：</strong>下次会议尝试用AI准备议程，看看会议时间是否能缩短20%。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第3课：AI辅助项目管理</h3>
+            <div class="lesson-content">
+                <span class="tag intermediate">进阶级</span>
+                <span class="tag">管理技能</span>
+
+                <h4>项目规划阶段</h4>
+                <div class="code-block">
+                    <span class="comment">// 制定项目计划</span>
+                    "我要负责一个[项目类型]项目，
+                    目标：[具体目标]
+                    团队：[人数和角色]
+                    截止日期：[时间]
+                    
+                    请帮我：
+                    1. 拆分项目里程碑
+                    2. 估算每个阶段的时间
+                    3. 识别潜在风险
+                    4. 建议的团队分工"
+                </div>
+
+                <h4>进度跟踪</h4>
+                <p>用AI帮你：</p>
+                <ul>
+                    <li>生成周报/日报模板</li>
+                    <li>分析进度延迟的原因</li>
+                    <li>提出资源调配建议</li>
+                    <li>起草风险预警通知</li>
+                </ul>
+
+                <h4>团队沟通</h4>
+                <div class="code-block">
+                    <span class="comment">// 处理团队冲突</span>
+                    "团队里出现了[描述情况]，
+                    我需要和[相关人员]沟通。
+                    请帮我：
+                    1. 分析可能的沟通策略
+                    2. 起草一个中立、建设性的沟通稿
+                    3. 提供后续跟进建议"
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-users-cog"></i>
+                    <strong>团队领导建议：</strong>作为团队负责人，你可以用AI来准备一对一谈话、团队建设活动方案、甚至是激励邮件。但记住，真诚的人际互动永远比AI生成的内容更有价值。
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-card">
+            <h3><i class="fas fa-book-open"></i> 第4课：建立团队知识库</h3>
+            <div class="lesson-content">
+                <span class="tag advanced">高级</span>
+                <span class="tag">长期建设</span>
+
+                <h4>为什么需要AI知识库？</h4>
+                <p>把团队的集体智慧和AI结合，可以：</p>
+                <ul>
+                    <li>新员工快速上手</li>
+                    <li>减少重复性问题</li>
+                    <li>保留团队经验</li>
+                    <li>提高整体效率</li>
+                </ul>
+
+                <h4>知识库内容规划</h4>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <h4><i class="fas fa-book"></i> 操作手册</h4>
+                        <p>常用流程、系统操作、工具使用指南</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-question-circle"></i> FAQ</h4>
+                        <p>常见问题及解决方案</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-lightbulb"></i> 最佳实践</h4>
+                        <p>成功案例、经验教训、技巧分享</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4><i class="fas fa-file-alt"></i> 模板库</h4>
+                        <p>文档模板、邮件模板、报告模板</p>
+                    </div>
+                </div>
+
+                <h4>用AI整理知识库</h4>
+                <div class="code-block">
+                    <span class="comment">// 将零散文档整理成知识库</span>
+                    "我有以下关于[主题]的零散笔记：
+                    [粘贴内容]
+                    
+                    请帮我：
+                    1. 整理成结构化的知识文档
+                    2. 提取关键要点
+                    3. 补充缺失的信息（如果有）
+                    4. 生成FAQ部分"
+                </div>
+
+                <div class="practice-box">
+                    <i class="fas fa-rocket"></i>
+                    <strong>团队项目：</strong>和同事们一起，用AI整理你们团队的第一个共享知识库文档。从最常见的"新人入职指南"开始！
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <p>AI学习天地 - 让每个人都能掌握人工智能的力量</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">免费开源 | 持续更新 | 团队协作学习平台</p>
+    </footer>
+
+    <script>
+        // 显示首页
+        function showHome() {
+            document.getElementById('home-section').style.display = 'block';
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            window.scrollTo(0, 0);
+        }
+
+        // 显示模块内容
+        function showModule(moduleId) {
+            document.getElementById('home-section').style.display = 'none';
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(moduleId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // 测验功能
+        function selectOption(element, isCorrect) {
+            // 移除其他选项的选中状态
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'wrong');
+            });
+
+            // 标记当前选项
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+                showQuizResult(true, '正确！AI擅长处理重复性文本工作和数据分析，而不是替代人类做决策。');
+            } else {
+                element.classList.add('wrong');
+                showQuizResult(false, '再想想。AI是辅助工具，不是决策者。它最擅长的是处理重复性工作。');
+            }
+        }
+
+        function showQuizResult(isCorrect, message) {
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.className = 'quiz-result show ' + (isCorrect ? 'success' : 'error');
+            resultDiv.innerHTML = '<i class="fas fa-' + (isCorrect ? 'check-circle' : 'times-circle') + '"></i> ' + message;
+        }
+
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 学习进度追踪（使用 localStorage）
+        function saveProgress(module, lesson, completed) {
+            let progress = JSON.parse(localStorage.getItem('aiLearningProgress') || '{}');
+            if (!progress[module]) progress[module] = {};
+            progress[module][lesson] = completed;
+            localStorage.setItem('aiLearningProgress', JSON.stringify(progress));
+            updateProgressUI();
+        }
+
+        function updateProgressUI() {
+            // 更新UI上的进度显示
+            const progress = JSON.parse(localStorage.getItem('aiLearningProgress') || '{}');
+            // 这里可以添加更新进度条和完成标记的逻辑
+        }
+
+        // 页面加载时恢复进度
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
