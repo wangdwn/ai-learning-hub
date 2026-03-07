@@ -7,6 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // API基础URL配置
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000/api'
+            : '/api';
+
+        // 检查是否使用本地存储模式（GitHub Pages等静态托管）
+        const USE_LOCAL_STORAGE = window.location.hostname.includes('github.io') ||
+                                   window.location.hostname === 'localhost';
+    </script>
     <style>
         :root {
             --primary: #0ea5e9;
@@ -1856,6 +1866,53 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 文件上传区域 */
+        .file-upload-zone {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-zone:hover {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .file-upload-zone.drag-over {
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-result {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .upload-result-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .upload-result-content {
+            background: var(--bg-dark);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
         /* 实战项目页面 */
         .project-filters {
             display: flex;
@@ -2647,6 +2704,46 @@
             box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
         }
 
+        /* 讨论表单样式 */
+        #disc-title {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        #disc-title:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        #disc-content {
+            width: 100%;
+            min-height: 200px;
+            padding: 0.875rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: all 0.3s;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        #disc-content:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
         /* 讨论详情 */
         .discussion-detail-header {
             display: flex;
@@ -3049,6 +3146,190 @@
             background: rgba(239, 68, 68, 0.1);
             border-color: var(--danger);
             color: var(--danger);
+        }
+
+        /* 使用模板弹窗 */
+        .template-use-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .template-use-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .template-use-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .template-use-content {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .template-use-modal.show .template-use-content {
+            transform: translateY(0);
+        }
+
+        .template-use-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .template-use-close:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .template-use-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .template-use-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+        }
+
+        .template-use-category {
+            padding: 0.25rem 0.75rem;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .template-use-body {
+            padding: 1.5rem 2rem;
+        }
+
+        .template-original,
+        .template-input-section,
+        .template-ai-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .template-original h5,
+        .template-input-section h5,
+        .template-ai-section h5 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .template-content-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .template-input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .template-input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .template-ai-result {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+
+        .ai-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        .ai-loading {
+            text-align: center;
+            color: var(--primary);
+            padding: 2rem;
+        }
+
+        .ai-result-content {
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .ai-error {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .template-use-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
         }
 
         /* 上传模板弹窗 */
@@ -3761,56 +4042,372 @@
             opacity: 0.5;
         }
 
-        /* 响应式 */
+        /* 响应式 - 平板 */
         @media (max-width: 1024px) {
             .learning-path-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .path-sidebar {
                 position: static;
             }
-            
+
             .community-layout {
                 grid-template-columns: 1fr;
             }
-            
+
             .dashboard-header {
                 grid-template-columns: 1fr;
             }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .discussion-modal-content,
+            .discussion-detail-content {
+                max-width: 90vw;
+                width: 95%;
+                padding: 1.5rem;
+            }
         }
 
+        /* 移动端底部导航 */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 0.5rem 0;
+            z-index: 999;
+            justify-content: space-around;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--primary);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+
+        /* 响应式 - 手机 */
         @media (max-width: 768px) {
             .navbar {
-                padding: 0.75rem 1rem;
+                padding: 0.5rem 0.75rem;
+                height: 60px;
             }
-            
+
             .nav-center {
                 display: none;
             }
-            
-            .page {
-                padding: 1rem;
+
+            .mobile-nav {
+                display: flex;
             }
-            
+
+            .page {
+                padding-bottom: 80px;
+            }
+
+            .nav-right {
+                gap: 0.5rem;
+            }
+
+            .nav-logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-logo i {
+                font-size: 1.5rem;
+            }
+
+            .page {
+                padding: 0.75rem;
+                padding-top: 70px;
+            }
+
+            .hero-section {
+                padding: 1.5rem 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+                line-height: 1.3;
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .hero-stats {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .hero-stat {
+                padding: 0.5rem 1rem;
+            }
+
+            .hero-stat-value {
+                font-size: 1.25rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
             }
-            
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
             .skill-tree {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
-            
+
+            .skill-node {
+                padding: 1rem;
+            }
+
             .projects-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
-            
+
+            .project-card {
+                margin: 0;
+            }
+
+            .project-image {
+                height: 140px;
+            }
+
             .prompt-playground {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
-            
+
             .achievements-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .lesson-item {
+                margin-bottom: 0.75rem;
+            }
+
+            .lesson-header {
+                padding: 0.875rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .lesson-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 0.95rem;
+            }
+
+            .lesson-meta {
+                font-size: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .prompt-templates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-interactive {
+                padding: 1rem;
+            }
+
+            .quiz-option-modern {
+                padding: 0.875rem;
+            }
+
+            .file-upload-zone {
+                padding: 1.5rem 1rem;
+            }
+
+            .discussion-card {
+                padding: 1rem;
+            }
+
+            .discussion-header {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .discussion-title {
+                font-size: 1rem;
+            }
+
+            .discussion-footer {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .earth-sea-corner {
+                width: 120px;
+                height: 80px;
+                bottom: 70px;
+                right: 10px;
+            }
+
+            .earth-sea-sidebar {
+                display: none;
+            }
+
+            .feedback-widget {
+                bottom: 70px;
+                right: 10px;
+            }
+
+            .notification {
+                right: 0.5rem;
+                left: 0.5rem;
+                top: 70px;
+                max-width: none;
+            }
+
+            .login-content {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .avatar-colors {
+                gap: 0.5rem;
+            }
+
+            .avatar-color {
+                width: 36px;
+                height: 36px;
+            }
+
+            .project-filters,
+            .disc-filter-btn,
+            .prompt-cat-btn {
+                flex-wrap: wrap;
+            }
+
+            .disc-type-select {
+                flex-direction: column;
+            }
+
+            #disc-content {
+                min-height: 150px;
+            }
+
+            .image-viewer-modal img {
+                max-width: 95vw;
+                max-height: 60vh;
+            }
+
+            .template-use-content {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+                max-height: 90vh;
+            }
+
+            .api-config-panel {
+                width: 95vw;
+                right: -95vw;
+            }
+
+            .api-config-panel.show {
+                transform: translateX(-95vw);
+            }
+        }
+
+        /* 响应式 - 小屏手机 */
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 1.25rem;
+            }
+
+            .project-btn,
+            .action-btn-primary {
+                padding: 0.625rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .submit-disc-btn,
+            .submit-reply-btn {
+                padding: 0.875rem;
+            }
+
+            .discussion-modal-content,
+            .discussion-detail-content {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .quiz-question-text {
+                font-size: 1rem;
+            }
+
+            .option-text {
+                font-size: 0.875rem;
             }
         }
 
@@ -3976,6 +4573,30 @@
         </div>
     </nav>
 
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-nav">
+        <button class="mobile-nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>仪表盘</span>
+        </button>
+        <button class="mobile-nav-item" onclick="showPage('learning')" data-page="learning">
+            <i class="fas fa-graduation-cap"></i>
+            <span>学习</span>
+        </button>
+        <button class="mobile-nav-item" onclick="showPage('projects')" data-page="projects">
+            <i class="fas fa-project-diagram"></i>
+            <span>项目</span>
+        </button>
+        <button class="mobile-nav-item" onclick="showPage('community')" data-page="community">
+            <i class="fas fa-users"></i>
+            <span>社区</span>
+        </button>
+        <button class="mobile-nav-item" onclick="showPage('achievements')" data-page="achievements">
+            <i class="fas fa-trophy"></i>
+            <span>成就</span>
+        </button>
+    </nav>
+
     <!-- 主内容区 -->
     <main class="main-content">
         <!-- 首页封面 -->
@@ -4018,7 +4639,7 @@
 
             <!-- 山海主题装饰 - 右下角展示 -->
             <div class="earth-sea-corner" id="earthSeaCorner" onclick="openImageViewer(currentEarthSeaIndex)">
-                <img src="file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_01.png" alt="山海主题" id="earthSeaImg">
+                <img src="images/Earth_and_Sea_United_01.png" alt="山海主题" id="earthSeaImg">
                 <div class="earth-sea-badge">
                     <i class="fas fa-mountain"></i>
                     <span>点击放大</span>
@@ -4028,16 +4649,16 @@
             <!-- 山海主题侧边缩略图 -->
             <div class="earth-sea-sidebar">
                 <div class="earth-sea-thumb active" onclick="showEarthSeaImage(0)" title="立足大地">
-                    <img src="file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_01.png" alt="立足大地">
+                    <img src="images/Earth_and_Sea_United_01.png" alt="立足大地">
                 </div>
                 <div class="earth-sea-thumb" onclick="showEarthSeaImage(1)" title="探寻基石">
-                    <img src="file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_03.png" alt="探寻基石">
+                    <img src="images/Earth_and_Sea_United_03.png" alt="探寻基石">
                 </div>
                 <div class="earth-sea-thumb" onclick="showEarthSeaImage(2)" title="浩瀚如海">
-                    <img src="file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_06.png" alt="浩瀚如海">
+                    <img src="images/Earth_and_Sea_United_06.png" alt="浩瀚如海">
                 </div>
                 <div class="earth-sea-thumb" onclick="showEarthSeaImage(3)" title="山海相依">
-                    <img src="file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_08.png" alt="山海相依">
+                    <img src="images/Earth_and_Sea_United_08.png" alt="山海相依">
                 </div>
             </div>
 
@@ -4054,7 +4675,7 @@
                         <i class="fas fa-play-circle"></i>
                         <div>
                             <div style="font-weight: 600;">继续学习</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">第3课：提示词工程基础（已完成65%）</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">第2课：提示词工程基础（已完成65%）</div>
                         </div>
                         <i class="fas fa-chevron-right" style="margin-left: auto;"></i>
                     </div>
@@ -4312,7 +4933,7 @@
                                 <i class="fas fa-tools"></i>
                             </div>
                             <div class="lesson-info">
-                                <div class="lesson-title">第3课：提示词工程基础</div>
+                                <div class="lesson-title">第2课：提示词工程基础</div>
                                 <div class="lesson-meta">
                                     <span><i class="fas fa-clock"></i> 25分钟</span>
                                     <span><i class="fas fa-signal"></i> 核心技能</span>
@@ -4355,17 +4976,17 @@
                                 </div>
                             </div>
                             
-                            <div class="quiz-interactive">
+                            <div class="quiz-interactive" id="promptEngineeringQuiz">
                                 <div class="quiz-progress">
                                     <div class="quiz-progress-bar">
-                                        <div class="quiz-progress-fill" style="width: 0%"></div>
+                                        <div class="quiz-progress-fill" id="quizProgressFill" style="width: 0%"></div>
                                     </div>
-                                    <div class="quiz-question-number">1/5</div>
+                                    <div class="quiz-question-number" id="quizQuestionNumber">1/5</div>
                                 </div>
-                                <div class="quiz-question-text">
+                                <div class="quiz-question-text" id="quizQuestionText">
                                     当你想让AI扮演特定角色（如"资深地质工程师"）来回答问题时，应该使用哪种提示词技巧？
                                 </div>
-                                <div class="quiz-options-modern">
+                                <div class="quiz-options-modern" id="quizOptions">
                                     <div class="quiz-option-modern" onclick="selectQuizOption(this, false)">
                                         <div class="option-letter">A</div>
                                         <div class="option-text">分步骤法</div>
@@ -4383,6 +5004,7 @@
                                         <div class="option-text">约束条件法</div>
                                     </div>
                                 </div>
+                                <div id="quizResult" style="margin-top: 1rem; display: none;"></div>
                             </div>
                         </div>
                     </div>
@@ -4420,11 +5042,13 @@
                                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
                                     上传你的监测数据，AI将自动分析并生成专业报告
                                 </p>
-                                <div style="background: var(--bg-dark); border-radius: 8px; padding: 2rem; text-align: center; border: 2px dashed var(--border);">
+                                <div class="file-upload-zone" id="fileUploadZone" onclick="document.getElementById('fileInput').click()">
+                                    <input type="file" id="fileInput" style="display: none;" accept=".csv,.xlsx,.xls,.json,.txt" onchange="handleFileUpload(event)">
                                     <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
                                     <p style="color: var(--text-secondary);">拖拽文件到此处或点击上传</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">支持 CSV, Excel, JSON 格式</p>
+                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">支持 CSV, Excel, JSON, TXT 格式</p>
                                 </div>
+                                <div id="uploadResult" style="margin-top: 1rem;"></div>
                             </div>
                         </div>
                     </div>
@@ -5101,16 +5725,43 @@
             if (heroCover && !heroCover.classList.contains('hidden')) {
                 heroCover.classList.add('hidden');
             }
-            
+
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
             document.getElementById(pageId).classList.add('active');
-            
+
+            // 更新顶部导航状态
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            event.target.closest('.nav-tab').classList.add('active');
+
+            // 更新移动端底部导航状态
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === pageId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // 如果event存在，更新点击的导航项
+            if (event && event.target) {
+                const navTab = event.target.closest('.nav-tab');
+                if (navTab) {
+                    navTab.classList.add('active');
+                }
+            } else {
+                // 从移动端导航切换时，同步更新顶部导航
+                const navTabs = document.querySelectorAll('.nav-tab');
+                navTabs.forEach(tab => {
+                    if (tab.getAttribute('onclick') && tab.getAttribute('onclick').includes(`'${pageId}'`)) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
+
+            // 滚动到页面顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // 课程展开/收起
@@ -5169,57 +5820,51 @@
             }
         }
 
+        // 调用后端AI API（使用服务器端配置的密钥）
         async function callDeepSeekAPI(question, apiKey) {
-            const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+            const response = await fetch(`${API_BASE_URL}/ai/deepseek`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: 'deepseek-chat',
                     messages: [{
                         role: 'user',
                         content: question
-                    }],
-                    max_tokens: 1000,
-                    temperature: 0.7
+                    }]
                 })
             });
             
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error?.message || 'DeepSeek API请求失败');
+                throw new Error(error.error || 'DeepSeek API请求失败');
             }
             
             const data = await response.json();
-            return data.choices[0].message.content;
+            return data.content;
         }
 
         async function callKimiAPI(question, apiKey) {
-            const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+            const response = await fetch(`${API_BASE_URL}/ai/kimi`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: 'moonshot-v1-8k',
                     messages: [{
                         role: 'user',
                         content: question
-                    }],
-                    temperature: 0.7
+                    }]
                 })
             });
             
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error?.message || 'Kimi API请求失败');
+                throw new Error(error.error || 'Kimi API请求失败');
             }
             
             const data = await response.json();
-            return data.choices[0].message.content;
+            return data.content;
         }
 
         function formatAIResponse(text) {
@@ -5337,26 +5982,76 @@
             localStorage.setItem('aiHubLessonProgress', JSON.stringify(lessonProgress));
         }
 
-        // 测验选择
+        // 测验选择 - 支持多题目
+        let quizAnswered = false;
+
         function selectQuizOption(element, isCorrect) {
-            document.querySelectorAll('.quiz-option-modern').forEach(opt => {
-                opt.classList.remove('selected', 'correct', 'wrong');
+            // 防止重复答题
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const currentQuestion = promptEngineeringQuestions[currentQuizIndex];
+            const options = document.querySelectorAll('.quiz-option-modern');
+            
+            // 禁用所有选项
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.style.opacity = '0.7';
             });
             
             element.classList.add('selected');
             
+            // 高亮正确答案
+            options.forEach((opt, idx) => {
+                if (idx === currentQuestion.correct) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            const resultDiv = document.getElementById('quizResult');
+            
             if (isCorrect) {
                 element.classList.add('correct');
-                setTimeout(() => {
-                    showNotification('success', '回答正确！', '获得 +50 XP');
-                    updateXP(50);
-                }, 300);
+                quizScore++;
+                resultDiv.innerHTML = `
+                    <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">
+                            <i class="fas fa-check-circle"></i> 回答正确！
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            ${currentQuestion.explanation}
+                        </div>
+                    </div>
+                    <button class="action-btn-primary" onclick="nextQuizQuestion()">
+                        <i class="fas fa-arrow-right"></i> 下一题
+                    </button>
+                `;
+                showNotification('success', '回答正确！', '获得 +50 XP');
+                updateXP(50);
             } else {
                 element.classList.add('wrong');
-                setTimeout(() => {
-                    showNotification('info', '再试一次', '角色设定法是让AI扮演特定角色的技巧');
-                }, 300);
+                resultDiv.innerHTML = `
+                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="color: var(--danger); font-weight: 600; margin-bottom: 0.5rem;">
+                            <i class="fas fa-times-circle"></i> 回答错误
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            ${currentQuestion.explanation}
+                        </div>
+                    </div>
+                    <button class="action-btn-primary" onclick="nextQuizQuestion()">
+                        <i class="fas fa-arrow-right"></i> 下一题
+                    </button>
+                `;
             }
+            resultDiv.style.display = 'block';
+        }
+
+        // 下一题
+        function nextQuizQuestion() {
+            quizAnswered = false;
+            currentQuizIndex++;
+            loadQuizQuestion(currentQuizIndex);
         }
 
         // 更新XP
@@ -5512,6 +6207,115 @@
         function continueLastLesson() {
             showPage('learning');
             showNotification('info', '继续学习', '已恢复到你上次离开的位置');
+        }
+
+        // 提示词工程测试题数据
+        const promptEngineeringQuestions = [
+            {
+                question: '当你想让AI扮演特定角色（如"资深地质工程师"）来回答问题时，应该使用哪种提示词技巧？',
+                options: ['分步骤法', '角色设定法', '示例法', '约束条件法'],
+                correct: 1,
+                explanation: '角色设定法通过让AI扮演特定角色，可以获得更专业、更有针对性的回答。'
+            },
+            {
+                question: '当你需要AI按照固定的步骤分析问题时（如：先分析原因，再给出建议），应该使用哪种方法？',
+                options: ['角色设定法', '分步骤法', '示例法', '迭代优化法'],
+                correct: 1,
+                explanation: '分步骤法通过明确指定思考的步骤，引导AI按照你的逻辑顺序进行分析和回答。'
+            },
+            {
+                question: '当你想让AI按照特定格式输出（如表格、JSON等），最好的方法是？',
+                options: ['直接要求', '提供一个示例', '使用约束条件', '以上都是'],
+                correct: 3,
+                explanation: '以上方法都可以，但提供一个示例（示例法）通常效果最好，让AI直观理解你的格式要求。'
+            },
+            {
+                question: '当你需要限制AI回答的长度、风格或内容范围时，应该使用？',
+                options: ['分步骤法', '示例法', '约束条件法', '角色设定法'],
+                correct: 2,
+                explanation: '约束条件法通过明确设定限制条件（如"200字以内"、"用专业术语"等）来控制AI的输出。'
+            },
+            {
+                question: '以下哪个提示词使用了"角色设定法"？',
+                options: [
+                    '请分三步解释这个问题',
+                    '你是一位有20年经验的地质工程师，请分析以下数据',
+                    '请参考这个格式：标题+正文+结论',
+                    '请在100字以内回答'
+                ],
+                correct: 1,
+                explanation: '这个提示词明确让AI扮演"有20年经验的地质工程师"角色，是典型的角色设定法。'
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // 加载测试题
+        function loadQuizQuestion(index) {
+            if (index >= promptEngineeringQuestions.length) {
+                showQuizResult();
+                return;
+            }
+
+            // 重置答题状态
+            quizAnswered = false;
+
+            const q = promptEngineeringQuestions[index];
+            document.getElementById('quizQuestionNumber').textContent = `${index + 1}/${promptEngineeringQuestions.length}`;
+            document.getElementById('quizProgressFill').style.width = `${(index / promptEngineeringQuestions.length) * 100}%`;
+            document.getElementById('quizQuestionText').textContent = q.question;
+            
+            const optionsHtml = q.options.map((opt, i) => `
+                <div class="quiz-option-modern" onclick="selectQuizOption(this, ${i === q.correct})" data-index="${i}" style="pointer-events: auto; opacity: 1;">
+                    <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+                    <div class="option-text">${opt}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('quizOptions').innerHTML = optionsHtml;
+            document.getElementById('quizResult').style.display = 'none';
+        }
+
+        // 显示测试结果
+        function showQuizResult() {
+            const percentage = Math.round((quizScore / promptEngineeringQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '太棒了！你已经掌握了提示词工程的核心技巧！';
+            } else if (percentage >= 60) {
+                message = '不错！继续练习，你会越来越熟练的！';
+            } else {
+                message = '还需要多加练习，建议重新学习课程内容。';
+            }
+            
+            document.getElementById('quizQuestionText').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-trophy" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">测试完成！</h3>
+                    <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">得分：${quizScore}/${promptEngineeringQuestions.length} (${percentage}%)</p>
+                    <p style="color: var(--text-secondary);">${message}</p>
+                </div>
+            `;
+            document.getElementById('quizOptions').style.display = 'none';
+            document.getElementById('quizProgressFill').style.width = '100%';
+            
+            // 添加重新测试按钮
+            document.getElementById('quizResult').innerHTML = `
+                <button class="action-btn-primary" onclick="restartQuiz()" style="width: 100%;">
+                    <i class="fas fa-redo"></i> 重新测试
+                </button>
+            `;
+            document.getElementById('quizResult').style.display = 'block';
+        }
+
+        // 重新开始测试
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quizOptions').style.display = 'block';
+            loadQuizQuestion(0);
         }
 
         // 打开课程
@@ -5856,6 +6660,10 @@
                 return;
             }
 
+            // 检查API配置状态
+            const apiKeys = JSON.parse(localStorage.getItem('aiHubAPIKeys') || '{}');
+            const hasAPI = apiKeys.deepseek || apiKeys.kimi;
+
             // 创建项目工作区弹窗
             const modal = document.createElement('div');
             modal.className = 'project-workspace-modal';
@@ -5899,17 +6707,31 @@
                                 </div>
 
                                 <div class="ai-interaction-area">
-                                    <h5><i class="fas fa-robot"></i> AI助手</h5>
+                                    <h5>
+                                        <i class="fas fa-robot"></i> AI助手
+                                        <button onclick="showAPIConfig()" style="float: right; font-size: 0.75rem; padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; color: var(--text-secondary); cursor: pointer;">
+                                            <i class="fas fa-key"></i> 配置API
+                                        </button>
+                                    </h5>
                                     <div class="chat-area" id="projectChatArea">
                                         <div class="chat-message ai-message">
                                             <div class="chat-avatar"><i class="fas fa-robot"></i></div>
                                             <div class="chat-bubble">
-                                                你好！我是你的项目AI助手。请在上方的输入框中粘贴你的数据或问题，我会帮你完成这个项目。
+                                                <strong>欢迎使用AI项目助手！</strong><br><br>
+                                                我可以帮你：<br>
+                                                • 分析监测数据并生成报告<br>
+                                                • 撰写公文和会议纪要<br>
+                                                • 编写数据处理脚本<br>
+                                                • 解答专业问题<br><br>
+                                                ${hasAPI ? 
+                                                    '<div style="color: var(--success); margin-top: 0.5rem;"><i class="fas fa-check-circle"></i> API已配置，可以开始使用了！</div>' :
+                                                    '<div style="color: var(--warning); margin-top: 0.5rem;"><i class="fas fa-exclamation-triangle"></i> 请先点击右上角"配置API"添加你的AI密钥</div>'
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                     <div class="chat-input-area">
-                                        <textarea id="projectUserInput" placeholder="输入你的内容，按Ctrl+Enter发送..."></textarea>
+                                        <textarea id="projectUserInput" placeholder="输入你的内容，按Ctrl+Enter发送..." onkeydown="if(event.ctrlKey && event.key==='Enter') sendProjectMessage('${projectId}')"></textarea>
                                         <button onclick="sendProjectMessage('${projectId}')">
                                             <i class="fas fa-paper-plane"></i> 发送
                                         </button>
@@ -5937,6 +6759,13 @@
                 step: 0,
                 totalSteps: project.steps.length
             };
+
+            // 检查API配置并显示提示
+            if (!hasAPI) {
+                setTimeout(() => {
+                    showNotification('warning', '需要配置AI API', '请点击AI助手区域的"配置API"按钮添加你的API密钥，才能使用AI生成功能');
+                }, 1000);
+            }
 
             setTimeout(() => modal.classList.add('show'), 10);
             showNotification('success', '项目已启动', '开始你的实战项目之旅！');
@@ -6003,12 +6832,25 @@
             }
         }
 
-        function sendProjectMessage(projectId) {
+        // 实战项目AI助手 - 调用真实AI API
+        async function sendProjectMessage(projectId) {
             const input = document.getElementById('projectUserInput');
             const message = input.value.trim();
             if (!message) return;
 
+            // 检查API配置
+            const apiKeys = JSON.parse(localStorage.getItem('aiHubAPIKeys') || '{}');
+            const preferredModel = localStorage.getItem('aiHubPreferredModel') || 'deepseek';
+            
+            if (!apiKeys.deepseek && !apiKeys.kimi) {
+                showNotification('warning', '需要配置API密钥', '请先配置AI API密钥');
+                showAPIConfig();
+                return;
+            }
+
             const chatArea = document.getElementById('projectChatArea');
+            const project = projectData[projectId];
+            const step = project.steps[currentProjectStep];
 
             // 添加用户消息
             chatArea.innerHTML += `
@@ -6018,94 +6860,133 @@
                 </div>
             `;
 
+            // 添加加载状态
+            const loadingId = 'loading-' + Date.now();
+            chatArea.innerHTML += `
+                <div class="chat-message ai-message" id="${loadingId}">
+                    <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="chat-bubble">
+                        <i class="fas fa-spinner fa-spin"></i> AI正在思考...
+                    </div>
+                </div>
+            `;
+
             input.value = '';
             chatArea.scrollTop = chatArea.scrollHeight;
 
-            // 模拟AI回复
-            setTimeout(() => {
-                const project = projectData[projectId];
-                const step = project.steps[currentProjectStep];
+            try {
+                // 构建系统提示词
+                const systemPrompt = `你是一个专业的${project.title}助手。${project.description}。
+当前步骤：${step.title}
+${step.desc}
+
+请根据用户提供的数据，生成专业、详细的工作报告或分析结果。使用Markdown格式，包含标题、列表等。`;
 
                 let aiResponse = '';
-
-                // 根据项目类型和步骤生成不同的回复
-                if (projectId === 'report-generator') {
-                    aiResponse = `我已收到你的监测数据，正在分析...
-
-**数据分析结果：**
-- 数据趋势：地下水位呈下降趋势
-- 变化幅度：1.0米（降幅8%）
-- 异常检测：3月15日后下降加速
-
-**建议措施：**
-1. 加强监测频率
-2. 排查周边用水情况
-3. 评估是否需要采取补水措施
-
-你可以继续提问，我会帮你完善这份报告。`;
-                } else if (projectId === 'disaster-warning') {
-                    aiResponse = `**海洋灾害风险分析：**
-
-⚠️ **预警等级：橙色预警（高风险）**
-
-**风险因素：**
-1. 波高3.5米，超出正常范围75%
-2. 12级大风，达到台风级别
-3. 气压偏低，可能形成强对流天气
-4. 水温异常，可能引发赤潮
-
-**建议措施：**
-- 立即通知海上作业人员回港
-- 启动应急响应预案
-- 加强监测频率至每小时一次`;
-                } else if (projectId === 'document-writing') {
-                    aiResponse = `**会议通知**
-
-各部门：
-
-为总结2024年第一季度工作，部署第二季度任务，经研究决定召开工作总结会议。现将有关事项通知如下：
-
-**一、会议时间**
-2024年4月10日（星期三）上午9:00
-
-**二、会议地点**
-三楼会议室
-
-**三、参会人员**
-各部门负责人
-
-**四、会议内容**
-1. 第一季度工作总结汇报
-2. 第二季度工作计划讨论
-3. 其他事项
-
-**五、有关要求**
-1. 请各部门提前准备汇报材料
-2. 准时参会，不得缺席
-
-特此通知。
-
-2024年4月3日`;
+                
+                // 调用AI API
+                if (preferredModel === 'kimi' && apiKeys.kimi) {
+                    const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.kimi}`
+                        },
+                        body: JSON.stringify({
+                            model: 'moonshot-v1-8k',
+                            messages: [
+                                { role: 'system', content: systemPrompt },
+                                { role: 'user', content: message }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('Kimi API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
+                } else if (apiKeys.deepseek) {
+                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.deepseek}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [
+                                { role: 'system', content: systemPrompt },
+                                { role: 'user', content: message }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('DeepSeek API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
                 } else {
-                    aiResponse = `收到！我已理解你的需求。
-
-根据你提供的信息，我建议：
-
-1. **数据整理**：先对输入数据进行结构化处理
-2. **分析要点**：提取关键信息和异常点
-3. **生成输出**：按照标准格式生成结果
-
-请提供更多具体数据，我会继续帮你完成这个项目。`;
+                    throw new Error('未配置有效的API密钥');
                 }
 
+                // 移除加载状态并显示回复
+                document.getElementById(loadingId).remove();
                 chatArea.innerHTML += `
                     <div class="chat-message ai-message">
                         <div class="chat-avatar"><i class="fas fa-robot"></i></div>
-                        <div class="chat-bubble">${aiResponse}</div>
+                        <div class="chat-bubble">${formatAIResponse(aiResponse)}</div>
                     </div>
                 `;
-                chatArea.scrollTop = chatArea.scrollHeight;
-            }, 1500);
+                
+                // 添加复制按钮
+                chatArea.innerHTML += `
+                    <div style="text-align: right; margin: 0.5rem 0;">
+                        <button class="action-btn-secondary" onclick="copyProjectResult(this)" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-copy"></i> 复制结果
+                        </button>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('AI API错误:', error);
+                document.getElementById(loadingId).remove();
+                chatArea.innerHTML += `
+                    <div class="chat-message ai-message">
+                        <div class="chat-avatar" style="background: var(--danger);"><i class="fas fa-exclamation"></i></div>
+                        <div class="chat-bubble" style="color: var(--danger);">
+                            <strong>AI调用失败</strong><br>
+                            ${error.message}<br><br>
+                            可能原因：<br>
+                            1. API密钥无效或已过期<br>
+                            2. 网络连接问题<br>
+                            3. API服务暂时不可用<br><br>
+                            <button class="action-btn-primary" onclick="showAPIConfig()" style="margin-top: 0.5rem;">
+                                <i class="fas fa-key"></i> 重新配置API
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // 复制项目结果
+        function copyProjectResult(btn) {
+            const chatArea = document.getElementById('projectChatArea');
+            const aiMessages = chatArea.querySelectorAll('.ai-message .chat-bubble');
+            if (aiMessages.length > 0) {
+                const lastResponse = aiMessages[aiMessages.length - 1].innerText;
+                navigator.clipboard.writeText(lastResponse).then(() => {
+                    btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-copy"></i> 复制结果';
+                    }, 2000);
+                    showNotification('success', '复制成功', 'AI生成的内容已复制到剪贴板');
+                });
+            }
         }
 
         // 项目筛选
@@ -6136,95 +7017,284 @@
             showNotification('info', '用户资料', '功能开发中...');
         }
 
-        // 讨论区数据管理
-        const DISCUSSIONS_KEY = 'aiHubDiscussions';
-        const DISCUSSIONS_SYNC_KEY = 'aiHubDiscussionsSync';
-        
-        // 初始化示例讨论数据
-        function initDiscussions() {
-            let discussions = JSON.parse(localStorage.getItem(DISCUSSIONS_KEY) || 'null');
-            if (!discussions || discussions.length === 0) {
-                discussions = [
-                    {
-                        id: Date.now() - 100000,
-                        author: '李明',
-                        authorDept: '技术设备部',
-                        avatarColor: 'ocean',
-                        title: '如何处理监测数据中的异常值？',
-                        content: '最近在用AI处理海洋温度监测数据，发现有些异常值AI处理得不太好。大家有什么好的提示词技巧吗？',
-                        type: 'question',
-                        time: new Date(Date.now() - 7200000).toISOString(),
-                        views: 156,
-                        likes: 8,
-                        liked: false,
-                        replies: [
-                            {
-                                id: Date.now() - 90000,
-                                author: '王芳',
-                                authorDept: '预警室',
-                                avatarColor: 'green',
-                                content: '可以试试在提示词里加上"请识别并标注异常数据点，给出可能的原因分析"，这样AI会更关注异常值。',
-                                time: new Date(Date.now() - 3600000).toISOString(),
-                                likes: 3
-                            }
-                        ]
-                    },
-                    {
-                        id: Date.now() - 200000,
-                        author: '张伟',
-                        authorDept: '海洋资源管理部',
-                        avatarColor: 'orange',
-                        title: '分享：我用AI生成的月度监测报告模板',
-                        content: '经过两周的调试，终于做出了一套自动报告生成流程。从数据导入到报告输出，全程只需要5分钟！分享一下我的提示词模板...',
-                        type: 'showcase',
-                        time: new Date(Date.now() - 18000000).toISOString(),
-                        views: 512,
-                        likes: 45,
-                        liked: false,
-                        replies: []
-                    },
-                    {
-                        id: Date.now() - 300000,
-                        author: '王芳',
-                        authorDept: '预警室',
-                        avatarColor: 'green',
-                        title: '讨论：AI生成的报告需要人工审核吗？',
-                        content: '我们团队最近开始用AI生成监测报告，但领导担心准确性问题。大家是怎么平衡效率和质量的？',
-                        type: 'discussion',
-                        time: new Date(Date.now() - 86400000).toISOString(),
-                        views: 423,
-                        likes: 18,
-                        liked: false,
-                        replies: [
-                            {
-                                id: Date.now() - 250000,
-                                author: '李明',
-                                authorDept: '技术设备部',
-                                avatarColor: 'ocean',
-                                content: '我们的做法是AI生成后，由资深同事抽查20%，既保证效率又有质量控制。',
-                                time: new Date(Date.now() - 80000000).toISOString(),
-                                likes: 12
-                            }
-                        ]
-                    }
-                ];
-                localStorage.setItem(DISCUSSIONS_KEY, JSON.stringify(discussions));
+        // 文件上传处理
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            processUploadedFile(file);
+        }
+
+        // 处理上传的文件
+        function processUploadedFile(file) {
+            const resultContainer = document.getElementById('uploadResult');
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            
+            if (file.size > maxSize) {
+                resultContainer.innerHTML = `
+                    <div class="upload-result" style="border-color: var(--danger);">
+                        <div class="upload-result-header" style="color: var(--danger);">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>文件过大</span>
+                        </div>
+                        <p>文件大小超过5MB限制，请选择更小的文件</p>
+                    </div>
+                `;
+                return;
             }
-            return discussions;
+
+            // 显示文件信息
+            resultContainer.innerHTML = `
+                <div class="upload-result">
+                    <div class="upload-result-header">
+                        <i class="fas fa-file-alt" style="color: var(--primary);"></i>
+                        <span><strong>${file.name}</strong></span>
+                        <span style="color: var(--text-muted); font-size: 0.875rem;">(${(file.size / 1024).toFixed(1)} KB)</span>
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <button class="action-btn-primary" onclick="analyzeFileContent()">
+                            <i class="fas fa-magic"></i> 使用AI分析数据
+                        </button>
+                    </div>
+                    <div id="fileContentPreview" style="display: none;">
+                        <div class="upload-result-content" id="fileContentText"></div>
+                    </div>
+                </div>
+            `;
+
+            // 读取文件内容
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                window.uploadedFileContent = content;
+                window.uploadedFileName = file.name;
+                
+                // 显示内容预览
+                const previewDiv = document.getElementById('fileContentPreview');
+                const contentDiv = document.getElementById('fileContentText');
+                if (previewDiv && contentDiv) {
+                    previewDiv.style.display = 'block';
+                    contentDiv.textContent = content.substring(0, 1000) + (content.length > 1000 ? '\n\n... (内容已截断)' : '');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 分析文件内容
+        async function analyzeFileContent() {
+            if (!window.uploadedFileContent) {
+                showNotification('error', '没有文件内容', '请先上传文件');
+                return;
+            }
+
+            // 检查API配置
+            const apiKeys = JSON.parse(localStorage.getItem('aiHubAPIKeys') || '{}');
+            if (!apiKeys.deepseek && !apiKeys.kimi) {
+                showNotification('warning', '需要配置API密钥', '请先配置AI API密钥');
+                showAPIConfig();
+                return;
+            }
+
+            const resultContainer = document.getElementById('uploadResult');
+            resultContainer.innerHTML += `
+                <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px;">
+                    <div class="ai-loading" style="text-align: center; color: var(--primary);">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                        <p style="margin-top: 0.5rem;">AI正在分析数据...</p>
+                    </div>
+                    <div id="analysisResult" style="display: none; margin-top: 1rem;"></div>
+                </div>
+            `;
+
+            try {
+                const prompt = `请分析以下海洋监测数据，并生成一份专业的数据分析报告：
+
+文件名：${window.uploadedFileName}
+
+数据内容：
+${window.uploadedFileContent.substring(0, 3000)}
+
+请提供：
+1. 数据概览（数据类型、记录数、时间范围等）
+2. 关键指标分析
+3. 异常数据识别
+4. 趋势分析
+5. 建议措施
+
+使用Markdown格式输出。`;
+
+                const preferredModel = localStorage.getItem('aiHubPreferredModel') || 'deepseek';
+                let aiResponse = '';
+
+                if (preferredModel === 'kimi' && apiKeys.kimi) {
+                    const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.kimi}`
+                        },
+                        body: JSON.stringify({
+                            model: 'moonshot-v1-8k',
+                            messages: [
+                                { role: 'system', content: '你是海洋监测数据分析专家，擅长生成专业的数据分析报告。' },
+                                { role: 'user', content: prompt }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('Kimi API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
+                } else if (apiKeys.deepseek) {
+                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.deepseek}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [
+                                { role: 'system', content: '你是海洋监测数据分析专家，擅长生成专业的数据分析报告。' },
+                                { role: 'user', content: prompt }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('DeepSeek API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
+                }
+
+                // 显示分析结果
+                const analysisDiv = document.getElementById('analysisResult');
+                analysisDiv.style.display = 'block';
+                analysisDiv.innerHTML = `
+                    <h4 style="color: var(--primary); margin-bottom: 0.75rem;"><i class="fas fa-chart-bar"></i> AI分析报告</h4>
+                    <div style="background: var(--bg-card); border-radius: 8px; padding: 1rem; line-height: 1.8;">
+                        ${formatAIResponse(aiResponse)}
+                    </div>
+                    <div style="margin-top: 1rem; text-align: right;">
+                        <button class="action-btn-secondary" onclick="copyAnalysisResult()">
+                            <i class="fas fa-copy"></i> 复制报告
+                        </button>
+                    </div>
+                `;
+                
+                // 移除加载状态
+                document.querySelector('.ai-loading').style.display = 'none';
+                showNotification('success', '分析完成', 'AI已生成数据分析报告');
+                
+            } catch (error) {
+                console.error('AI分析失败:', error);
+                document.getElementById('analysisResult').style.display = 'block';
+                document.getElementById('analysisResult').innerHTML = `
+                    <div style="color: var(--danger); padding: 1rem;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <strong>分析失败</strong><br>
+                        ${error.message}<br>
+                        <button class="action-btn-primary" onclick="showAPIConfig()" style="margin-top: 0.5rem;">
+                            检查API配置
+                        </button>
+                    </div>
+                `;
+                document.querySelector('.ai-loading').style.display = 'none';
+            }
+        }
+
+        // 复制分析结果
+        function copyAnalysisResult() {
+            const resultContent = document.querySelector('#analysisResult .ai-result-content, #analysisResult div[style*="background: var(--bg-card)"]');
+            if (resultContent) {
+                const text = resultContent.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('success', '复制成功', '分析报告已复制到剪贴板');
+                });
+            }
+        }
+
+        // 拖拽文件上传
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadZone = document.getElementById('fileUploadZone');
+            if (uploadZone) {
+                // 阻止默认拖拽行为（防止浏览器打开文件）
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }, false);
+                });
+
+                uploadZone.addEventListener('dragenter', function(e) {
+                    this.classList.add('drag-over');
+                });
+
+                uploadZone.addEventListener('dragover', function(e) {
+                    this.classList.add('drag-over');
+                });
+
+                uploadZone.addEventListener('dragleave', function(e) {
+                    // 检查是否真的离开了元素（而不是进入了子元素）
+                    if (!this.contains(e.relatedTarget)) {
+                        this.classList.remove('drag-over');
+                    }
+                });
+
+                uploadZone.addEventListener('drop', function(e) {
+                    this.classList.remove('drag-over');
+
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const file = files[0];
+                        // 检查文件类型
+                        const validTypes = ['.csv', '.xlsx', '.xls', '.json', '.txt'];
+                        const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+                        if (validTypes.includes(fileExt)) {
+                            processUploadedFile(file);
+                        } else {
+                            showNotification('error', '不支持的文件类型', '请上传 CSV, Excel, JSON 或 TXT 格式的文件');
+                        }
+                    }
+                });
+            }
+        });
+
+        // 讨论区数据管理 - 使用后端API
+        let discussionsCache = [];
+        let currentDiscussionReplies = [];
+        
+        // 从服务器获取讨论列表
+        async function fetchDiscussions(filter = 'all', page = 1) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/discussions?type=${filter}&page=${page}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    discussionsCache = data.discussions;
+                    return data;
+                }
+                throw new Error(data.error);
+            } catch (error) {
+                console.error('获取讨论失败:', error);
+                showNotification('error', '加载失败', '无法获取讨论列表，请检查网络连接');
+                return { discussions: [] };
+            }
         }
 
         // 渲染讨论列表
-        function renderDiscussions(filter = 'all') {
+        async function renderDiscussions(filter = 'all') {
             const container = document.getElementById('discussions-container');
             if (!container) return;
             
-            const discussions = initDiscussions();
+            container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>';
             
-            const filteredDiscussions = filter === 'all' 
-                ? discussions 
-                : discussions.filter(d => d.type === filter);
+            const data = await fetchDiscussions(filter);
+            const discussions = data.discussions || [];
             
-            if (filteredDiscussions.length === 0) {
+            if (discussions.length === 0) {
                 container.innerHTML = `
                     <div class="discussions-empty">
                         <i class="fas fa-comments"></i>
@@ -6234,7 +7304,7 @@
                 return;
             }
             
-            container.innerHTML = filteredDiscussions.map(disc => `
+            container.innerHTML = discussions.map(disc => `
                 <div class="discussion-card" data-type="${disc.type}" data-id="${disc.id}">
                     <div class="discussion-header">
                         <div class="disc-author-avatar" style="background: ${getAvatarGradient(disc.avatarColor)};">
@@ -6243,23 +7313,23 @@
                         <div class="disc-author-info">
                             <div class="disc-author-name">${disc.author}</div>
                             <div class="disc-dept">${disc.authorDept}</div>
-                            <div class="disc-time">${formatTime(disc.time)}</div>
+                            <div class="disc-time">${formatTime(disc.createdAt)}</div>
                         </div>
                         <span class="disc-badge disc-badge-${disc.type}">
                             ${disc.type === 'question' ? '提问' : disc.type === 'showcase' ? '作品' : '讨论'}
                         </span>
                     </div>
-                    <h3 class="discussion-title" onclick="viewDiscussion(${disc.id})">${disc.title}</h3>
+                    <h3 class="discussion-title" onclick="viewDiscussion('${disc.id}')">${disc.title}</h3>
                     <p class="discussion-excerpt">${disc.content.substring(0, 150)}${disc.content.length > 150 ? '...' : ''}</p>
                     <div class="discussion-footer">
-                        <span onclick="viewDiscussion(${disc.id})">
-                            <i class="fas fa-comment"></i> ${disc.replies.length} 回复
+                        <span onclick="viewDiscussion('${disc.id}')">
+                            <i class="fas fa-comment"></i> ${disc.replies || 0} 回复
                         </span>
-                        <span class="${disc.liked ? 'liked' : ''}" onclick="likeDiscussion(${disc.id})">
-                            <i class="fas fa-heart"></i> ${disc.likes} 赞
+                        <span class="${disc.liked ? 'liked' : ''}" onclick="likeDiscussion('${disc.id}')">
+                            <i class="fas fa-heart"></i> ${disc.likes || 0} 赞
                         </span>
                         <span>
-                            <i class="fas fa-eye"></i> ${disc.views} 浏览
+                            <i class="fas fa-eye"></i> ${disc.views || 0} 浏览
                         </span>
                     </div>
                 </div>
@@ -6272,7 +7342,229 @@
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-            renderDiscussions(type);
+
+            // 根据模式选择渲染函数
+            if (USE_LOCAL_STORAGE) {
+                renderLocalDiscussions(type);
+            } else {
+                renderDiscussions(type);
+            }
+        }
+
+        // 本地存储模式渲染讨论列表
+        function renderLocalDiscussions(filter = 'all') {
+            const container = document.getElementById('discussions-container');
+            if (!container) return;
+
+            let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+
+            // 应用筛选
+            if (filter !== 'all') {
+                discussions = discussions.filter(d => d.type === filter);
+            }
+
+            if (discussions.length === 0) {
+                container.innerHTML = `
+                    <div class="discussions-empty">
+                        <i class="fas fa-comments"></i>
+                        <p>暂无讨论，来做第一个发言的人吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = discussions.map(disc => `
+                <div class="discussion-card" data-type="${disc.type}" data-id="${disc.id}">
+                    <div class="discussion-header">
+                        <div class="disc-author-avatar" style="background: ${getAvatarGradient(disc.avatarColor)};">
+                            ${disc.author.charAt(0)}
+                        </div>
+                        <div class="disc-author-info">
+                            <div class="disc-author-name">${disc.author}</div>
+                            <div class="disc-dept">${disc.authorDept}</div>
+                            <div class="disc-time">${disc.time}</div>
+                        </div>
+                        <span class="disc-badge disc-badge-${disc.type}">
+                            ${disc.type === 'question' ? '提问' : disc.type === 'showcase' ? '作品' : '讨论'}
+                        </span>
+                    </div>
+                    <h3 class="discussion-title" onclick="viewLocalDiscussion(${disc.id})">${disc.title}</h3>
+                    <p class="discussion-excerpt">${disc.content.substring(0, 150)}${disc.content.length > 150 ? '...' : ''}</p>
+                    <div class="discussion-footer">
+                        <span onclick="viewLocalDiscussion(${disc.id})">
+                            <i class="fas fa-comment"></i> ${disc.replies || 0} 回复
+                        </span>
+                        <span class="${disc.liked ? 'liked' : ''}" onclick="likeLocalDiscussion(${disc.id})">
+                            <i class="fas fa-heart"></i> ${disc.likes || 0} 赞
+                        </span>
+                        <span>
+                            <i class="fas fa-eye"></i> ${disc.views || 0} 浏览
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 查看本地讨论详情
+        function viewLocalDiscussion(id) {
+            let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+            let disc = discussions.find(d => d.id === id);
+
+            if (!disc) {
+                showNotification('error', '加载失败', '无法找到该讨论');
+                return;
+            }
+
+            // 增加浏览数
+            disc.views = (disc.views || 0) + 1;
+            localStorage.setItem('aiHubDiscussions', JSON.stringify(discussions));
+
+            // 获取回复
+            let allReplies = JSON.parse(localStorage.getItem('aiHubReplies') || '{}');
+            let replies = allReplies[id] || [];
+
+            const modal = document.createElement('div');
+            modal.className = 'discussion-detail-modal';
+            modal.innerHTML = `
+                <div class="discussion-modal-overlay" onclick="closeDiscussionDetail()"></div>
+                <div class="discussion-detail-content">
+                    <button class="discussion-modal-close" onclick="closeDiscussionDetail()">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <div class="discussion-detail-header">
+                        <div class="disc-author-avatar" style="background: ${getAvatarGradient(disc.avatarColor)};">
+                            ${disc.author.charAt(0)}
+                        </div>
+                        <div class="disc-author-info">
+                            <div class="disc-author-name">${disc.author}</div>
+                            <div class="disc-dept">${disc.authorDept}</div>
+                            <div class="disc-time">${disc.time}</div>
+                        </div>
+                        <span class="disc-badge disc-badge-${disc.type}">
+                            ${disc.type === 'question' ? '提问' : disc.type === 'showcase' ? '作品' : '讨论'}
+                        </span>
+                    </div>
+
+                    <h2 class="discussion-detail-title">${disc.title}</h2>
+                    <div class="discussion-detail-body">${disc.content.replace(/\n/g, '<br>')}</div>
+
+                    <div class="discussion-actions">
+                        <button class="action-btn" onclick="likeLocalDiscussion(${disc.id})">
+                            <i class="fas fa-heart"></i> ${disc.likes || 0} 赞
+                        </button>
+                        <button class="action-btn" onclick="showLocalReplyForm(${disc.id})">
+                            <i class="fas fa-reply"></i> 回复
+                        </button>
+                    </div>
+
+                    <div class="replies-section">
+                        <h3><i class="fas fa-comments"></i> ${replies.length} 条回复</h3>
+                        <div id="replies-list">
+                            ${replies.length === 0 ? '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">暂无回复，来说两句吧~</p>' :
+                                replies.map(reply => `
+                                    <div class="reply-item">
+                                        <div class="reply-header">
+                                            <div class="disc-author-avatar" style="background: ${getAvatarGradient(reply.avatarColor)}; width: 32px; height: 32px; font-size: 0.9rem;">
+                                                ${reply.author.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <div class="disc-author-name">${reply.author}</div>
+                                                <div class="disc-time">${reply.time}</div>
+                                            </div>
+                                        </div>
+                                        <div class="reply-content">${reply.content.replace(/\n/g, '<br>')}</div>
+                                    </div>
+                                `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="reply-form-container" id="localReplyForm" style="display: none;">
+                        <textarea id="local-reply-content" placeholder="写下你的回复..." maxlength="500"></textarea>
+                        <div class="char-count"><span id="local-reply-char-count">0</span>/500</div>
+                        <button class="submit-reply-btn" onclick="submitLocalReply(${disc.id})">
+                            <i class="fas fa-paper-plane"></i> 发送回复
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // 绑定字符计数
+            const textarea = modal.querySelector('#local-reply-content');
+            if (textarea) {
+                textarea.addEventListener('input', function() {
+                    const countEl = document.getElementById('local-reply-char-count');
+                    if (countEl) countEl.textContent = this.value.length;
+                });
+            }
+
+            setTimeout(() => modal.classList.add('show'), 10);
+
+            // 刷新列表以更新浏览数
+            renderLocalDiscussions();
+        }
+
+        // 点赞本地讨论
+        function likeLocalDiscussion(id) {
+            let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+            let disc = discussions.find(d => d.id === id);
+
+            if (disc) {
+                disc.likes = (disc.likes || 0) + 1;
+                localStorage.setItem('aiHubDiscussions', JSON.stringify(discussions));
+                renderLocalDiscussions();
+                showNotification('success', '已点赞', '感谢你的支持！');
+            }
+        }
+
+        // 显示本地回复表单
+        function showLocalReplyForm(id) {
+            if (!currentUser) {
+                showNotification('error', '请先登录', '登录后才能回复');
+                return;
+            }
+            const form = document.getElementById('localReplyForm');
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // 提交本地回复
+        function submitLocalReply(discussionId) {
+            const content = document.getElementById('local-reply-content').value.trim();
+
+            if (!content) {
+                showNotification('error', '请输入内容', '回复内容不能为空');
+                return;
+            }
+
+            let allReplies = JSON.parse(localStorage.getItem('aiHubReplies') || '{}');
+            if (!allReplies[discussionId]) {
+                allReplies[discussionId] = [];
+            }
+
+            allReplies[discussionId].push({
+                author: currentUser.name,
+                authorDept: currentUser.dept,
+                avatarColor: currentUser.avatarColor,
+                content: content,
+                time: new Date().toLocaleString('zh-CN')
+            });
+
+            localStorage.setItem('aiHubReplies', JSON.stringify(allReplies));
+
+            // 更新回复数
+            let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+            let disc = discussions.find(d => d.id === discussionId);
+            if (disc) {
+                disc.replies = (disc.replies || 0) + 1;
+                localStorage.setItem('aiHubDiscussions', JSON.stringify(discussions));
+            }
+
+            showNotification('success', '回复成功', '你的回复已发布！');
+            closeDiscussionDetail();
+            renderLocalDiscussions();
         }
 
         // 新讨论模态框
@@ -6350,10 +7642,11 @@
             currentDiscType = btn.dataset.type;
         }
 
-        function submitDiscussion() {
+        // 提交讨论
+        async function submitDiscussion() {
             const title = document.getElementById('disc-title').value.trim();
             const content = document.getElementById('disc-content').value.trim();
-            
+
             if (!title) {
                 showNotification('error', '请输入标题', '标题不能为空');
                 return;
@@ -6362,40 +7655,82 @@
                 showNotification('error', '请输入内容', '内容不能为空');
                 return;
             }
-            
+
             const newDiscussion = {
                 id: Date.now(),
+                title: title,
+                content: content,
                 author: currentUser.name,
                 authorDept: currentUser.dept,
                 avatarColor: currentUser.avatarColor,
-                title: title,
-                content: content,
                 type: currentDiscType,
-                time: new Date().toISOString(),
-                views: 0,
-                likes: 0,
-                liked: false,
-                replies: []
+                time: new Date().toLocaleString('zh-CN'),
+                replies: 0,
+                likes: 0
             };
-            
-            const discussions = initDiscussions();
-            discussions.unshift(newDiscussion);
-            localStorage.setItem(DISCUSSIONS_KEY, JSON.stringify(discussions));
-            
-            closeDiscussionModal();
-            renderDiscussions();
-            showNotification('success', '发布成功', '你的讨论已发布，大家可以看到！');
+
+            // 如果使用本地存储模式（GitHub Pages）
+            if (USE_LOCAL_STORAGE) {
+                let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+                discussions.unshift(newDiscussion);
+                localStorage.setItem('aiHubDiscussions', JSON.stringify(discussions));
+
+                closeDiscussionModal();
+                renderLocalDiscussions();
+                showNotification('success', '发布成功', '你的讨论已发布！（本地存储模式）');
+                return;
+            }
+
+            // 否则使用后端API
+            try {
+                const response = await fetch(`${API_BASE_URL}/discussions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newDiscussion)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    closeDiscussionModal();
+                    renderDiscussions();
+                    showNotification('success', '发布成功', '你的讨论已发布，大家可以看到！');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('发布讨论失败:', error);
+                // 失败时回退到本地存储
+                let discussions = JSON.parse(localStorage.getItem('aiHubDiscussions') || '[]');
+                discussions.unshift(newDiscussion);
+                localStorage.setItem('aiHubDiscussions', JSON.stringify(discussions));
+                closeDiscussionModal();
+                renderLocalDiscussions();
+                showNotification('success', '发布成功（本地模式）', '已保存到本地，后端服务暂时不可用');
+            }
         }
 
         // 查看讨论详情
-        function viewDiscussion(id) {
-            const discussions = initDiscussions();
-            const disc = discussions.find(d => d.id === id);
-            if (!disc) return;
+        async function viewDiscussion(id) {
+            // 从缓存或服务器获取讨论详情
+            let disc = discussionsCache.find(d => d.id === id);
             
-            // 增加浏览量
-            disc.views++;
-            localStorage.setItem(DISCUSSIONS_KEY, JSON.stringify(discussions));
+            if (!disc) {
+                showNotification('error', '加载失败', '无法找到该讨论');
+                return;
+            }
+            
+            // 获取回复列表
+            try {
+                const response = await fetch(`${API_BASE_URL}/discussions/${id}/replies`);
+                const data = await response.json();
+                currentDiscussionReplies = data.replies || [];
+            } catch (error) {
+                console.error('获取回复失败:', error);
+                currentDiscussionReplies = [];
+            }
             
             const modal = document.createElement('div');
             modal.className = 'discussion-detail-modal';
@@ -6417,7 +7752,7 @@
                                 <span>·</span>
                                 <span>${disc.authorDept}</span>
                                 <span>·</span>
-                                <span>${formatTime(disc.time)}</span>
+                                <span>${formatTime(disc.createdAt)}</span>
                             </div>
                         </div>
                     </div>
@@ -6427,28 +7762,28 @@
                     </div>
                     
                     <div class="discussion-detail-actions">
-                        <button class="action-btn ${disc.liked ? 'liked' : ''}" onclick="likeDiscussion(${disc.id}, true)">
-                            <i class="fas fa-heart"></i> ${disc.likes}
+                        <button class="action-btn ${disc.liked ? 'liked' : ''}" onclick="likeDiscussion('${disc.id}', true)">
+                            <i class="fas fa-heart"></i> ${disc.likes || 0}
                         </button>
                         <button class="action-btn">
-                            <i class="fas fa-eye"></i> ${disc.views}
+                            <i class="fas fa-eye"></i> ${disc.views || 0}
                         </button>
                     </div>
                     
                     <div class="replies-section">
-                        <h3><i class="fas fa-comments"></i> 回复 (${disc.replies.length})</h3>
+                        <h3><i class="fas fa-comments"></i> 回复 (${currentDiscussionReplies.length})</h3>
                         
                         <div class="reply-form">
                             <textarea id="reply-content" placeholder="写下你的回复..." maxlength="500"></textarea>
-                            <button onclick="submitReply(${disc.id})">
+                            <button onclick="submitReply('${disc.id}')">
                                 <i class="fas fa-paper-plane"></i> 回复
                             </button>
                         </div>
                         
-                        <div class="replies-list">
-                            ${disc.replies.length === 0 ? 
+                        <div class="replies-list" id="repliesList">
+                            ${currentDiscussionReplies.length === 0 ? 
                                 '<p class="no-replies">暂无回复，来做第一个回复的人吧！</p>' :
-                                disc.replies.map(reply => `
+                                currentDiscussionReplies.map(reply => `
                                     <div class="reply-item">
                                         <div class="reply-header">
                                             <div class="reply-avatar" style="background: ${getAvatarGradient(reply.avatarColor)};">
@@ -6456,7 +7791,7 @@
                                             </div>
                                             <div>
                                                 <div class="reply-author">${reply.author} · ${reply.authorDept}</div>
-                                                <div class="reply-time">${formatTime(reply.time)}</div>
+                                                <div class="reply-time">${formatTime(reply.createdAt)}</div>
                                             </div>
                                         </div>
                                         <div class="reply-content">${reply.content.replace(/\n/g, '<br>')}</div>
@@ -6482,7 +7817,8 @@
             }
         }
 
-        function submitReply(discussionId) {
+        // 提交回复到服务器
+        async function submitReply(discussionId) {
             if (!currentUser) {
                 showNotification('error', '请先登录', '登录后才能回复');
                 return;
@@ -6494,52 +7830,66 @@
                 return;
             }
             
-            const discussions = initDiscussions();
-            const disc = discussions.find(d => d.id === discussionId);
-            if (disc) {
-                disc.replies.push({
-                    id: Date.now(),
-                    author: currentUser.name,
-                    authorDept: currentUser.dept,
-                    avatarColor: currentUser.avatarColor,
-                    content: content,
-                    time: new Date().toISOString(),
-                    likes: 0
+            try {
+                const response = await fetch(`${API_BASE_URL}/discussions/${discussionId}/replies`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        author: currentUser.name,
+                        authorDept: currentUser.dept,
+                        avatarColor: currentUser.avatarColor
+                    })
                 });
-                localStorage.setItem(DISCUSSIONS_KEY, JSON.stringify(discussions));
                 
-                // 重新打开详情页显示新回复
-                closeDiscussionDetail();
-                setTimeout(() => viewDiscussion(discussionId), 300);
-                showNotification('success', '回复成功', '你的回复已发布！');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // 重新打开详情页显示新回复
+                    closeDiscussionDetail();
+                    setTimeout(() => viewDiscussion(discussionId), 300);
+                    showNotification('success', '回复成功', '你的回复已发布！');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('提交回复失败:', error);
+                showNotification('error', '回复失败', '请检查网络连接后重试');
             }
         }
 
-        function likeDiscussion(id, fromDetail = false) {
+        // 点赞讨论
+        async function likeDiscussion(id, fromDetail = false) {
             if (!currentUser) {
                 showNotification('error', '请先登录', '登录后才能点赞');
                 return;
             }
             
-            const discussions = initDiscussions();
-            const disc = discussions.find(d => d.id === id);
-            if (disc) {
-                if (disc.liked) {
-                    disc.likes--;
-                    disc.liked = false;
-                } else {
-                    disc.likes++;
-                    disc.liked = true;
-                }
-                localStorage.setItem(DISCUSSIONS_KEY, JSON.stringify(discussions));
+            try {
+                const response = await fetch(`${API_BASE_URL}/discussions/${id}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
                 
-                if (fromDetail) {
-                    // 更新详情页按钮
-                    event.target.closest('.action-btn').classList.toggle('liked');
-                    event.target.closest('.action-btn').innerHTML = `<i class="fas fa-heart"></i> ${disc.likes}`;
-                } else {
-                    renderDiscussions();
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (fromDetail) {
+                        // 更新详情页按钮
+                        event.target.closest('.action-btn').classList.toggle('liked');
+                        const currentLikes = parseInt(event.target.closest('.action-btn').textContent.match(/\d+/)[0]) || 0;
+                        event.target.closest('.action-btn').innerHTML = `<i class="fas fa-heart"></i> ${currentLikes + 1}`;
+                    } else {
+                        renderDiscussions();
+                    }
                 }
+            } catch (error) {
+                console.error('点赞失败:', error);
+                showNotification('error', '点赞失败', '请检查网络连接');
             }
         }
 
@@ -6564,14 +7914,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (document.getElementById('community')) {
                 initDiscussions();
-                renderDiscussions();
-                
+
+                // 根据模式选择渲染函数
+                if (USE_LOCAL_STORAGE) {
+                    renderLocalDiscussions();
+                } else {
+                    renderDiscussions();
+                }
+
                 // 定期刷新（模拟实时同步）
                 setInterval(() => {
                     if (document.getElementById('discussions-container')) {
                         const activeFilter = document.querySelector('.disc-filter-btn.active');
                         const filter = activeFilter ? activeFilter.dataset.filter || 'all' : 'all';
-                        renderDiscussions(filter);
+                        if (USE_LOCAL_STORAGE) {
+                            renderLocalDiscussions(filter);
+                        } else {
+                            renderDiscussions(filter);
+                        }
                     }
                 }, 5000); // 每5秒刷新一次
             }
@@ -7061,7 +8421,7 @@
             }
 
             container.innerHTML = filteredTemplates.map(template => `
-                <div class="prompt-template-card" data-id="${template.id}">
+                <div class="prompt-template-card" data-id="${template.id}" onclick="usePromptTemplate(${template.id})">
                     <div class="prompt-template-header">
                         <div>
                             <div class="prompt-template-title">${template.title}</div>
@@ -7077,12 +8437,15 @@
                             </div>
                             <span>${template.author} · ${template.authorDept}</span>
                         </div>
-                        <div class="prompt-template-actions">
+                        <div class="prompt-template-actions" onclick="event.stopPropagation()">
                             <button class="prompt-action-btn ${template.liked ? 'liked' : ''}" onclick="likePromptTemplate(${template.id}, event)">
                                 <i class="fas fa-heart"></i> ${template.likes}
                             </button>
                             <button class="prompt-action-btn" onclick="copyPromptTemplate(${template.id}, event)">
                                 <i class="fas fa-copy"></i> 复制
+                            </button>
+                            <button class="prompt-action-btn" style="background: var(--primary); color: white;" onclick="usePromptTemplate(${template.id}); event.stopPropagation();">
+                                <i class="fas fa-play"></i> 使用
                             </button>
                         </div>
                     </div>
@@ -7280,12 +8643,206 @@
             }
         }
 
-        // 山海主题图片切换
+        // 使用提示词模板 - 打开AI交互界面
+        function usePromptTemplate(id) {
+            const templates = initPromptTemplates();
+            const template = templates.find(t => t.id === id);
+            if (!template) return;
+
+            // 检查API配置
+            const apiKeys = JSON.parse(localStorage.getItem('aiHubAPIKeys') || '{}');
+            if (!apiKeys.deepseek && !apiKeys.kimi) {
+                showNotification('warning', '需要配置API密钥', '请先配置AI API密钥才能使用模板');
+                showAPIConfig();
+                return;
+            }
+
+            // 创建模板使用弹窗
+            const modal = document.createElement('div');
+            modal.className = 'template-use-modal';
+            modal.innerHTML = `
+                <div class="template-use-overlay" onclick="closeTemplateUseModal()"></div>
+                <div class="template-use-content">
+                    <button class="template-use-close" onclick="closeTemplateUseModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <div class="template-use-header">
+                        <h2><i class="fas fa-magic"></i> 使用模板：${template.title}</h2>
+                        <span class="template-use-category">${template.categoryName}</span>
+                    </div>
+                    
+                    <div class="template-use-body">
+                        <div class="template-original">
+                            <h5><i class="fas fa-file-alt"></i> 模板内容</h5>
+                            <div class="template-content-box">${template.content}</div>
+                        </div>
+                        
+                        <div class="template-input-section">
+                            <h5><i class="fas fa-edit"></i> 填写你的内容</h5>
+                            <textarea id="templateUserInput" placeholder="在这里输入你的具体需求或数据...&#10;&#10;例如：&#10;- 如果是角色设定模板，描述你需要AI扮演的角色场景&#10;- 如果是报告生成模板，粘贴你的监测数据&#10;- 如果是公文模板，填写会议主题、时间、地点等信息"></textarea>
+                        </div>
+                        
+                        <div class="template-ai-section">
+                            <h5>
+                                <i class="fas fa-robot"></i> AI生成结果
+                                <button onclick="showAPIConfig()" style="float: right; font-size: 0.75rem; padding: 0.25rem 0.75rem;">
+                                    <i class="fas fa-key"></i> 切换API
+                                </button>
+                            </h5>
+                            <div class="template-ai-result" id="templateAIResult">
+                                <div class="ai-placeholder">
+                                    <i class="fas fa-robot" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p>点击"生成内容"按钮，AI将根据模板和你的输入生成结果</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-use-footer">
+                        <button class="action-btn-secondary" onclick="closeTemplateUseModal()">
+                            <i class="fas fa-times"></i> 关闭
+                        </button>
+                        <button class="action-btn-primary" onclick="generateFromTemplate(${template.id})">
+                            <i class="fas fa-magic"></i> 生成内容
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        // 关闭模板使用弹窗
+        function closeTemplateUseModal() {
+            const modal = document.querySelector('.template-use-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        // 使用模板生成内容
+        async function generateFromTemplate(templateId) {
+            const templates = initPromptTemplates();
+            const template = templates.find(t => t.id === templateId);
+            if (!template) return;
+
+            const userInput = document.getElementById('templateUserInput').value.trim();
+            if (!userInput) {
+                showNotification('warning', '请输入内容', '请填写你的具体需求或数据');
+                return;
+            }
+
+            const resultContainer = document.getElementById('templateAIResult');
+            const apiKeys = JSON.parse(localStorage.getItem('aiHubAPIKeys') || '{}');
+            const preferredModel = localStorage.getItem('aiHubPreferredModel') || 'deepseek';
+
+            // 显示加载状态
+            resultContainer.innerHTML = `
+                <div class="ai-loading">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                    <p>AI正在根据模板生成内容...</p>
+                </div>
+            `;
+
+            try {
+                // 构建完整的提示词
+                const fullPrompt = `${template.content}\n\n用户输入：\n${userInput}\n\n请根据以上模板和用户输入，生成完整的内容。`;
+
+                let aiResponse = '';
+                
+                // 调用AI API
+                if (preferredModel === 'kimi' && apiKeys.kimi) {
+                    const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.kimi}`
+                        },
+                        body: JSON.stringify({
+                            model: 'moonshot-v1-8k',
+                            messages: [
+                                { role: 'system', content: '你是一个专业的AI助手，擅长根据模板生成高质量的内容。' },
+                                { role: 'user', content: fullPrompt }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('Kimi API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
+                } else if (apiKeys.deepseek) {
+                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKeys.deepseek}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [
+                                { role: 'system', content: '你是一个专业的AI助手，擅长根据模板生成高质量的内容。' },
+                                { role: 'user', content: fullPrompt }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('DeepSeek API请求失败');
+                    const data = await response.json();
+                    aiResponse = data.choices[0].message.content;
+                } else {
+                    throw new Error('未配置有效的API密钥');
+                }
+
+                // 显示结果
+                resultContainer.innerHTML = `
+                    <div class="ai-result-content">${formatAIResponse(aiResponse)}</div>
+                    <div style="margin-top: 1rem; text-align: right;">
+                        <button class="action-btn-secondary" onclick="copyTemplateResult()">
+                            <i class="fas fa-copy"></i> 复制结果
+                        </button>
+                    </div>
+                `;
+                
+                showNotification('success', '生成成功', 'AI已根据模板生成内容');
+                
+            } catch (error) {
+                console.error('AI生成失败:', error);
+                resultContainer.innerHTML = `
+                    <div class="ai-error">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: var(--danger);"></i>
+                        <p><strong>生成失败</strong></p>
+                        <p>${error.message}</p>
+                        <button class="action-btn-primary" onclick="showAPIConfig()" style="margin-top: 1rem;">
+                            <i class="fas fa-key"></i> 检查API配置
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // 复制模板生成结果
+        function copyTemplateResult() {
+            const resultContent = document.querySelector('.ai-result-content');
+            if (resultContent) {
+                const text = resultContent.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('success', '复制成功', '内容已复制到剪贴板');
+                });
+            }
+        }
+
+        // 山海主题图片切换（使用相对路径，部署到GitHub时需要同时上传images文件夹）
         const earthSeaImages = [
-            'file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_01.png',
-            'file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_03.png',
-            'file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_06.png',
-            'file:///C:/Users/anybody/Desktop/Earth_and_Sea_United_08.png'
+            'images/Earth_and_Sea_United_01.png',
+            'images/Earth_and_Sea_United_03.png',
+            'images/Earth_and_Sea_United_06.png',
+            'images/Earth_and_Sea_United_08.png'
         ];
         let currentEarthSeaIndex = 0;
 
