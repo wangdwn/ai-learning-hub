@@ -4524,6 +4524,142 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
+
+        /* ===== 全面移动端优化 ===== */
+        @media (max-width: 768px) {
+
+            /* 导航栏：隐藏中间tab，只保留logo和头像 */
+            .nav-center { display: none; }
+            .xp-badge, .streak-badge { display: none; }
+            .navbar { padding: 0.75rem 1rem; }
+            .logo { font-size: 1.1rem; }
+
+            /* 主内容区底部留白，避免被底部导航遮住 */
+            .main-content { margin-top: 60px; padding-bottom: 70px; }
+            .page { padding: 1rem; }
+
+            /* 封面页字体缩小 */
+            .hero-title { font-size: 1.6rem !important; }
+            .hero-subtitle { font-size: 0.9rem !important; }
+            .hero-actions { flex-direction: column; gap: 0.75rem; }
+            .hero-actions button { width: 100%; }
+
+            /* 统计数字网格：2列 */
+            .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 0.75rem; }
+            .stat-card { padding: 1rem; }
+            .stat-number { font-size: 1.5rem; }
+
+            /* 课程卡片：单列 */
+            .courses-grid, .projects-grid, .skills-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem;
+            }
+
+            /* 卡片内边距缩小 */
+            .course-card, .project-card, .lesson-card {
+                padding: 1rem;
+            }
+
+            /* 段落标题字体 */
+            .section-header h2 { font-size: 1.1rem; }
+            .section-title { font-size: 1.1rem; }
+
+            /* 进度条区域 */
+            .dashboard-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem;
+            }
+
+            /* API配置弹窗：全屏显示 */
+            .api-config-modal {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                border-radius: 0;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
+            .api-config-content {
+                border-radius: 0;
+                min-height: 100vh;
+                padding: 1.5rem 1rem;
+            }
+
+            /* 模态框：接近全屏 */
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+                padding: 1.25rem;
+                border-radius: 16px;
+            }
+
+            /* 通知：顶部居中 */
+            .notification {
+                right: 1rem;
+                left: 1rem;
+                top: 70px;
+                transform: translateY(-200px);
+            }
+            .notification.show { transform: translateY(0); }
+
+            /* 按钮字体和间距 */
+            .btn, .action-btn-primary, .project-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* 输入框更大更好点击 */
+            input, textarea, select {
+                font-size: 16px !important; /* 防止iOS自动缩放 */
+                padding: 0.75rem !important;
+            }
+
+            /* 讨论区单列 */
+            .discussion-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .discussion-sidebar { display: none; }
+
+            /* 成就页单列 */
+            .achievements-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.75rem;
+            }
+
+            /* 封面右下角图片隐藏 */
+            .earth-sea-corner { display: none; }
+            .earth-sea-sidebar { display: none; }
+
+            /* 技能图谱 */
+            .skill-section { padding: 1rem; }
+
+            /* 底部导航更大 */
+            .mobile-nav {
+                height: 60px;
+                padding: 0;
+            }
+            .mobile-nav-item {
+                flex: 1;
+                padding: 0.5rem 0.25rem;
+                font-size: 0.7rem;
+            }
+            .mobile-nav-item i {
+                font-size: 1.3rem;
+                margin-bottom: 2px;
+            }
+
+            /* AI对话区域 */
+            .ai-demo-box { padding: 1rem; }
+            .ai-answer-box { font-size: 0.9rem; }
+        }
+
+        /* 超小屏（320px以下） */
+        @media (max-width: 360px) {
+            .page { padding: 0.75rem; }
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .achievements-grid { grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
 <body>
@@ -5896,6 +6032,11 @@
                     <p class="api-config-desc">
                         为了使用真实的AI对话功能，你需要提供自己的API密钥。<br>
                         密钥仅保存在你的浏览器本地，不会上传到任何服务器。
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        <a href="deepseek-key-guide.html" target="_blank" style="color: #0ea5e9; font-size: 0.9rem;">
+                            <i class="fas fa-book-open"></i> 没有Key？点这里查看5分钟获取教程
+                        </a>
                     </p>
                     
                     <div class="api-config-tabs">
