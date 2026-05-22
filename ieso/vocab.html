@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IESO词汇本 - AI智学工坊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: #0a0e27;
+            color: #e0e4f0;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: linear-gradient(135deg, #1a1f3a 0%, #0d1233 100%);
+            border-bottom: 1px solid rgba(100, 140, 255, 0.15);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar .logo i {
+            font-size: 24px;
+            color: #5b8cff;
+        }
+
+        .top-bar .logo span {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #5b8cff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-bar .back-link a {
+            color: #8892b0;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .top-bar .back-link a:hover {
+            color: #5b8cff;
+        }
+
+        .main-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #5b8cff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #8892b0;
+            font-size: 15px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(100, 140, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            color: #e0e4f0;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #5b8cff;
+        }
+
+        .search-box input::placeholder {
+            color: #5a6380;
+        }
+
+        .search-box button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #5b8cff, #7c5cfc);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-family: inherit;
+        }
+
+        .search-box button:hover {
+            opacity: 0.9;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 140, 255, 0.15);
+            background: transparent;
+            color: #8892b0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            border-color: #5b8cff;
+            color: #e0e4f0;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #5b8cff33, #7c5cfc33);
+            border-color: #5b8cff;
+            color: #5b8cff;
+        }
+
+        .vocab-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vocab-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(100, 140, 255, 0.1);
+            border-radius: 14px;
+            padding: 18px 22px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .vocab-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(100, 140, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .vocab-card .term {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .vocab-card .term .en {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e4f0;
+        }
+
+        .vocab-card .term .tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .tag-ieso { background: #5b8cff33; color: #5b8cff; }
+        .tag-marine { background: #22d3ee33; color: #22d3ee; }
+        .tag-geo { background: #f59e0b33; color: #f59e0b; }
+        .tag-tech { background: #a78bfa33; color: #a78bfa; }
+
+        .vocab-card .definition {
+            color: #8892b0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .vocab-card .example {
+            margin-top: 8px;
+            padding: 10px 14px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #6b7280;
+            font-style: italic;
+            display: none;
+        }
+
+        .vocab-card.expanded .example {
+            display: block;
+        }
+
+        .stats-bar {
+            text-align: center;
+            color: #5a6380;
+            font-size: 13px;
+            margin-top: 32px;
+            padding: 16px;
+            border-top: 1px solid rgba(100, 140, 255, 0.08);
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 24px; }
+            .search-box { flex-direction: column; }
+            .vocab-card .term { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="logo">
+        <i class="fas fa-book"></i>
+        <span>AI智学工坊</span>
+    </div>
+    <div class="back-link">
+        <a href="../"><i class="fas fa-arrow-left"></i> 返回首页</a>
+    </div>
+</div>
+
+<div class="main-container">
+
+    <div class="page-header">
+        <h1>IESO 专业词汇本</h1>
+        <p>International Earth Science Olympiad · 地质海洋核心术语</p>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索英文或中文词汇..." oninput="filterCards()">
+        <button onclick="filterCards()"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">全部</button>
+        <button class="filter-btn" data-filter="ieso" onclick="setFilter('ieso', this)">IESO</button>
+        <button class="filter-btn" data-filter="marine" onclick="setFilter('marine', this)">海洋</button>
+        <button class="filter-btn" data-filter="geo" onclick="setFilter('geo', this)">地质</button>
+        <button class="filter-btn" data-filter="tech" onclick="setFilter('tech', this)">技术</button>
+    </div>
+
+    <div class="vocab-grid" id="vocabGrid"></div>
+
+    <div class="stats-bar" id="statsBar">共 <span id="countDisplay">0</span> 个词汇</div>
+
+</div>
+
+<script>
+    const vocabulary = [
+        { en: "Abyssal Plain", zh: "深海平原", tag: "marine", example: "The abyssal plain covers a vast portion of the ocean floor at depths of 3000–6000 m." },
+        { en: "Accretionary Wedge", zh: "增生楔", tag: "geo", example: "An accretionary wedge forms at convergent plate boundaries where sediment is scraped off subducting plates." },
+        { en: "Aquifer", zh: "含水层", tag: "geo", example: "Groundwater is stored and transmitted through porous rock layers called aquifers." },
+        { en: "Asthenosphere", zh: "软流圈", tag: "ieso", example: "The asthenosphere is a semi-molten layer of the upper mantle that allows tectonic plates to move." },
+        { en: "Bathymetry", zh: "水深测量", tag: "marine", example: "Bathymetry maps reveal the topography of the ocean floor." },
+        { en: "Bedrock", zh: "基岩", tag: "geo", example: "Bedrock is the solid rock layer beneath soil and sediment." },
+        { en: "Benthic Zone", zh: "底栖带", tag: "marine", example: "Organisms living in the benthic zone depend on organic matter sinking from above." },
+        { en: "Biogenic Sediment", zh: "生物沉积物", tag: "marine", example: "Biogenic sediment consists of the remains of marine organisms such as shells and skeletons." },
+        { en: "Caldera", zh: "破火山口", tag: "geo", example: "A caldera forms when a volcano collapses after a major eruption." },
+        { en: "Chemosynthesis", zh: "化能合成", tag: "ieso", example: "Chemosynthesis allows organisms to produce energy from chemical reactions in hydrothermal vent ecosystems." },
+        { en: "Continental Crust", zh: "大陆地壳", tag: "ieso", example: "Continental crust is thicker and less dense than oceanic crust." },
+        { en: "Coral Bleaching", zh: "珊瑚白化", tag: "marine", example: "Rising sea temperatures cause coral bleaching by expelling symbiotic algae from coral tissues." },
+        { en: "Coriolis Effect", zh: "科里奥利效应", tag: "ieso", example: "The Coriolis effect deflects ocean currents and winds to the right in the Northern Hemisphere." },
+        { en: "Crustal Deformation", zh: "地壳变形", tag: "geo", example: "Crustal deformation occurs due to tectonic forces such as compression, tension, and shear." },
+        { en: "Diagenesis", zh: "成岩作用", tag: "geo", example: "Diagenesis transforms sediment into sedimentary rock through compaction and cementation." },
+        { en: "Diatom", zh: "硅藻", tag: "marine", example: "Diatoms are microscopic algae with silica-based cell walls, important for ocean carbon cycling." },
+        { en: "Ecosystem Resilience", zh: "生态系统韧性", tag: "tech", example: "Ecosystem resilience measures the capacity of an environment to recover from disturbances." },
+        { en: "Ekman Transport", zh: "埃克曼输送", tag: "marine", example: "Ekman transport moves surface water at a 90° angle to the wind direction due to the Coriolis effect." },
+        { en: "Epicenter", zh: "震中", tag: "ieso", example: "The epicenter is the point on the Earth's surface directly above the earthquake focus." },
+        { en: "Eustatic Sea Level", zh: "全球海平面", tag: "marine", example: "Eustatic sea level changes are caused by variations in the volume of ocean water or changes in ocean basin capacity." },
+        { en: "Evaporite", zh: "蒸发岩", tag: "geo", example: "Evaporites such as halite and gypsum form when seawater evaporates in restricted basins." },
+        { en: "Fault Line", zh: "断层线", tag: "geo", example: "The San Andreas Fault is a well-known fault line marking the boundary between the Pacific and North American plates." },
+        { en: "Foraminifera", zh: "有孔虫", tag: "marine", example: "Foraminifera shells are used in paleoclimatology to reconstruct past ocean temperatures." },
+        { en: "Geothermal Gradient", zh: "地温梯度", tag: "ieso", example: "The geothermal gradient averages about 25–30°C per kilometer of depth in the Earth's crust." },
+        { en: "Glacial Isostasy", zh: "冰川均衡", tag: "geo", example: "Glacial isostasy refers to the vertical movement of the Earth's crust in response to ice loading and unloading." },
+        { en: "Guyot", zh: "平顶海山", tag: "marine", example: "A guyot is a flat-topped seamount whose summit was eroded by wave action before subsiding below sea level." },
+        { en: "Halocline", zh: "盐跃层", tag: "marine", example: "The halocline is a layer in the water column where salinity changes rapidly with depth." },
+        { en: "Hydrothermal Vent", zh: "热液喷口", tag: "marine", example: "Hydrothermal vents on the ocean floor release mineral-rich superheated water, supporting unique ecosystems." },
+        { en: "Igneous Rock", zh: "火成岩", tag: "ieso", example: "Igneous rock forms from the cooling and solidification of magma or lava." },
+        { en: "Ionosphere", zh: "电离层", tag: "tech", example: "The ionosphere is a layer of the atmosphere ionized by solar radiation, affecting radio wave propagation." },
+        { en: "Isotope Fractionation", zh: "同位素分馏", tag: "tech", example: "Isotope fractionation provides clues about past climate conditions recorded in ice cores and sediments." },
+        { en: "Karst Topography", zh: "喀斯特地貌", tag: "geo", example: "Karst topography is characterized by limestone caves, sinkholes, and underground drainage systems." },
+        { en: "Kuroshio Current", zh: "黑潮", tag: "marine", example: "The Kuroshio Current is a warm western boundary current flowing north along the coast of Japan." },
+        { en: "Laminar Flow", zh: "层流", tag: "tech", example: "Laminar flow describes fluid movement in parallel layers with minimal mixing." },
+        { en: "Lithosphere", zh: "岩石圈", tag: "ieso", example: "The lithosphere comprises the Earth's crust and the uppermost solid mantle." },
+        { en: "Littoral Zone", zh: "潮间带", tag: "marine", example: "The littoral zone is the area of shoreline between high and low tide marks." },
+        { en: "Magma Chamber", zh: "岩浆房", tag: "geo", example: "A magma chamber is a large pool of molten rock beneath the Earth's surface." },
+        { en: "Magnetometer", zh: "磁力仪", tag: "tech", example: "A magnetometer measures magnetic field strength and is used in geophysical surveys." },
+        { en: "Mantle Plume", zh: "地幔柱", tag: "ieso", example: "A mantle plume is a column of hot magma rising from deep within the Earth's mantle." },
+        { en: "Meteorite Impact", zh: "陨石撞击", tag: "ieso", example: "Meteorite impacts can cause mass extinctions, as hypothesized for the K-Pg extinction event." },
+        { en: "Mid-Atlantic Ridge", zh: "大西洋中脊", tag: "geo", example: "The Mid-Atlantic Ridge is a divergent plate boundary where new oceanic crust is formed." },
+        { en: "Milankovitch Cycles", zh: "米兰科维奇旋回", tag: "ieso", example: "Milankovitch cycles describe long-term variations in Earth's orbit that influence climate patterns." },
+        { en: "Neritic Zone", zh: "浅海带", tag: "marine", example: "The neritic zone extends from the low tide mark to the edge of the continental shelf." },
+        { en: "Nodule (Manganese)", zh: "锰结核", tag: "marine", example: "Manganese nodules are mineral concretions found on the deep ocean floor containing valuable metals." },
+        { en: "Ophiolite", zh: "蛇绿岩套", tag: "geo", example: "Ophiolites are fragments of oceanic lithosphere thrust onto continental crust." },
+        { en: "Outgassing", zh: "脱气作用", tag: "geo", example: "Volcanic outgassing released water vapor and gases that contributed to the formation of Earth's early atmosphere." },
+        { en: "Oxidation-Reduction", zh: "氧化还原", tag: "tech", example: "Redox reactions play a key role in biogeochemical cycles such as the sulfur and iron cycles." },
+        { en: "Paleomagnetism", zh: "古地磁学", tag: "ieso", example: "Paleomagnetism studies the record of Earth's magnetic field preserved in rocks." },
+        { en: "Pelagic Zone", zh: "远洋带", tag: "marine", example: "The pelagic zone refers to the open ocean away from the coast and above the seabed." },
+        { en: "Permafrost", zh: "永冻层", tag: "geo", example: "Permafrost is ground that remains frozen for at least two consecutive years." },
+        { en: "Photic Zone", zh: "透光带", tag: "marine", example: "The photic zone is the upper layer of the ocean where sunlight penetrates and photosynthesis occurs." },
+        { en: "Plate Tectonics", zh: "板块构造", tag: "ieso", example: "Plate tectonics is the theory explaining the movement of Earth's lithospheric plates." },
+        { en: "Pyroclastic Flow", zh: "火山碎屑流", tag: "geo", example: "A pyroclastic flow is a fast-moving current of hot gas and volcanic matter during an eruption." },
+        { en: "Refraction (Seismic)", zh: "地震波折射", tag: "tech", example: "Seismic refraction is used to determine subsurface geological structures." },
+        { en: "Rift Valley", zh: "裂谷", tag: "geo", example: "The East African Rift Valley is a developing divergent plate boundary." },
+        { en: "Salinity", zh: "盐度", tag: "marine", example: "Ocean salinity varies due to evaporation, precipitation, and freshwater inflow." },
+        { en: "Seafloor Spreading", zh: "海底扩张", tag: "ieso", example: "Seafloor spreading drives the movement of tectonic plates at mid-ocean ridges." },
+        { en: "Seismic Tomography", zh: "地震层析成像", tag: "tech", example: "Seismic tomography uses earthquake waves to create 3D images of Earth's interior." },
+        { en: "Seismograph", zh: "地震仪", tag: "ieso", example: "A seismograph records ground motion during an earthquake." },
+        { en: "Stratigraphy", zh: "地层学", tag: "geo", example: "Stratigraphy studies rock layers and their sequence to interpret Earth's history." },
+        { en: "Subduction Zone", zh: "俯冲带", tag: "geo", example: "Subduction zones occur where one tectonic plate sinks beneath another." },
+        { en: "Thermocline", zh: "温跃层", tag: "marine", example: "The thermocline is a layer where water temperature decreases rapidly with depth." },
+        { en: "Tidal Energy", zh: "潮汐能", tag: "tech", example: "Tidal energy harnesses the rise and fall of sea levels to generate electricity." },
+        { en: "Tsunami", zh: "海啸", tag: "marine", example: "Tsunamis are large ocean waves triggered by underwater earthquakes or volcanic eruptions." },
+        { en: "Turbidity Current", zh: "浊流", tag: "marine", example: "Turbidity currents are underwater avalanches of sediment-laden water that flow down continental slopes." },
+        { en: "Upwelling", zh: "上升流", tag: "marine", example: "Upwelling brings nutrient-rich deep water to the surface, supporting productive marine ecosystems." },
+        { en: "Volcanic Arc", zh: "火山弧", tag: "geo", example: "Volcanic arcs form above subduction zones where magma rises to create a chain of volcanoes." },
+        { en: "Weathering", zh: "风化作用", tag: "ieso", example: "Weathering breaks down rocks into smaller particles through physical, chemical, and biological processes." },
+        { en: "Xenolith", zh: "捕虏体", tag: "geo", example: "A xenolith is a rock fragment trapped within magma that provides clues about the Earth's mantle." },
+        { en: "Zooplankton", zh: "浮游动物", tag: "marine", example: "Zooplankton are drifting animals that form a critical link in the marine food web." }
+    ];
+
+    let currentFilter = 'all';
+    let filtered = vocabulary;
+
+    function renderCards(list) {
+        const grid = document.getElementById('vocabGrid');
+        grid.innerHTML = '';
+        list.forEach(word => {
+            const card = document.createElement('div');
+            card.className = 'vocab-card';
+            card.onclick = function() { this.classList.toggle('expanded'); };
+
+            const tagMap = { ieso: 'IESO', marine: '海洋', geo: '地质', tech: '技术' };
+            const tagClass = 'tag-' + word.tag;
+
+            card.innerHTML = `
+                <div class="term">
+                    <span class="en">${word.en}</span>
+                    <span class="tag ${tagClass}">${tagMap[word.tag] || word.tag}</span>
+                </div>
+                <div class="definition">${word.zh}</div>
+                <div class="example">${word.example}</div>
+            `;
+            grid.appendChild(card);
+        });
+        document.getElementById('countDisplay').textContent = list.length;
+    }
+
+    function filterCards() {
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        filtered = vocabulary.filter(w => {
+            const matchSearch = !q || w.en.toLowerCase().includes(q) || w.zh.includes(q);
+            const matchFilter = currentFilter === 'all' || w.tag === currentFilter;
+            return matchSearch && matchFilter;
+        });
+        renderCards(filtered);
+    }
+
+    function setFilter(tag, btn) {
+        currentFilter = tag;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterCards();
+    }
+
+    // initial render
+    renderCards(vocabulary);
+</script>
+</body>
+</html>
