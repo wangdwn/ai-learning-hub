@@ -1,188 +1,101 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>思维导图速记 高中英语词汇</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>高中英语词汇 4482词</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#faf8f6;color:#2c3e50;line-height:1.6}
-header{background:linear-gradient(135deg,#c67c4e,#d8946a);color:#fff;padding:28px 20px 18px;text-align:center}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#faf8f6;color:#333;font-size:14px}
+header{background:linear-gradient(135deg,#c67c4e,#d8946a);color:#fff;padding:24px 16px 16px;text-align:center}
 header h1{font-size:20px;font-weight:700}
-header p{font-size:13px;opacity:.85;margin-top:4px}
-.controls{background:#fff;border-bottom:1px solid #e8ddd0;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:0;z-index:20;justify-content:center}
-.controls input{flex:1;min-width:140px;max-width:300px;padding:7px 14px;border:1px solid #e8ddd0;border-radius:18px;font-size:13px;outline:none}
-.controls input:focus{border-color:#c67c4e}
-.tag{display:inline-block;padding:4px 12px;border:1px solid #e8ddd0;border-radius:14px;font-size:12px;cursor:pointer;transition:.2s;background:#fff;color:#888;user-select:none}
-.tag.on{border-color:#c67c4e}
-.tag.on.high{background:#c67c4e;color:#fff}
-.tag.on.mid{background:#b8987a;color:#fff}
-.tag.on.low{background:#999;color:#fff}
-.stats{text-align:center;font-size:13px;color:#888;padding:8px 16px;background:#fff;border-bottom:1px solid #e8ddd0}
-#content{max-width:960px;margin:0 auto;padding:14px 16px}
-.list{border:1px solid #e8ddd0;border-radius:8px;margin-bottom:16px;overflow:hidden}
-.list-hd{background:#f5eee8;padding:12px 14px;font-weight:700;font-size:15px;color:#c67c4e;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
-.list-hd .arrow{transition:transform .2s;font-size:11px}
-.list-hd.collapsed .arrow{transform:rotate(-90deg)}
-.list-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:12px}
-.list-body.hide{display:none}
-.group{border:1px solid #e8ddd0;border-radius:8px;overflow:hidden;background:#fff}
-.group-hd{background:#f5eee8;padding:8px 10px;font-weight:700;font-size:14px;color:#c67c4e;text-align:center;border-bottom:1px solid #e8ddd0}
-.group-wd{padding:6px 10px}
-.gword{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px;border-bottom:1px dotted #f5eee8;gap:4px}
-.gword:last-child{border:none}
-.gword .en{font-weight:500}
-.gword .zh{color:#888;font-size:11px;text-align:right}
-.lv{font-size:9px;padding:1px 5px;border-radius:6px;flex-shrink:0}
-.lv.high{background:#f0e6da;color:#8b5e3c}
-.lv.mid{background:#f5f0e8;color:#7a6b5a}
-.lv.low{background:#f0f0f0;color:#666}
-.loading{text-align:center;padding:60px}
-.loading .sp{display:inline-block;width:24px;height:24px;border:3px solid #e8ddd0;border-top-color:#c67c4e;border-radius:50%;animation:s .7s linear infinite}
+header p{font-size:13px;opacity:.85;margin-top:3px}
+.top-bar{background:#fff;border-bottom:1px solid #e0d5c8;padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;position:sticky;top:0;z-index:20}
+.top-bar input{flex:1;min-width:120px;max-width:260px;padding:6px 12px;border:1px solid #e0d5c8;border-radius:16px;font-size:13px;outline:none}
+.top-bar input:focus{border-color:#c67c4e}
+.f{display:inline-block;padding:3px 10px;border:1px solid #e0d5c8;border-radius:12px;font-size:12px;cursor:pointer;background:#fff;color:#999;user-select:none}
+.f.on{border-color:#c67c4e;color:#fff}
+.f.on.h{background:#c67c4e}
+.f.on.m{background:#b8987a}
+.f.on.l{background:#999}
+.s{text-align:center;font-size:12px;color:#888;padding:6px;background:#fff;border-bottom:1px solid #e0d5c8}
+#w{max-width:860px;margin:0 auto;padding:10px 12px}
+.w{border:1px solid #e0d5c8;border-radius:6px;margin-bottom:6px;overflow:hidden}
+.w-h{background:#f5eee8;padding:8px 12px;font-weight:700;font-size:14px;color:#c67c4e;cursor:pointer;display:flex;justify-content:space-between;user-select:none}
+.w-h .a{transition:transform .2s;font-size:10px;color:#888}
+.w-h.c .a{transform:rotate(-90deg)}
+.w-b{padding:6px 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:4px}
+.w-b.h{display:none}
+.it{display:flex;justify-content:space-between;align-items:center;padding:3px 0;gap:4px;border-bottom:1px dotted #f0e8e0;font-size:13px}
+.it:last-child{border:0}
+.it .e{font-weight:500}
+.it .z{color:#888;font-size:12px;text-align:right}
+.tg{font-size:10px;padding:1px 6px;border-radius:5px;flex-shrink:0;white-space:nowrap}
+.tg.h{background:#f0e6da;color:#8b5e3c}
+.tg.m{background:#f5f0e8;color:#7a6b5a}
+.tg.l{background:#f0f0f0;color:#666}
+.l{text-align:center;padding:40px;color:#888}
+.l .sp{display:inline-block;width:22px;height:22px;border:2px solid #e0d5c8;border-top-color:#c67c4e;border-radius:50%;animation:s .7s linear infinite}
 @keyframes s{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:60px;color:#888}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:#e8ddd0;border-radius:2px}
 </style>
 </head>
 <body>
-<header>
-  <h1>🌿 思维导图速记 高中英语词汇</h1>
-  <p><span id="totalW">0</span> 词 · <span id="listCount">0</span> 单元</p>
-</header>
-<div class="controls">
-  <input id="search" placeholder="🔍 搜单词或中文...">
-  <span class="tag on high" onclick="tg(this,'高')">高频</span>
-  <span class="tag on mid" onclick="tg(this,'中')">中频</span>
-  <span class="tag on low" onclick="tg(this,'补')">补充</span>
+<header><h1>📖 高中英语词汇</h1><p>俞敏洪 编著 · <span id="t">0</span> 词 · 45 单元</p></header>
+<div class="top-bar">
+<input id="q" placeholder="🔍 搜单词或释义...">
+<div class="f on h" onclick="l(this,'h')">高频</div>
+<div class="f on m" onclick="l(this,'m')">中频</div>
+<div class="f on l" onclick="l(this,'l')">补充</div>
 </div>
-<div class="stats">显示 <span id="shownW">0</span> 条</div>
-<div id="content"><div class="loading"><div class="sp"></div></div></div>
+<div class="s">已显示 <span id="s">0</span> 条</div>
+<div id="w"><div class="l"><div class="sp"></div></div></div>
 
 <script>
-const THEMES={
-1:["air","work","able","act","fire","break","every","thing","fact","effect","benefit","attract","add"],
-2:["graph","contribute","circle","close","expect","visit","view","fall","stand","change","style"],
-3:["like","stand","use","know","sure","main","new","man","remember","impress","house","collect"],
-4:["post","care","move","motion","advantage","create","precious","habit","usual","common","normal","stay","test"],
-5:["centre","general","depend","part","form","offer","order","honour","import","variety","cover","handle"],
-6:["service","press","prove","ball","spend","sea","flat","mercy","sea","office"],
-7:["way","mind","sit","consider","just","electric","light","top","photo","certain","drama","regret","remain","mother"],
-8:["explain","near","condition","easy","force","curious","finish","bind","turn","weight","life","limit","length"],
-9:["subject","point","solve","receive","confidence","put","pride","promise","worthy","produce","count","knowledge","speech"],
-10:["think","should","class","night","suggest","relationship","difficult","person","aware","sense","weak","private","passion","genuine"],
-11:["take","wear","mail","angry","right","can","against","demand","attack","long","shame","firm","strict"],
-12:["week","mean","look","be","secret","place","worth","maintain","contain","stand","equal","immediate","connect","polite","paint","survive"],
-13:["rely","joy","develop","simple","pocket","high","blood","anxious","possible","satisfy","various","choose","express","disappoint","deliver","instruct"],
-14:["pay","strong","famous","excited","stop","ear","face","warm","beauty","nature","polite","document","publish","flood","blame"],
-15:["favourite","frequently","fast","please","call","interesting","delight","music","library","distant","drive","break","courage","water"],
-16:["taste","clean","bed","clothes","shirt","true","bank","bargain","button","bathe","stomach","pound","fold"],
-17:["family","argue","regard","meet","kind","sick","concentrate","flower","cook","same","male","author","recommend","adventure","arrange","doubt"],
-18:["paint","initial","mass","join","though","tell","spread","quit","laugh","awful","plenty","coast","seek","comfort","portrait"],
-19:["colour","staff","watch","lift","snow","result","appear","happen","signal","dance","gold","steal","angle","event"],
-20:["pick","health","character","box","warn","face","print","fierce","guide","drag","exercise","strike","court","punish","stare","declare","strength"],
-21:["some","present","agency","decide","accident","geography","opinion","charge","danger","tongue","tire","address","situation","perform"],
-22:["land","fail","fall","convenient","punish","miss","spot","season","power","through","press","pressure","wake","trick","native","count","progress","cover"],
-23:["continue","kilo","imagine","certain","concern","room","reply","simple","share","brave","crime","memory","nature"],
-24:["grade","habit","arm","conversation","well","addict","individual","anxiety","pray","treat","experiment","differ","permit"],
-25:["compete","plant","sign","wind","worth","reduce","pack","star","arrive","coach","order","hurry","scene","scenery","shelter"],
-26:["build","instruction","convey","pair","local","lock","poem","smell","sorrow","promote","ancient","remind","splendid","delicious","bless","temple"],
-27:["victory","mark","hear","clear","equal","physics","pause","comfort","course","pass","crowd","goal","envy","puzzle","donate","invest","separate","globe"],
-28:["found","front","community","wing","technology","complete","peace","novel","rent","allow","advance","satisfy","volunteer","easy","blow","fight","treasure"],
-29:["bar","out","divide","ride","rise","suit","magic","blood","grace","card","hunt","diet","pollute","action","luggage","typical"],
-30:["astronaut","low","pack","bath","award","company","function","instant","scare","particular","scale","source","attack","examine"],
-31:["cent","grand","doctor","cheer","cross","tour","conference","reflect","explode","poverty","rob","approve","persuade","contrast","worry"],
-32:["note","economic","catch","corporate","draw","bridge","gain","explore","anxious","fortune","occupy","stove","paragraph","type","honest","empty","plug","broad","biscuit"],
-33:["name","whisper","soon","ice","rock","amazing","fine","bite","winter","drop","flow","level","steam","float","bold","fierce","laughter","quit"],
-34:["hungry","search","crime","since","identity","harm","suppose","admit","lack","bother","spare","panic","awkward","desire","reward"],
-35:["resemble","guide","breath","coffee","drama","rate","pleasant","soul","sunrise","chap","organ","stranger","stage","bother","rank","ruin","rapid","arrangement"],
-36:["mix","silent","blue","show","cube","escape","powder","budget","toast","restless","possess","clarify","defeat","sigh","persuade","schedule"],
-37:["hamburger","medicine","suck","fresh","flower","stream","display","province","atmosphere","genius","oxygen","hydrogen","memorial","genius"],
-38:["assist","crisis","describe","science","institute","limit","intend","reject","acquire","stuff","faith","sunlight","inspect","laundry","update","stain"],
-39:["major","space","million","music","pulse","microwave","argument","overcome","dial","contract","principle","species","victim","grab","bloom","tune","bargain","impact","crash","investigate","possession"],
-40:["psychology","immigration","metre","command","temporary","camp","permanent","endure","document","schedule","loan","gentle","analysis","trap","flexible","concrete","patience","conclusion","float"],
-41:["origin","insert","master","battle","forward","navy","orbit","colony","drift","involve","slave","anecdote","deposit","manner","shrink","superior","version","bamboo","enterprise"],
-42:["candle","carve","court","approach","journey","pile","council","substance","mild","sculpture","parcel","coin","rouse","damp","preserve","accurate","circulate","prosper","gentle","chain","dialogue","glance","classic"],
-43:["jump","sniff","episode","botany","ripe","system","sneeze","chain","comprehension","infect","modest","dizzy","acute","sponsor","relief","march","cotton","retire","lodge"],
-44:["jewellery","boom","festival","blood","rhyme","channel","pill","consult","applaud","bow","thriller","compress","pension","inspect","presentation","outstanding","minority","trap","ash","suburb","tolerate","extreme"],
-45:["column","medal","feed","switch","slave","slip","fragment","glare","aboard","thorough","severe","hollow","pregnant","raw","abuse","memorandum","breeze","authentic","panic","ecology","hardship","relevant","municipal"]};
-
-let words=[], filtered=[], filters={high:1,mid:1,low:1,search:''};
-const listNums=Object.keys(THEMES).map(Number).sort((a,b)=>a-b);
-
-function tg(el,l){
-  el.classList.toggle('on');
-  filters.high=document.querySelector('.tag.on.high')!==null;
-  filters.mid=document.querySelector('.tag.on.mid')!==null;
-  filters.low=document.querySelector('.tag.on.low')!==null;
-  apply();
-}
+let V=[],F=[],fl={h:1,m:1,l:1,q:""},L=45;
+function l(el,t){el.classList.toggle("on");fl.h=!!document.querySelector(".f.on.h");fl.m=!!document.querySelector(".f.on.m");fl.l=!!document.querySelector(".f.on.l");go()}
 
 async function load(){
   try{
-    let r=await fetch('vocab.json?_='+Date.now());
-    if(!r.ok) throw Error('HTTP '+r.status);
-    words=await r.json();
-    document.getElementById('totalW').textContent=words.length;
-    document.getElementById('listCount').textContent=listNums.length;
-    apply();
-  }catch(e){
-    document.getElementById('content').innerHTML='<div class="empty">⚠️ 数据加载失败: '+e.message+'</div>';
-  }
+    let r=await fetch("vocab.json?_="+Date.now());
+    if(!r.ok)throw Error(String(r.status));
+    V=await r.json();
+    document.getElementById("t").textContent=V.length;
+    go();
+  }catch(e){document.getElementById("w").innerHTML='<div class="l">⚠️ 加载失败: '+e.message+'</div>'}
 }
 
-function apply(){
-  let q=filters.search.toLowerCase();
-  filtered=words.filter(w=>{
-    if((w.level==='高频'&&!filters.high)||(w.level==='中频'&&!filters.mid)||(w.level==='补充'&&!filters.low)) return false;
-    if(q&&!w.en.toLowerCase().includes(q)&&!w.zh.includes(q)) return false;
-    return true;
+function go(){
+  let q=fl.q.toLowerCase();
+  F=V.filter(w=>{
+    if((w.level==="高频"&&!fl.h)||(w.level==="中频"&&!fl.m)||(w.level==="补充"&&!fl.l))return 0;
+    if(q&&!w.en.toLowerCase().includes(q)&&!w.zh.includes(q))return 0;
+    return 1;
   });
-  document.getElementById('shownW').textContent=filtered.length;
-  render();
+  document.getElementById("s").textContent=F.length;
+  rn();
 }
 
-function render(){
-  let c=document.getElementById('content'), html='';
-  if(!filtered.length){c.innerHTML='<div class="empty">📭 没有匹配的词汇</div>';return;}
+function rn(){
+  let c=document.getElementById("w"),h="";
+  if(!F.length){c.innerHTML='<div class="l">📭 无匹配</div>';return}
   
-  let pp=Math.ceil(words.length/45);
-  
-  for(let ln of listNums){
-    let st=(ln-1)*pp, en=Math.min(st+pp,words.length);
-    let lw=filtered.filter(w=>words.indexOf(w)>=st&&words.indexOf(w)<en);
-    if(!lw.length) continue;
+  let pp=V.length/L;
+  for(let i=1;i<=L;i++){
+    let st=Math.round((i-1)*pp),en=Math.round(Math.min(i*pp,V.length));
+    let lw=F.filter(w=>V.indexOf(w)>=st&&V.indexOf(w)<en);
+    if(!lw.length)continue;
     
-    let themes=THEMES[ln];
-    let groups=[];
-    for(let th of themes){
-      let gw=lw.filter(w=>{
-        let e=w.en.toLowerCase();
-        return e===th||e.startsWith(th+'er')||e.startsWith(th+'or')||e.startsWith(th+'ing')||e.startsWith(th+'ed')||e.startsWith(th+'tion')||e.startsWith(th+'sive')||e.startsWith(th+'ment')||e.startsWith(th+'ful')||e.startsWith(th+'less')||e.startsWith(th+'ness')||e.startsWith(th+'ly')||e.startsWith(th+'al')||e.startsWith(th+'ive')||e.startsWith(th+'ist')||e.startsWith(th+'ize')||e.startsWith(th+'ous')||e.startsWith(th+'ible')||e.startsWith(th+'able');
-      });
-      if(gw.length) groups.push({th,ws:gw});
+    h+='<div class="w"><div class="w-h" onclick="this.classList.toggle(\'c\');this.nextElementSibling.classList.toggle(\'h\')"><span>📘 单元'+i+' ('+lw.length+'词)</span><span class="a">▼</span></div><div class="w-b">';
+    for(let w of lw){
+      let lc=w.level==="高频"?"h":w.level==="中频"?"m":"l";
+      let ll=w.level==="高频"?"🔥":w.level==="中频"?"📖":"🌱";
+      h+='<div class="it"><span class="e">'+w.en+'</span><span class="z">'+w.zh+' <span class="tg '+lc+'">'+ll+'</span></span></div>';
     }
-    if(!groups.length) continue;
-    
-    html+='<div class="list"><div class="list-hd" onclick="this.classList.toggle(\'collapsed\');this.nextElementSibling.classList.toggle(\'hide\')"><span>📘 单元'+ln+' · '+groups.length+'组</span><span style="font-weight:400;font-size:12px;color:#888">'+lw.length+'词</span><span class="arrow">▼</span></div><div class="list-body">';
-    
-    for(let g of groups){
-      html+='<div class="group"><div class="group-hd">'+g.th+'</div><div class="group-wd">';
-      for(let w of g.ws.slice(0,12)){
-        let lc=w.level==='高频'?'high':w.level==='中频'?'mid':'low';
-        html+='<div class="gword"><span class="en">'+w.en+'</span><span class="lv '+lc+'">'+lc+': <span class="zh">'+w.zh+'</span></span></div>';
-      }
-      if(g.ws.length>12) html+='<div style="text-align:center;font-size:10px;color:#888;padding-top:3px">+'+ (g.ws.length-12) +'</div>';
-      html+='</div></div>';
-    }
-    html+='</div></div>';
+    h+='</div></div>';
   }
-  c.innerHTML=html;
+  c.innerHTML=h;
 }
 
-document.getElementById('search').addEventListener('input',function(){
-  clearTimeout(window._st);
-  window._st=setTimeout(()=>{filters.search=this.value;apply();},300);
+document.getElementById("q").addEventListener("input",function(){
+  clearTimeout(window._t);
+  window._t=setTimeout(()=>{fl.q=this.value;go()},200);
 });
 load();
 </script>
