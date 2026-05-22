@@ -5,313 +5,186 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>思维导图速记 高中英语词汇</title>
 <style>
-:root {
-  --primary: #2d9e5a;
-  --primary-light: #e8f5ed;
-  --accent: #f39c12;
-  --bg: #f9fbf9;
-  --card-bg: #fff;
-  --text: #2c3e50;
-  --text-light: #7f8c8d;
-  --border: #e0e0e0;
-  --high-bg: #e8f5ed;
-  --high-text: #1b7a3a;
-  --mid-bg: #fff8e1;
-  --mid-text: #b8860b;
-  --low-bg: #f0f0f5;
-  --low-text: #555;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-header {
-  background: linear-gradient(135deg, #2d9e5a 0%, #4caf50 100%);
-  color: #fff; padding: 28px 20px 20px; text-align: center;
-}
-header h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
-header p { font-size: 13px; opacity: .85; margin-top: 6px; }
-.stats-bar {
-  background: #fff; border-bottom: 1px solid var(--border);
-  padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
-  font-size: 13px; color: var(--text-light); position: sticky; top: 0; z-index: 10;
-}
-.stats-bar strong { color: var(--primary); }
-.controls {
-  background: #fff; border-bottom: 1px solid var(--border);
-  padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
-}
-.controls input {
-  flex: 1; min-width: 160px; max-width: 360px;
-  padding: 8px 14px; border: 1px solid var(--border); border-radius: 20px;
-  font-size: 14px; outline: none; transition: border .2s;
-}
-.controls input:focus { border-color: var(--primary); }
-.level-btn {
-  padding: 5px 14px; border: 1px solid var(--border); border-radius: 16px;
-  background: #fff; cursor: pointer; font-size: 13px; transition: all .2s; color: var(--text);
-}
-.level-btn.active { color: #fff; font-weight: 600; }
-.level-btn.active.lv-high { background: var(--primary); border-color: var(--primary); }
-.level-btn.active.lv-mid { background: var(--accent); border-color: var(--accent); }
-.level-btn.active.lv-low { background: #888; border-color: #888; }
-.level-btn.all { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
-.level-btn.all.active { background: var(--primary); color: #fff; }
-
-.word-count { font-size: 12px; color: var(--text-light); }
-
-.alphabet-nav {
-  display: flex; flex-wrap: wrap; gap: 3px; justify-content: center;
-  background: #fff; border-bottom: 1px solid var(--border); padding: 8px 12px;
-}
-.alphabet-nav a {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 50%;
-  font-size: 13px; text-decoration: none; color: var(--text); transition: all .15s;
-  cursor: pointer;
-}
-.alphabet-nav a:hover { background: var(--primary-light); color: var(--primary); }
-.alphabet-nav a.active { background: var(--primary); color: #fff; font-weight: 600; }
-
-.word-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px; padding: 14px 16px; max-width: 960px; margin: 0 auto;
-}
-.word-card {
-  background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
-  padding: 12px 14px; transition: all .2s;
-}
-.word-card:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(45,158,90,.12); }
-.word-card .en {
-  font-size: 15px; font-weight: 600; color: var(--primary);
-  display: flex; align-items: center; gap: 8px;
-}
-.word-card .en .level-tag {
-  font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 8px;
-}
-.level-tag.high { background: var(--high-bg); color: var(--high-text); }
-.level-tag.mid { background: var(--mid-bg); color: var(--mid-text); }
-.level-tag.low { background: var(--low-bg); color: var(--low-text); }
-.word-card .zh { font-size: 13px; color: var(--text); margin-top: 2px; }
-.word-card .meta { font-size: 11px; color: var(--text-light); margin-top: 4px; }
-
-.pagination {
-  display: flex; justify-content: center; align-items: center; gap: 6px;
-  padding: 16px; flex-wrap: wrap;
-}
-.pagination a, .pagination span.page-btn {
-  padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
-  font-size: 13px; text-decoration: none; color: var(--text); cursor: pointer;
-  transition: all .15s; background: #fff;
-}
-.pagination a:hover, .pagination span.page-btn:hover { background: var(--primary-light); border-color: var(--primary); }
-.pagination a.active, .pagination span.page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-.pagination a.disabled, .pagination span.page-btn.disabled { opacity: .4; pointer-events: none; }
-.pagination .page-info { font-size: 13px; color: var(--text-light); padding: 0 8px; }
-
-.loading { display: flex; justify-content: center; align-items: center; padding: 60px 20px; }
-.loading::after { 
-  content: ""; width: 32px; height: 32px; border: 3px solid var(--border);
-  border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.error { text-align: center; padding: 40px; color: #e74c3c; }
-.empty { text-align: center; padding: 40px; color: var(--text-light); }
-.empty .icon { font-size: 48px; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#faf8f6;color:#2c3e50;line-height:1.6}
+header{background:linear-gradient(135deg,#c67c4e,#d8946a);color:#fff;padding:28px 20px 18px;text-align:center}
+header h1{font-size:20px;font-weight:700}
+header p{font-size:13px;opacity:.85;margin-top:4px}
+.controls{background:#fff;border-bottom:1px solid #e8ddd0;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:0;z-index:20;justify-content:center}
+.controls input{flex:1;min-width:140px;max-width:300px;padding:7px 14px;border:1px solid #e8ddd0;border-radius:18px;font-size:13px;outline:none}
+.controls input:focus{border-color:#c67c4e}
+.tag{display:inline-block;padding:4px 12px;border:1px solid #e8ddd0;border-radius:14px;font-size:12px;cursor:pointer;transition:.2s;background:#fff;color:#888;user-select:none}
+.tag.on{border-color:#c67c4e}
+.tag.on.high{background:#c67c4e;color:#fff}
+.tag.on.mid{background:#b8987a;color:#fff}
+.tag.on.low{background:#999;color:#fff}
+.stats{text-align:center;font-size:13px;color:#888;padding:8px 16px;background:#fff;border-bottom:1px solid #e8ddd0}
+#content{max-width:960px;margin:0 auto;padding:14px 16px}
+.list{border:1px solid #e8ddd0;border-radius:8px;margin-bottom:16px;overflow:hidden}
+.list-hd{background:#f5eee8;padding:12px 14px;font-weight:700;font-size:15px;color:#c67c4e;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.list-hd .arrow{transition:transform .2s;font-size:11px}
+.list-hd.collapsed .arrow{transform:rotate(-90deg)}
+.list-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:12px}
+.list-body.hide{display:none}
+.group{border:1px solid #e8ddd0;border-radius:8px;overflow:hidden;background:#fff}
+.group-hd{background:#f5eee8;padding:8px 10px;font-weight:700;font-size:14px;color:#c67c4e;text-align:center;border-bottom:1px solid #e8ddd0}
+.group-wd{padding:6px 10px}
+.gword{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:12px;border-bottom:1px dotted #f5eee8;gap:4px}
+.gword:last-child{border:none}
+.gword .en{font-weight:500}
+.gword .zh{color:#888;font-size:11px;text-align:right}
+.lv{font-size:9px;padding:1px 5px;border-radius:6px;flex-shrink:0}
+.lv.high{background:#f0e6da;color:#8b5e3c}
+.lv.mid{background:#f5f0e8;color:#7a6b5a}
+.lv.low{background:#f0f0f0;color:#666}
+.loading{text-align:center;padding:60px}
+.loading .sp{display:inline-block;width:24px;height:24px;border:3px solid #e8ddd0;border-top-color:#c67c4e;border-radius:50%;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:60px;color:#888}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:#e8ddd0;border-radius:2px}
 </style>
 </head>
 <body>
-
 <header>
   <h1>🌿 思维导图速记 高中英语词汇</h1>
-  <p>俞敏洪 编著 · 收录 <span id="totalWords">0</span> 词</p>
+  <p><span id="totalW">0</span> 词 · <span id="listCount">0</span> 单元</p>
 </header>
-
-<div class="stats-bar">
-  <span>📚 高频 <strong id="highCount">0</strong></span>
-  <span>📖 中频 <strong id="midCount">0</span>
-  <span>📗 补充 <strong id="lowCount">0</strong></span>
-  <span>| 当前 <strong id="shownCount">0</strong> 条</span>
-</div>
-
 <div class="controls">
-  <input type="text" id="searchInput" placeholder="🔍 搜索单词或中文...">
-  <div style="display:flex;flex-wrap:wrap;gap:5px;">
-    <button class="level-btn all active" data-level="all" onclick="setLevel('all')">全部</button>
-    <button class="level-btn lv-high active" data-level="high" onclick="setLevel('high')">高频</button>
-    <button class="level-btn lv-mid active" data-level="mid" onclick="setLevel('mid')">中频</button>
-    <button class="level-btn lv-low active" data-level="low" onclick="setLevel('low')">补充</button>
-  </div>
+  <input id="search" placeholder="🔍 搜单词或中文...">
+  <span class="tag on high" onclick="tg(this,'高')">高频</span>
+  <span class="tag on mid" onclick="tg(this,'中')">中频</span>
+  <span class="tag on low" onclick="tg(this,'补')">补充</span>
 </div>
-
-<div class="alphabet-nav" id="alphabetNav"></div>
-
-<div id="wordCount" class="word-count" style="text-align:center;padding:6px;"></div>
-<div id="wordGrid" class="word-grid"></div>
-<div id="pagination" class="pagination"></div>
+<div class="stats">显示 <span id="shownW">0</span> 条</div>
+<div id="content"><div class="loading"><div class="sp"></div></div></div>
 
 <script>
-const PER_PAGE = 60;
-let allWords = [];
-let filteredWords = [];
-let currentPage = 1;
-let filters = { level: { all: true, high: true, mid: true, low: true }, search: '', letter: '' };
+const THEMES={
+1:["air","work","able","act","fire","break","every","thing","fact","effect","benefit","attract","add"],
+2:["graph","contribute","circle","close","expect","visit","view","fall","stand","change","style"],
+3:["like","stand","use","know","sure","main","new","man","remember","impress","house","collect"],
+4:["post","care","move","motion","advantage","create","precious","habit","usual","common","normal","stay","test"],
+5:["centre","general","depend","part","form","offer","order","honour","import","variety","cover","handle"],
+6:["service","press","prove","ball","spend","sea","flat","mercy","sea","office"],
+7:["way","mind","sit","consider","just","electric","light","top","photo","certain","drama","regret","remain","mother"],
+8:["explain","near","condition","easy","force","curious","finish","bind","turn","weight","life","limit","length"],
+9:["subject","point","solve","receive","confidence","put","pride","promise","worthy","produce","count","knowledge","speech"],
+10:["think","should","class","night","suggest","relationship","difficult","person","aware","sense","weak","private","passion","genuine"],
+11:["take","wear","mail","angry","right","can","against","demand","attack","long","shame","firm","strict"],
+12:["week","mean","look","be","secret","place","worth","maintain","contain","stand","equal","immediate","connect","polite","paint","survive"],
+13:["rely","joy","develop","simple","pocket","high","blood","anxious","possible","satisfy","various","choose","express","disappoint","deliver","instruct"],
+14:["pay","strong","famous","excited","stop","ear","face","warm","beauty","nature","polite","document","publish","flood","blame"],
+15:["favourite","frequently","fast","please","call","interesting","delight","music","library","distant","drive","break","courage","water"],
+16:["taste","clean","bed","clothes","shirt","true","bank","bargain","button","bathe","stomach","pound","fold"],
+17:["family","argue","regard","meet","kind","sick","concentrate","flower","cook","same","male","author","recommend","adventure","arrange","doubt"],
+18:["paint","initial","mass","join","though","tell","spread","quit","laugh","awful","plenty","coast","seek","comfort","portrait"],
+19:["colour","staff","watch","lift","snow","result","appear","happen","signal","dance","gold","steal","angle","event"],
+20:["pick","health","character","box","warn","face","print","fierce","guide","drag","exercise","strike","court","punish","stare","declare","strength"],
+21:["some","present","agency","decide","accident","geography","opinion","charge","danger","tongue","tire","address","situation","perform"],
+22:["land","fail","fall","convenient","punish","miss","spot","season","power","through","press","pressure","wake","trick","native","count","progress","cover"],
+23:["continue","kilo","imagine","certain","concern","room","reply","simple","share","brave","crime","memory","nature"],
+24:["grade","habit","arm","conversation","well","addict","individual","anxiety","pray","treat","experiment","differ","permit"],
+25:["compete","plant","sign","wind","worth","reduce","pack","star","arrive","coach","order","hurry","scene","scenery","shelter"],
+26:["build","instruction","convey","pair","local","lock","poem","smell","sorrow","promote","ancient","remind","splendid","delicious","bless","temple"],
+27:["victory","mark","hear","clear","equal","physics","pause","comfort","course","pass","crowd","goal","envy","puzzle","donate","invest","separate","globe"],
+28:["found","front","community","wing","technology","complete","peace","novel","rent","allow","advance","satisfy","volunteer","easy","blow","fight","treasure"],
+29:["bar","out","divide","ride","rise","suit","magic","blood","grace","card","hunt","diet","pollute","action","luggage","typical"],
+30:["astronaut","low","pack","bath","award","company","function","instant","scare","particular","scale","source","attack","examine"],
+31:["cent","grand","doctor","cheer","cross","tour","conference","reflect","explode","poverty","rob","approve","persuade","contrast","worry"],
+32:["note","economic","catch","corporate","draw","bridge","gain","explore","anxious","fortune","occupy","stove","paragraph","type","honest","empty","plug","broad","biscuit"],
+33:["name","whisper","soon","ice","rock","amazing","fine","bite","winter","drop","flow","level","steam","float","bold","fierce","laughter","quit"],
+34:["hungry","search","crime","since","identity","harm","suppose","admit","lack","bother","spare","panic","awkward","desire","reward"],
+35:["resemble","guide","breath","coffee","drama","rate","pleasant","soul","sunrise","chap","organ","stranger","stage","bother","rank","ruin","rapid","arrangement"],
+36:["mix","silent","blue","show","cube","escape","powder","budget","toast","restless","possess","clarify","defeat","sigh","persuade","schedule"],
+37:["hamburger","medicine","suck","fresh","flower","stream","display","province","atmosphere","genius","oxygen","hydrogen","memorial","genius"],
+38:["assist","crisis","describe","science","institute","limit","intend","reject","acquire","stuff","faith","sunlight","inspect","laundry","update","stain"],
+39:["major","space","million","music","pulse","microwave","argument","overcome","dial","contract","principle","species","victim","grab","bloom","tune","bargain","impact","crash","investigate","possession"],
+40:["psychology","immigration","metre","command","temporary","camp","permanent","endure","document","schedule","loan","gentle","analysis","trap","flexible","concrete","patience","conclusion","float"],
+41:["origin","insert","master","battle","forward","navy","orbit","colony","drift","involve","slave","anecdote","deposit","manner","shrink","superior","version","bamboo","enterprise"],
+42:["candle","carve","court","approach","journey","pile","council","substance","mild","sculpture","parcel","coin","rouse","damp","preserve","accurate","circulate","prosper","gentle","chain","dialogue","glance","classic"],
+43:["jump","sniff","episode","botany","ripe","system","sneeze","chain","comprehension","infect","modest","dizzy","acute","sponsor","relief","march","cotton","retire","lodge"],
+44:["jewellery","boom","festival","blood","rhyme","channel","pill","consult","applaud","bow","thriller","compress","pension","inspect","presentation","outstanding","minority","trap","ash","suburb","tolerate","extreme"],
+45:["column","medal","feed","switch","slave","slip","fragment","glare","aboard","thorough","severe","hollow","pregnant","raw","abuse","memorandum","breeze","authentic","panic","ecology","hardship","relevant","municipal"]};
 
-async function loadData() {
-  const grid = document.getElementById('wordGrid');
-  grid.innerHTML = '<div class="loading"></div>';
-  try {
-    const resp = await fetch('vocab.json?_=' + Date.now());
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    allWords = await resp.json();
-    document.getElementById('totalWords').textContent = allWords.length;
-    
-    const levels = { high: 0, mid: 0, low: 0 };
-    allWords.forEach(w => { levels[w.level] ? levels[w.level]++ : (levels[w.level]=1); });
-    document.getElementById('highCount').textContent = levels['高频'] || 0;
-    document.getElementById('midCount').textContent = levels['中频'] || 0;
-    document.getElementById('lowCount').textContent = levels['补充'] || 0;
-    
-    buildAlphabetNav();
-    applyFilters();
-  } catch(e) {
-    grid.innerHTML = '<div class="error">⚠️ 词汇数据加载失败: ' + e.message + '<br><br>请检查 <code>vocab.json</code> 文件是否存在</div>';
+let words=[], filtered=[], filters={high:1,mid:1,low:1,search:''};
+const listNums=Object.keys(THEMES).map(Number).sort((a,b)=>a-b);
+
+function tg(el,l){
+  el.classList.toggle('on');
+  filters.high=document.querySelector('.tag.on.high')!==null;
+  filters.mid=document.querySelector('.tag.on.mid')!==null;
+  filters.low=document.querySelector('.tag.on.low')!==null;
+  apply();
+}
+
+async function load(){
+  try{
+    let r=await fetch('vocab.json?_='+Date.now());
+    if(!r.ok) throw Error('HTTP '+r.status);
+    words=await r.json();
+    document.getElementById('totalW').textContent=words.length;
+    document.getElementById('listCount').textContent=listNums.length;
+    apply();
+  }catch(e){
+    document.getElementById('content').innerHTML='<div class="empty">⚠️ 数据加载失败: '+e.message+'</div>';
   }
 }
 
-function setLevel(level) {
-  document.querySelectorAll('.level-btn').forEach(b => {
-    if (b.dataset.level === level) {
-      b.classList.toggle('active');
-    }
-  });
-  // Ensure "all" reflects individual states
-  const allActive = ['high','mid','low'].every(l => 
-    document.querySelector(`.level-btn[data-level="${l}"]`).classList.contains('active')
-  );
-  document.querySelector('.level-btn[data-level="all"]').classList.toggle('active', allActive);
-  
-  filters.level.high = document.querySelector('.level-btn[data-level="high"]').classList.contains('active');
-  filters.level.mid = document.querySelector('.level-btn[data-level="mid"]').classList.contains('active');
-  filters.level.low = document.querySelector('.level-btn[data-level="low"]').classList.contains('active');
-  currentPage = 1;
-  applyFilters();
-}
-
-function setLetter(letter) {
-  document.querySelectorAll('#alphabetNav a').forEach(a => a.classList.remove('active'));
-  if (letter === '#') {
-    filters.letter = 'non-alpha';
-    document.querySelector('#alphabetNav a[data-letter="#"]')?.classList.add('active');
-  } else {
-    filters.letter = letter;
-    document.querySelector(`#alphabetNav a[data-letter="${letter}"]`)?.classList.add('active');
-  }
-  if (!letter) filters.letter = '';
-  currentPage = 1;
-  applyFilters();
-}
-
-function setSearch(search) {
-  filters.search = search.toLowerCase();
-  currentPage = 1;
-  applyFilters();
-}
-
-function applyFilters() {
-  filteredWords = allWords.filter(w => {
-    // Level filter
-    const lvl = w.level;
-    if (lvl === '高频' && !filters.level.high) return false;
-    if (lvl === '中频' && !filters.level.mid) return false;
-    if (lvl === '补充' && !filters.level.low) return false;
-    
-    // Search filter
-    if (filters.search && !w.en.toLowerCase().includes(filters.search) && !w.zh.includes(filters.search)) return false;
-    
-    // Letter filter
-    if (filters.letter) {
-      const firstChar = w.en[0].toLowerCase();
-      if (filters.letter === 'non-alpha') {
-        if (/[a-z]/.test(firstChar)) return false;
-      } else {
-        if (firstChar !== filters.letter) return false;
-      }
-    }
-    
+function apply(){
+  let q=filters.search.toLowerCase();
+  filtered=words.filter(w=>{
+    if((w.level==='高频'&&!filters.high)||(w.level==='中频'&&!filters.mid)||(w.level==='补充'&&!filters.low)) return false;
+    if(q&&!w.en.toLowerCase().includes(q)&&!w.zh.includes(q)) return false;
     return true;
   });
-  
-  document.getElementById('shownCount').textContent = filteredWords.length;
+  document.getElementById('shownW').textContent=filtered.length;
   render();
 }
 
-function render() {
-  const totalPages = Math.max(1, Math.ceil(filteredWords.length / PER_PAGE));
-  const start = (currentPage - 1) * PER_PAGE;
-  const pageWords = filteredWords.slice(start, start + PER_PAGE);
+function render(){
+  let c=document.getElementById('content'), html='';
+  if(!filtered.length){c.innerHTML='<div class="empty">📭 没有匹配的词汇</div>';return;}
   
-  const grid = document.getElementById('wordGrid');
-  if (pageWords.length === 0) {
-    grid.innerHTML = '<div class="empty"><div class="icon">📭</div><p>没有匹配的词汇</p></div>';
-  } else {
-    grid.innerHTML = pageWords.map(w => {
-      const lvlClass = w.level === '高频' ? 'high' : w.level === '中频' ? 'mid' : 'low';
-      const lvlLabel = w.level === '高频' ? '🔥高频' : w.level === '中频' ? '📖中频' : '🌱补充';
-      return `<div class="word-card">
-        <div class="en">${w.en}<span class="level-tag ${lvlClass}">${lvlLabel}</span></div>
-        <div class="zh">${w.zh}</div>
-      </div>`;
-    }).join('');
+  let pp=Math.ceil(words.length/45);
+  
+  for(let ln of listNums){
+    let st=(ln-1)*pp, en=Math.min(st+pp,words.length);
+    let lw=filtered.filter(w=>words.indexOf(w)>=st&&words.indexOf(w)<en);
+    if(!lw.length) continue;
+    
+    let themes=THEMES[ln];
+    let groups=[];
+    for(let th of themes){
+      let gw=lw.filter(w=>{
+        let e=w.en.toLowerCase();
+        return e===th||e.startsWith(th+'er')||e.startsWith(th+'or')||e.startsWith(th+'ing')||e.startsWith(th+'ed')||e.startsWith(th+'tion')||e.startsWith(th+'sive')||e.startsWith(th+'ment')||e.startsWith(th+'ful')||e.startsWith(th+'less')||e.startsWith(th+'ness')||e.startsWith(th+'ly')||e.startsWith(th+'al')||e.startsWith(th+'ive')||e.startsWith(th+'ist')||e.startsWith(th+'ize')||e.startsWith(th+'ous')||e.startsWith(th+'ible')||e.startsWith(th+'able');
+      });
+      if(gw.length) groups.push({th,ws:gw});
+    }
+    if(!groups.length) continue;
+    
+    html+='<div class="list"><div class="list-hd" onclick="this.classList.toggle(\'collapsed\');this.nextElementSibling.classList.toggle(\'hide\')"><span>📘 单元'+ln+' · '+groups.length+'组</span><span style="font-weight:400;font-size:12px;color:#888">'+lw.length+'词</span><span class="arrow">▼</span></div><div class="list-body">';
+    
+    for(let g of groups){
+      html+='<div class="group"><div class="group-hd">'+g.th+'</div><div class="group-wd">';
+      for(let w of g.ws.slice(0,12)){
+        let lc=w.level==='高频'?'high':w.level==='中频'?'mid':'low';
+        html+='<div class="gword"><span class="en">'+w.en+'</span><span class="lv '+lc+'">'+lc+': <span class="zh">'+w.zh+'</span></span></div>';
+      }
+      if(g.ws.length>12) html+='<div style="text-align:center;font-size:10px;color:#888;padding-top:3px">+'+ (g.ws.length-12) +'</div>';
+      html+='</div></div>';
+    }
+    html+='</div></div>';
   }
-  
-  document.getElementById('wordCount').textContent = `第 ${currentPage}/${totalPages} 页 · 共 ${filteredWords.length} 条`;
-  
-  renderPagination(totalPages);
+  c.innerHTML=html;
 }
 
-function renderPagination(totalPages) {
-  const p = document.getElementById('pagination');
-  let html = '';
-  
-  html += `<span class="page-btn ${currentPage <= 1 ? 'disabled' : ''}" onclick="goPage(${currentPage - 1})">◀</span>`;
-  
-  let startP = Math.max(1, currentPage - 4);
-  let endP = Math.min(totalPages, currentPage + 4);
-  if (startP > 1) { html += `<span class="page-btn" onclick="goPage(1)">1</span><span style="color:var(--text-light);padding:0 4px;">...</span>"; }
-  for (let i = startP; i <= endP; i++) {
-    html += `<span class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</span>`;
-  }
-  if (endP < totalPages) { html += `<span style="color:var(--text-light);padding:0 4px;">...</span><span class="page-btn" onclick="goPage(${totalPages})">${totalPages}</span>`; }
-  
-  html += `<span class="page-btn ${currentPage >= totalPages ? 'disabled' : ''}" onclick="goPage(${currentPage + 1})">▶</span>`;
-  p.innerHTML = html;
-}
-
-function goPage(p) {
-  const total = Math.max(1, Math.ceil(filteredWords.length / PER_PAGE));
-  if (p < 1 || p > total) return;
-  currentPage = p;
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function buildAlphabetNav() {
-  const nav = document.getElementById('alphabetNav');
-  let html = '<a data-letter="" onclick="setLetter(\'\')" class="active">All</a>';
-  for (let c = 97; c <= 122; c++) {
-    html += `<a data-letter="${String.fromCharCode(c)}" onclick="setLetter('${String.fromCharCode(c)}')">${String.fromCharCode(c).toUpperCase()}</a>`;
-  }
-  html += `<a data-letter="#" onclick="setLetter('#')">#</a>`;
-  nav.innerHTML = html;
-}
-
-// Search with debounce
-let searchTimer;
-document.getElementById('searchInput').addEventListener('input', function() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => setSearch(this.value), 300);
+document.getElementById('search').addEventListener('input',function(){
+  clearTimeout(window._st);
+  window._st=setTimeout(()=>{filters.search=this.value;apply();},300);
 });
-
-loadData();
+load();
 </script>
 </body>
 </html>
